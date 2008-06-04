@@ -12,7 +12,7 @@ Scalar 20
 // Main Level Colosion Body //
 Poly
 Id 1
-Vertex -14 0
+Vertex -14 -4
 Vertex 8 -10
 Vertex 13 2
 Vertex -10 12
@@ -29,16 +29,16 @@ Vertex 9 -2
 Vertex 6 -5
 Vertex 2 -3
 Vertex -2 -3
-Vertex -15 2
+Vertex -15 0
 
 // Generator //
-Sphere -6 6
-Id 1
+//Sphere -6 6
+//Id 1
 
 // Collector //
-Sphere 6 -2
-Id 11
+//Sphere 6 -2
+//Id 11
 
 // Magnet //
-Sphere 6 -8
-Id 21
+//Sphere 6 -8
+//Id 21

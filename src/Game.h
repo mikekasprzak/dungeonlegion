@@ -16,62 +16,6 @@
 // - ------------------------------------------------------------------------------------------ - //
 
 // - ------------------------------------------------------------------------------------------ - //
-// Inputs //
-// '+' - Positive or Repel (increase distance)
-// '-' - Negative or Attract (decrease distance)
-// '0' - Neutral (Will follow whatever default behavior)
-// '1' - Default Repel/Attract value (either + or -)
-// - ------------------------------------------------------------------------------------------ - //
-// Returns -1, 0, or +1, the polarity action to take //
-inline const int SolvePolarity( const int a, const int b ) {
-	// Determine the sign of the 'a' polarity //
-	int a_sign = 0;
-	if ( a > 0 )
-		a_sign = 1;
-	else if ( a < 0 )
-		a_sign = -1;
-	// Note the intensity of the 'a' polarity //
-	//int a_intensity = abs(a);
-	
-	// Determine the sign of the 'b' polarity //
-	int b_sign = 0;
-	if ( b > 0 )
-		b_sign = 1;
-	else if ( b < 0 )
-		b_sign = -1;
-	// Note the intensity of the 'b' polarity //
-	//int b_intensity = abs(b);
-	
-	// If signs are different //
-	if ( a_sign != b_sign ) {
-		// The special case if a is ever zero, do nothing //
-		if ( a_sign == 0 ) {
-			return 0;
-		}
-		// If b's sign is zero, follow the behavior of a's sign //
-		else if ( b_sign == 0 ) {
-			return a_sign;
-		}
-		// Default behavior is to Attract on sign difference //
-		else {
-			return -1;
-		}
-	}
-	// Otherwise the signs are the same //
-	else {
-		// If the signs are both zero, it has no effect //
-		if ( a_sign == 0 ) {
-			return 0;
-		}
-		// Default Behavior is to Repel on sign equality //
-		else {
-			return +1;
-		}
-	}
-}
-// - ------------------------------------------------------------------------------------------ - //
-
-// - ------------------------------------------------------------------------------------------ - //
 class cImpulse {
 public:
 	Vector2D Pos;
@@ -430,8 +374,8 @@ public:
 	
 	inline void Step() {
 		// Magnet Moving Hack //
-		if ( mouse_b == 1 )
-			Magnet[0].Pos = Camera.Mouse;
+//		if ( mouse_b == 1 )
+//			Magnet[0].Pos = Camera.Mouse;
 		
 		
 		// Step all Generators //
