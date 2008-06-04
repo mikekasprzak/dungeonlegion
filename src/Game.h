@@ -214,6 +214,78 @@ public:
 //	}
 //};
 // - ------------------------------------------------------------------------------------------ - //
+class cHero {
+public:
+	// Physics Variables//
+	Vector2D Pos, Old;
+	Real Radius;
+	
+	Vector2D Force;
+
+public:
+	// AI Variables //
+	Vector2D Target;
+
+
+
+public:
+	cHero( const Vector2D& _StartPos ) :
+		Pos( _StartPos ),
+		Old( _StartPos ),
+		Radius( 6 ),
+		Target( _StartPos )
+	{
+	}
+
+	cHero( const cPolyMapElement& Element ) :
+		Pos( Element.Center ),
+		Old( Element.Center ),
+		Radius( 6 ),
+		Target( Element.Center )
+	{
+	}
+
+public:
+	inline const Vector2D Velocity() {
+		return (Pos - Old);
+	}
+	
+	inline void AddForce( const Vector2D& _Force ) {
+		Force += _Force;
+	}
+	
+	inline void ApplyReflection( const Vector2D& _ContactNormal ) {
+		// Calculate the Reflection //
+		Real ReflectionStrength = (Velocity() * _ContactNormal) * Real(2);
+		
+		// Reflect only if you oppose the direction of the Contact Normal //
+		if ( ReflectionStrength > Real::Zero ) {
+			// Apply the reflection to Old Position //
+			Old += ReflectionStrength * _ContactNormal;
+		}
+	}
+public:	
+	inline void Step() {
+		Vector2D Temp = Pos;
+		Vector2D NewVelocity = (Velocity() * Real(0.98)) + Force;
+		
+		Pos += NewVelocity;
+		Old = Temp;
+		
+		// Clear Collected Forces //
+		Force = Vector2D(0,0);
+		
+		
+		AddForce( (Target - Pos).Normal() * Real(0.05) );
+	}
+	
+	inline void Draw() { 
+		gfxDrawCross( Target, 3, RGB_GREEN );
+		
+		gfxDrawCircle( Pos, Radius, RGB_PURPLE );
+	}
+};
+// - ------------------------------------------------------------------------------------------ - //
 class cExitPortal { 
 public:
 	Vector2D Pos;
@@ -284,6 +356,9 @@ public:
 	std::vector<cImpulse> Impulse;
 //	std::vector<cParticle> Particle;
 
+	std::vector<cHero> Hero;
+	int CurrentHero;
+	
 	std::vector<cExitPortal> ExitPortal;
 		
 //	std::vector<cGenerator> Generator;
@@ -305,16 +380,11 @@ public:
 public:
 	inline cGame() :
 		Map( "TestMap.txt" ),
+		CurrentHero( 0 ),
 		BoundsIndex( 0 )
 	{
 		printf( "- Game Init -\n" );
-		// Hacked in Elements //
-//		Generator.push_back( cGenerator( Vector2D( 0, 0 ), 12, 30 ) );
-//		Collector.push_back( cCollector( Vector2D( 0, -200 ), 16, 20 ) );
-//
-//		Magnet.push_back( cMagnet( Vector2D( 70, -100 ), 12, -1 ) );
-		
-		
+
 		// Find the bounds rectangle //
 		for ( size_t idx = 0; idx < Map.Element.size(); idx++ ) {
 			if ( Map.Element[idx].Type == PME_RECT ) {
@@ -330,9 +400,9 @@ public:
 				// What type of Sphere is it? //
 				switch (Map.Element[idx].Id) {
 					case 1: {
-						// Player //
-//						Generator.push_back( cGenerator(Map.Element[idx]) );
-						printf(" + Added Player\n");
+						// Hero //
+						Hero.push_back( cHero(Map.Element[idx]) );
+						printf(" + Added Hero\n");
 						break;
 					}
 					case 2: {
@@ -353,8 +423,9 @@ public:
 	
 	inline void Step() {
 		// Magnet Moving Hack //
-//		if ( mouse_b == 1 )
-//			Magnet[0].Pos = Camera.Mouse;
+		if ( mouse_b == 1 )
+			if ( Hero.size() )
+				Hero[0].Target = Camera.Mouse;
 		
 		
 		// Step all Generators //
@@ -367,18 +438,18 @@ public:
 //				Particle.push_back( cParticle( Generator[idx].Pos + Offset, Generator[idx].Direction ) );
 //			}
 //		}
-//		// Step all Collectors //
-//		for ( size_t idx = 0; idx < Collector.size(); idx++ ) {
-//			Collector[idx].Step();
-//			// TODO: Add Impulse 
-//			Impulse.push_back( 
-//				cImpulse(
-//					Collector[idx].Pos,
-//					0, -0.01,
-//					48, 0
-//					)
-//				);
-//		}
+		// Step all Collectors //
+		for ( size_t idx = 0; idx < ExitPortal.size(); idx++ ) {
+			ExitPortal[idx].Step();
+			// TODO: Add Impulse 
+			Impulse.push_back( 
+				cImpulse(
+					ExitPortal[idx].Pos,
+					0, -0.01,
+					48, 0
+					)
+				);
+		}
 //		// Step all Magnets //
 //		for ( size_t idx = 0; idx < Magnet.size(); idx++ ) {
 //			Magnet[idx].Step();
@@ -393,43 +464,41 @@ public:
 //		}
 //
 //
-//		// Step all Particles //
-//		for ( size_t idx = 0; idx < Particle.size(); idx++ ) {
-//			Particle[idx].Step();
-//
-//			// Apply Impulses //
-//			for ( size_t idx2 = 0; idx2 < Impulse.size(); idx2++ ) {
-//				Particle[idx].AddForce( Impulse[idx2].GetForce( Particle[idx].Pos ) );
-//			}
-//			
-//			// Test for Collisions Vs. Polygons //
-//			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
-//				if ( TestPointVsPolygon2D( Particle[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size() ) ) {
-//					// Reflect off the surface //
-//					Particle[idx].ApplyReflection( 
-//						NearestEdgeNormalOfPolygon2D( 
-//							Particle[idx].Pos,
-//							&Collision[idx2]->Vertex[0],
-//							Collision[idx2]->Vertex.size()
-//							)
-//						);
-//				}
-//			}
-//		
-//			// Test for Collisions Vs. Collectors //
-//			for ( size_t idx2 = 0; idx2 < Collector.size(); idx2++ ) {
-//				if ( TestPointVsSphere2D( Particle[idx].Pos, Collector[idx2].Pos, Collector[idx2].Radius ) ) {
-//					Collector[idx2].Count++;
-//					
-//					// Kill Particle //
-//					Particle.erase( Particle.begin() + idx );
-//					idx--;
-//					break;
-//				}
-//			}
-//			
-//			
-//		}
+		// Step all Heroes //
+		for ( size_t idx = 0; idx < Hero.size(); idx++ ) {
+			Hero[idx].Step();
+
+			// Apply Impulses //
+			for ( size_t idx2 = 0; idx2 < Impulse.size(); idx2++ ) {
+				Hero[idx].AddForce( Impulse[idx2].GetForce( Hero[idx].Pos ) );
+			}
+			
+			// Test for Collisions Vs. Polygons //
+			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
+				if ( !TestPointVsPolygon2D( Hero[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size() ) ) {
+					Vector2D EdgePoint = NearestPointOnEdgeOfPolygon2D( 
+						Hero[idx].Pos,
+						&Collision[idx2]->Vertex[0],
+						Collision[idx2]->Vertex.size()
+						);
+					
+					Hero[idx].Pos = EdgePoint;
+				}
+			}
+		
+			// Test for Collisions Vs. Collectors //
+			for ( size_t idx2 = 0; idx2 < ExitPortal.size(); idx2++ ) {
+				if ( TestPointVsSphere2D( Hero[idx].Pos, ExitPortal[idx2].Pos, ExitPortal[idx2].Radius ) ) {
+					
+					// Kill Hero //
+					Hero.erase( Hero.begin() + idx );
+					idx--;
+					break;
+				}
+			}
+			
+			
+		}
 
 		// Remove all Impulses //
 		Impulse.clear();
@@ -438,9 +507,9 @@ public:
 	
 	inline void Draw() {
 		// Draw all Generators //
-//		for ( size_t idx = 0; idx < Generator.size(); idx++ ) {
-//			Generator[idx].Draw();
-//		}
+		for ( size_t idx = 0; idx < Hero.size(); idx++ ) {
+			Hero[idx].Draw();
+		}
 		// Draw all ExitPortals //
 		for ( size_t idx = 0; idx < ExitPortal.size(); idx++ ) {
 			ExitPortal[idx].Draw();
