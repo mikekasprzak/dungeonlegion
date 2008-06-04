@@ -31,14 +31,12 @@ Vertex 2 -3
 Vertex -2 -3
 Vertex -15 0
 
-// Generator //
-//Sphere -6 6
-//Id 1
 
-// Collector //
-//Sphere 6 -2
-//Id 11
+// Player //
+Sphere -13 -2
+Id 1
 
-// Magnet //
-//Sphere 6 -8
-//Id 21
+// Exit Portal //
+Sphere -12 2
+Id 2
+
