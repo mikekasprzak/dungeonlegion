@@ -271,6 +271,9 @@ public:
 	Vector2D Force;
 
 public:
+	// Distinction Variables //
+	cStats Stats;
+	
 	// AI Variables //
 	Vector2D Target;
 
@@ -362,6 +365,79 @@ public:
 	}
 };
 // - ------------------------------------------------------------------------------------------ - //
+class cEnemy {
+public:
+	// Physics Variables//
+	Vector2D Pos, Old;
+	Real Radius;
+	
+	Vector2D Force;
+
+public:
+	// Distinction Variables //
+	cStats Stats;
+	
+	// AI Variables //
+	Vector2D Target;
+
+
+
+public:
+	cEnemy( const Vector2D& _StartPos ) :
+		Pos( _StartPos ),
+		Old( _StartPos ),
+		Radius( 8 ),
+		Target( _StartPos )
+	{
+	}
+
+	cEnemy( const cPolyMapElement& Element ) :
+		Pos( Element.Center ),
+		Old( Element.Center ),
+		Radius( 8 ),
+		Target( Element.Center )
+	{
+	}
+
+public:
+	inline const Vector2D Velocity() {
+		return (Pos - Old);
+	}
+	
+	inline void AddForce( const Vector2D& _Force ) {
+		Force += _Force;
+	}
+	
+	inline void ApplyReflection( const Vector2D& _ContactNormal ) {
+		// Calculate the Reflection //
+		Real ReflectionStrength = (Velocity() * _ContactNormal) * Real(2);
+		
+		// Reflect only if you oppose the direction of the Contact Normal //
+		if ( ReflectionStrength > Real::Zero ) {
+			// Apply the reflection to Old Position //
+			Old += ReflectionStrength * _ContactNormal;
+		}
+	}
+public:	
+	inline void Step() {
+		Vector2D Temp = Pos;
+		Vector2D NewVelocity = (Velocity() * Real(0.98)) + Force;
+		
+		Pos += NewVelocity;
+		Old = Temp;
+		
+		// Clear Collected Forces //
+		Force = Vector2D(0,0);
+		
+		
+		AddForce( (Target - Pos).Normal() * Real(0.05) );
+	}
+	
+	inline void Draw() { 
+		gfxDrawCircle( Pos, Radius, RGB_RED );
+	}
+};
+// - ------------------------------------------------------------------------------------------ - //
 //class cMagnet {
 //public:
 //	Vector2D Pos;
@@ -406,6 +482,8 @@ public:
 
 	std::vector<cHero> Hero;
 	int CurrentHero;
+	
+	std::vector<cEnemy> Enemy;
 	
 	std::vector<cExitPortal> ExitPortal;
 		
@@ -459,7 +537,12 @@ public:
 						printf(" + Added Exit Portal\n");
 						break;
 					}
-				};
+					case 11: {
+						// Enemy //
+						Enemy.push_back( cEnemy(Map.Element[idx]) );
+						printf(" + Added Enemy\n");
+						break;
+					}				};
 			}
 			else if ( Map.Element[idx].Type == PME_POLY ) {
 				// For now, asume all polygons are collision //
@@ -544,8 +627,29 @@ public:
 					break;
 				}
 			}
+		}
+
+		// Step all Enemies //
+		for ( size_t idx = 0; idx < Enemy.size(); idx++ ) {
+			Enemy[idx].Step();
+
+			// Apply Impulses //
+			for ( size_t idx2 = 0; idx2 < Impulse.size(); idx2++ ) {
+				Enemy[idx].AddForce( Impulse[idx2].GetForce( Enemy[idx].Pos ) );
+			}
 			
-			
+			// Test for Collisions Vs. Polygons //
+			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
+				if ( !TestPointVsPolygon2D( Enemy[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size() ) ) {
+					Vector2D EdgePoint = NearestPointOnEdgeOfPolygon2D( 
+						Enemy[idx].Pos,
+						&Collision[idx2]->Vertex[0],
+						Collision[idx2]->Vertex.size()
+						);
+					
+					Enemy[idx].Pos = EdgePoint;
+				}
+			}
 		}
 
 		// Remove all Impulses //
@@ -554,10 +658,16 @@ public:
 	
 	
 	inline void Draw() {
-		// Draw all Generators //
+		// Draw all Heroes //
 		for ( size_t idx = 0; idx < Hero.size(); idx++ ) {
 			Hero[idx].Draw();
 		}
+	
+		// Draw all Enemies //
+		for ( size_t idx = 0; idx < Enemy.size(); idx++ ) {
+			Enemy[idx].Draw();
+		}
+		
 		// Draw all ExitPortals //
 		for ( size_t idx = 0; idx < ExitPortal.size(); idx++ ) {
 			ExitPortal[idx].Draw();

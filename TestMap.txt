@@ -40,3 +40,6 @@ Id 1
 Sphere -12 2
 Id 2
 
+// Enemy //
+Sphere 10 0
+Id 11
