@@ -214,6 +214,54 @@ public:
 //	}
 //};
 // - ------------------------------------------------------------------------------------------ - //
+class cStats {
+public:
+	int HP, MaxHP;
+	int Attack;
+	int Defense;
+	
+	// Things for identifying enhancements //
+	
+public:
+	inline bool IsAlive() const {
+		return HP != 0;
+	}
+	
+	inline int GetHP() const {
+		return HP;
+	}
+	
+	inline void AddHP( const int _HP ) {
+		HP += _HP;
+		
+		if ( HP < 0 )
+			HP = 0;
+		else if ( HP > MaxHP )
+			HP = MaxHP;
+	}
+
+public:
+	inline int GetAttack() const {
+		// TODO: Apply modifiers //
+		return Attack;
+	}
+	
+	inline int GetDefense() const {
+		// TODO: Apply modifiers //
+		return Defense;
+	}
+
+public:
+	// Calculate damage dealt to an opponent //
+	inline int CalculateDamage( const cStats& Vs ) const {
+		int Damage = GetAttack() - Vs.GetDefense();
+		if ( Damage > 0 )
+			return Damage;
+		else
+			return 0;
+	}
+};
+// - ------------------------------------------------------------------------------------------ - //
 class cHero {
 public:
 	// Physics Variables//
