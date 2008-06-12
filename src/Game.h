@@ -214,7 +214,7 @@ public:
 //	}
 //};
 // - ------------------------------------------------------------------------------------------ - //
-class cStats {
+class cStatus {
 public:
 	int HP, MaxHP;
 	int Attack;
@@ -253,7 +253,7 @@ public:
 
 public:
 	// Calculate damage dealt to an opponent //
-	inline int CalculateDamage( const cStats& Vs ) const {
+	inline int CalculateDamage( const cStatus& Vs ) const {
 		int Damage = GetAttack() - Vs.GetDefense();
 		if ( Damage > 0 )
 			return Damage;
@@ -273,11 +273,23 @@ public:
 
 public:
 	// Distinction Variables //
-	cStats Stats;
+	cStatus Status;
+
+	// AI State Variables //	
+	enum {
+		ST_NULL = 0,
+		ST_IDLE,
+		ST_MOVING,
+				
+		ST_END
+	};
+	size_t State;
+	
 	
 	// AI Variables //
-	Vector2D Target;
-
+	cEntity* Leader;
+	Vector2D TargetPos;
+	cEntity* Target;
 
 
 public:
@@ -285,11 +297,15 @@ public:
 		Pos( _StartPos ),
 		Old( _StartPos ),
 		Radius( 6 ),
-		Target( _StartPos )
+		State( ST_IDLE ),
+		Leader( 0 ),
+		TargetPos( _StartPos ),
+		Target( 0 )
 	{
 	}
 
 public:
+	// Physics Functions //
 	inline const Vector2D Velocity() {
 		return (Pos - Old);
 	}
@@ -319,12 +335,12 @@ public:
 		// Clear Collected Forces //
 		Force = Vector2D(0,0);
 		
-		
-		AddForce( (Target - Pos).Normal() * Real(0.05) );
+		// Movement Hack //
+		AddForce( (TargetPos - Pos).Normal() * Real(0.05) );
 	}
 	
 	inline void Draw() { 
-		gfxDrawCross( Target, 3, RGB_GREEN );
+		gfxDrawCross( TargetPos, 3, RGB_GREEN );
 		
 		gfxDrawCircle( Pos, Radius, RGB_PURPLE );
 	}
@@ -340,7 +356,7 @@ public:
 
 public:
 	// Distinction Variables //
-	cStats Stats;
+	cStatus Status;
 	
 	// AI Variables //
 	Vector2D Target;
@@ -429,7 +445,7 @@ public:
 
 public:
 	// Distinction Variables //
-	cStats Stats;
+	cStatus Status;
 	
 	// AI Variables //
 	Vector2D Target;
