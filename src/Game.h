@@ -297,7 +297,9 @@ public:
 		Pos( _StartPos ),
 		Old( _StartPos ),
 		Radius( 6 ),
+		
 		State( ST_IDLE ),
+		
 		Leader( 0 ),
 		TargetPos( _StartPos ),
 		Target( 0 )
@@ -305,18 +307,21 @@ public:
 	}
 
 public:
-	// Physics Functions //
+	// Calculate the current velocity from positions //
 	inline const Vector2D Velocity() {
 		return (Pos - Old);
 	}
 	
+	// Accumulate a force/impulse //
 	inline void AddForce( const Vector2D& _Force ) {
 		Force += _Force;
 	}
 	
-	inline void ApplyReflection( const Vector2D& _ContactNormal ) {
+	// Given a surface contact, change the old position to reflect off that surface //
+	//   "Reflect" is a value from 0 to 1, depending on how much energy to retain (0-100%) //
+	inline void ApplyReflection( const Vector2D& _ContactNormal, const Real Reflect = Real::One) {
 		// Calculate the Reflection //
-		Real ReflectionStrength = (Velocity() * _ContactNormal) * Real(2);
+		Real ReflectionStrength = (Velocity() * _ContactNormal) * (Real::One + Reflect);
 		
 		// Reflect only if you oppose the direction of the Contact Normal //
 		if ( ReflectionStrength > Real::Zero ) {
@@ -324,6 +329,26 @@ public:
 			Old += ReflectionStrength * _ContactNormal;
 		}
 	}
+	
+	// Proper "Area" fomula //
+	inline Real Area() const {
+		return Real::Pi * Radius * Radius;
+	}
+	
+	// Specialty Area formula, for Circle vs. Circle tests.  One less multiply. //
+	inline Real CircleArea() const {
+		return Radius * Radius;
+	}
+
+public:
+	// Return where I should be going //
+	inline const Vector2D& GetTarget() const {
+		if ( Target )
+			return Target->Pos;
+		else
+			return TargetPos;
+	}
+	
 public:	
 	inline void Step() {
 		Vector2D Temp = Pos;
@@ -336,11 +361,11 @@ public:
 		Force = Vector2D(0,0);
 		
 		// Movement Hack //
-		AddForce( (TargetPos - Pos).Normal() * Real(0.05) );
+		AddForce( (GetTarget() - Pos).Normal() * Real(0.05) );
 	}
 	
 	inline void Draw() { 
-		gfxDrawCross( TargetPos, 3, RGB_GREEN );
+		gfxDrawCross( GetTarget(), 3, RGB_GREEN );
 		
 		gfxDrawCircle( Pos, Radius, RGB_PURPLE );
 	}
