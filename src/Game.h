@@ -220,6 +220,8 @@ public:
 	int Attack;
 	int Defense;
 	
+	Real AttackRange;
+	
 	// Things for identifying enhancements //
 	
 public:
@@ -339,6 +341,10 @@ public:
 	inline Real CircleArea() const {
 		return Radius * Radius;
 	}
+	
+	inline Real RadiusSquared() const {
+		return Radius * Radius;
+	}
 
 public:
 	// Return where I should be going //
@@ -347,6 +353,19 @@ public:
 			return Target->Pos;
 		else
 			return TargetPos;
+	}
+	
+	// Determine if something is within my Attack Range //
+	inline bool IsWithinAttackRange( const Vector2D& VsPos, const Real VsRadius ) const {
+		Vector2D Diff = VsPos - Pos;
+		Real RadiusSum = RadiusSquared() + (VsRadius * VsRadius);
+		RadiusSum += Status.AttackRange * Status.AttackRange;
+		
+		return Diff.MagnitudeSquared() < RadiusSum;
+	}
+	
+	inline bool IsWithinAttackRange( const cEntity& Vs ) const {
+		return IsWithinAttackRange( Vs.Pos, Vs.Radius );
 	}
 	
 public:	
