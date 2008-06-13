@@ -13,6 +13,7 @@
 // - ------------------------------------------------------------------------------------------ - //
 #include <AdvancedGeometry/PointVsPolygon2D.h>
 #include <AdvancedGeometry/PointVsEdgedPolygon2D.h>
+#include <AdvancedGeometry/PointVsCapsuleChain2D.h>
 // - ------------------------------------------------------------------------------------------ - //
 
 // - ------------------------------------------------------------------------------------------ - //
@@ -281,7 +282,10 @@ public:
 	enum {
 		ST_NULL = 0,
 		ST_IDLE,
-		ST_MOVING,
+		//ST_MOVING,
+		//ST_FOLLOWING,
+		//ST_ENGAGING,
+		
 				
 		ST_END
 	};
@@ -397,6 +401,8 @@ public:
 	Real Radius;
 	
 	Vector2D Force;
+	
+	bool Inside;
 
 public:
 	// Distinction Variables //
@@ -414,6 +420,7 @@ public:
 		Radius( 6 ),
 		Target( _StartPos )
 	{
+		Inside = false;
 	}
 
 public:
@@ -453,7 +460,10 @@ public:
 	inline void Draw() { 
 		gfxDrawCross( Target, 3, RGB_GREEN );
 		
-		gfxDrawCircle( Pos, Radius, RGB_PURPLE );
+		if ( Inside )
+			gfxDrawCircle( Pos, Radius, RGB_PURPLE );
+		else
+			gfxDrawCircle( Pos, Radius, RGB_YELLOW );
 	}
 };
 // - ------------------------------------------------------------------------------------------ - //
@@ -711,12 +721,18 @@ public:
 			}
 			
 			// Test for Collisions Vs. Polygons //
+			Hero[idx].Inside = false;
 			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
-				if ( !TestPointVsPolygon2D( Hero[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size() ) ) {
-					Vector2D EdgePoint = NearestPointOnEdgeOfPolygon2D( 
+				//if ( !TestCircleVsPolygon2D( Hero[idx].Pos, Hero[idx].Radius, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size() ) )
+				if ( Test_Point_Vs_CapsuleChain2D( Hero[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size(), Hero[idx].Radius ) )
+				{
+					Hero[idx].Inside = true;
+				
+					Vector2D EdgePoint = Nearest_InnerEdgePoint_On_CapsuleChain2D( 
 						Hero[idx].Pos,
 						&Collision[idx2]->Vertex[0],
-						Collision[idx2]->Vertex.size()
+						Collision[idx2]->Vertex.size(),
+						Hero[idx].Radius
 						);
 					
 					Hero[idx].Pos = EdgePoint;
@@ -725,7 +741,7 @@ public:
 		
 			// Test for Collisions Vs. Collectors //
 			for ( size_t idx2 = 0; idx2 < ExitPortal.size(); idx2++ ) {
-				if ( TestPointVsSphere2D( Hero[idx].Pos, ExitPortal[idx2].Pos, ExitPortal[idx2].Radius ) ) {
+				if ( Test_Point_Vs_Sphere2D( Hero[idx].Pos, ExitPortal[idx2].Pos, ExitPortal[idx2].Radius ) ) {
 					
 					// Kill Hero //
 					Hero.erase( Hero.begin() + idx );
@@ -745,17 +761,18 @@ public:
 			}
 			
 			// Test for Collisions Vs. Polygons //
-			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
-				if ( !TestPointVsPolygon2D( Enemy[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size() ) ) {
-					Vector2D EdgePoint = NearestPointOnEdgeOfPolygon2D( 
-						Enemy[idx].Pos,
-						&Collision[idx2]->Vertex[0],
-						Collision[idx2]->Vertex.size()
-						);
-					
-					Enemy[idx].Pos = EdgePoint;
-				}
-			}
+//			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
+//				if ( !TestCircleVsPolygon2D( Enemy[idx].Pos, Enemy[idx].Radius, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size() ) ) {
+//					Vector2D EdgePoint = NearestPointOnEdgeOfPolygon2D( 
+//						Enemy[idx].Pos,
+//						//Enemy[idx].Radius,
+//						&Collision[idx2]->Vertex[0],
+//						Collision[idx2]->Vertex.size()
+//						);
+//					
+//					Enemy[idx].Pos = EdgePoint;
+//				}
+//			}
 		}
 		
 		// TODO: Figure out the pushing rules //
