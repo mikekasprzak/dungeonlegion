@@ -90,7 +90,18 @@ public:
 	Real AttackRange;
 	
 	// Things for identifying enhancements //
-	
+
+public:
+	cStatus() :
+		HP(12),
+		MaxHP(12),
+		Attack(2),
+		Defense(1),
+		
+		AttackRange( 3 )
+	{
+	}
+
 public:
 	inline bool IsAlive() const {
 		return HP != 0;
@@ -157,6 +168,19 @@ public:
 	};
 	size_t State;
 	
+	// AI Brain Type //
+	enum {
+		BR_NULL = 0,
+		BR_HERO,
+		BR_RECRUITABLE,
+		BR_TROOP,
+		BR_NEUTRAL,
+		BR_ENEMY,
+		
+		BR_END
+	};
+	size_t Brain;
+	
 	
 	// AI Variables //
 	cEntity* Leader;
@@ -165,12 +189,13 @@ public:
 
 
 public:
-	cEntity( const Vector2D& _StartPos ) :
+	cEntity( const Vector2D& _StartPos, const size_t _BrainType = BR_HERO, const Real _Radius = 6 ) :
 		Pos( _StartPos ),
 		Old( _StartPos ),
-		Radius( 6 ),
+		Radius( _Radius ),
 		
 		State( ST_IDLE ),
+		Brain( _BrainType ),
 		
 		Leader( 0 ),
 		TargetPos( _StartPos ),
@@ -256,7 +281,18 @@ public:
 	inline void Draw() { 
 		gfxDrawCross( GetTarget(), 3, RGB_GREEN );
 		
-		gfxDrawCircle( Pos, Radius, RGB_PURPLE );
+		if ( Brain == BR_HERO ) {
+			gfxDrawCircle( Pos, Radius, RGB_PURPLE );
+			
+			gfxDrawCircle( Pos, Radius + Status.AttackRange, RGB_GREY );
+		}
+		else if ( Brain == BR_TROOP ) {
+			gfxDrawCircle( Pos, Radius, RGB_SKY );
+			
+			gfxDrawCircle( Pos, Radius + Status.AttackRange, RGB_GREY );
+		}
+		else
+			gfxDrawCircle( Pos, Radius, RGB_RED );
 	}
 };
 // - ------------------------------------------------------------------------------------------ - //
@@ -332,7 +368,9 @@ public:
 				switch (Map.Element[idx].Id) {
 					case 1: {
 						// Hero //
-						Entity.push_back( cEntity(Map.Element[idx].Center) );
+						Entity.push_back( 
+							cEntity( Map.Element[idx].Center, cEntity::BR_HERO, 6 )
+							);
 						CurrentHero = Entity.size() - 1;
 						printf(" + Added Hero\n");
 						break;
@@ -343,16 +381,28 @@ public:
 						printf(" + Added Exit Portal\n");
 						break;
 					}
+					case 5: {
+						// Troop //
+						Entity.push_back( 
+							cEntity( Map.Element[idx].Center, cEntity::BR_TROOP, 4 )
+							);
+						printf(" + Added Troop\n");
+						break;
+					}
 					case 11: {
 						// Enemy //
-						Entity.push_back( cEntity(Map.Element[idx].Center) );
-						printf(" + Added Enemy\n");
+						Entity.push_back( 
+							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 8 )
+							);
+						printf(" + Added Enemy 1\n");
 						break;
 					}
 					case 12: {
 						// Enemy //
-						Entity.push_back( cEntity(Map.Element[idx].Center) );
-						printf(" + Added Entity\n");
+						Entity.push_back( 
+							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 18 )
+							);
+						printf(" + Added Enemy 2\n");
 						break;
 					}	
 				};
