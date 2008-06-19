@@ -162,6 +162,7 @@ public:
 		//ST_MOVING,
 		//ST_FOLLOWING,
 		//ST_ENGAGING,
+		ST_ENGAGED,
 		
 				
 		ST_END
@@ -261,6 +262,10 @@ public:
 	
 	inline bool IsWithinAttackRange( const cEntity& Vs ) const {
 		return IsWithinAttackRange( Vs.Pos, Vs.Radius );
+	}
+	
+	inline bool IsEngaged() const {
+		return State == cEntity::ST_ENGAGED;	
 	}
 	
 public:	
@@ -402,6 +407,7 @@ public:
 						Entity.push_back( 
 							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 18 )
 							);
+						Entity.back().State = cEntity::ST_ENGAGED;
 						printf(" + Added Enemy 2\n");
 						break;
 					}	
@@ -484,14 +490,49 @@ public:
 					Real Diff = RadiusSum - Length;
 					
 					// Less Mass, easier to push bigger guys //
-//					Real E1Mass = Entity[idx].Radius;
-//					Real E2Mass = Entity[idx2].Radius;
-					// Greater, More correct size ratio masses //
-					Real E1Mass = Entity[idx].CircleArea();
-					Real E2Mass = Entity[idx2].CircleArea();
+					Real E1Mass = Entity[idx].Radius;
+					Real E2Mass = Entity[idx2].Radius;
+					// Greater Mass, harder to push big guys, more correct ratio //
+//					Real E1Mass = Entity[idx].CircleArea();
+//					Real E2Mass = Entity[idx2].CircleArea();
 					
 					// Test various properties to figure out if one of them should not be moved //
-					
+					{
+						// If the other guy is my leader //
+						if ( Entity[idx].Leader == &Entity[idx2] ) {
+							// Since E2 is my leader, make my mass not affect him //
+							E1Mass = 0;
+						}
+						else if ( Entity[idx2].Leader == &Entity[idx] ) {
+							// Since E1 is my leader, make my mass not affect him //
+							E2Mass = 0;
+						}
+						
+						// If the other guy is my target //
+						else if ( Entity[idx].Target == &Entity[idx2] ) {
+							// Since E2 is my target, my mass shouldn't affect him //
+							E1Mass = 0;
+						}
+						else if ( Entity[idx2].Target == &Entity[idx] ) {
+							// Since E1 is my target, my mass shouldn't affect him //
+							E2Mass = 0;
+						}
+						
+						// So long as we don't have the same leader, obey the "no pushing //
+						//   if engaged" rule. //
+						else if ( (Entity[idx].Leader == 0) || (Entity[idx].Leader != Entity[idx2].Leader) ) {
+							// If the other guy is engaged in combat //
+							if ( Entity[idx2].IsEngaged() ) {
+								// E2 is already planted and engaged in a battle, I shouldn't move him //
+								E1Mass = 0;
+							}
+							else if ( Entity[idx].IsEngaged() ) {
+								// E1 is already planted and engaged in a battle, I shouldn't move him //
+								E2Mass = 0;
+							}
+						}
+											
+					}
 					
 					// Sum the Masses //
 					Real MassSum = E1Mass + E2Mass;
