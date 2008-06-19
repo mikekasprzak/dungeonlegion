@@ -634,7 +634,7 @@ public:
 			if ( Map.Element[idx].Type == PME_RECT ) {
 				switch (Map.Element[idx].Id) {
 					case 1: {
-						printf(" + Bounding Rectangle Set\n");
+						printf(" + Camera Bounding Rectangle Set\n");
 						BoundsIndex = idx;
 						break;
 					}
@@ -645,8 +645,9 @@ public:
 				switch (Map.Element[idx].Id) {
 					case 1: {
 						// Hero //
-						Hero.push_back( cHero(Map.Element[idx].Center) );
-						//CurrentHero = Entity.size() - 1;
+						//Hero.push_back( cHero(Map.Element[idx].Center) );
+						Entity.push_back( cEntity(Map.Element[idx].Center) );
+						CurrentHero = Entity.size() - 1;
 						printf(" + Added Hero\n");
 						break;
 					}
@@ -658,7 +659,8 @@ public:
 					}
 					case 11: {
 						// Enemy //
-						Enemy.push_back( cEnemy(Map.Element[idx].Center) );
+						//Enemy.push_back( cEnemy(Map.Element[idx].Center) );
+						Entity.push_back( cEntity(Map.Element[idx].Center) );
 						printf(" + Added Enemy\n");
 						break;
 					}
