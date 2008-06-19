@@ -43,3 +43,7 @@ Id 2
 // Enemy //
 Sphere 10 0
 Id 11
+
+// Entity //
+Sphere -8 -4
+Id 12 

@@ -597,9 +597,11 @@ public:
 //	std::vector<cParticle> Particle;
 
 	std::vector<cHero> Hero;
-	int CurrentHero;
 	
 	std::vector<cEnemy> Enemy;
+		
+	std::vector<cEntity> Entity;
+	int CurrentHero;
 	
 	std::vector<cExitPortal> ExitPortal;
 		
@@ -644,6 +646,7 @@ public:
 					case 1: {
 						// Hero //
 						Hero.push_back( cHero(Map.Element[idx].Center) );
+						//CurrentHero = Entity.size() - 1;
 						printf(" + Added Hero\n");
 						break;
 					}
@@ -658,7 +661,14 @@ public:
 						Enemy.push_back( cEnemy(Map.Element[idx].Center) );
 						printf(" + Added Enemy\n");
 						break;
-					}				};
+					}
+					case 12: {
+						// Enemy //
+						Entity.push_back( cEntity(Map.Element[idx].Center) );
+						printf(" + Added Entity\n");
+						break;
+					}	
+				};
 			}
 			else if ( Map.Element[idx].Type == PME_POLY ) {
 				// For now, asume all polygons are collision //
@@ -671,8 +681,8 @@ public:
 	inline void Step() {
 		// Magnet Moving Hack //
 		if ( mouse_b == 1 )
-			if ( Hero.size() )
-				Hero[0].Target = Camera.Mouse;
+			if ( Entity.size() )
+				Entity[CurrentHero].TargetPos = Camera.Mouse;
 		
 		
 		// Step all Generators //
@@ -775,6 +785,43 @@ public:
 //			}
 		}
 		
+		// Step all Entities //
+		for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+			Entity[idx].Step();
+
+			// Apply Impulses //
+			for ( size_t idx2 = 0; idx2 < Impulse.size(); idx2++ ) {
+				Entity[idx].AddForce( Impulse[idx2].GetForce( Entity[idx].Pos ) );
+			}
+
+
+			// Test for Collisions Vs. Polygons //
+			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
+				if ( Test_Point_Vs_CapsuleChain2D( Entity[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size(), Entity[idx].Radius ) )
+				{
+					Vector2D EdgePoint = Nearest_InnerEdgePoint_On_CapsuleChain2D( 
+						Entity[idx].Pos,
+						&Collision[idx2]->Vertex[0],
+						Collision[idx2]->Vertex.size(),
+						Entity[idx].Radius
+						);
+					
+					Entity[idx].Pos = EdgePoint;
+				}
+			}
+		
+			// Test for Collisions Vs. Collectors //
+			for ( size_t idx2 = 0; idx2 < ExitPortal.size(); idx2++ ) {
+				if ( Test_Point_Vs_Sphere2D( Entity[idx].Pos, ExitPortal[idx2].Pos, ExitPortal[idx2].Radius ) ) {
+					
+					// Kill Hero //
+					Entity.erase( Entity.begin() + idx );
+					idx--;
+					break;
+				}
+			}
+		}
+
 		// TODO: Figure out the pushing rules //
 		// Step all Heroes Vs Enemies //
 //		for ( size_t idx = 0; idx < Hero.size(); idx++ ) {
@@ -799,6 +846,12 @@ public:
 		for ( size_t idx = 0; idx < Enemy.size(); idx++ ) {
 			Enemy[idx].Draw();
 		}
+
+		// Draw all Entities //
+		for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+			Entity[idx].Draw();
+		}
+		
 		
 		// Draw all ExitPortals //
 		for ( size_t idx = 0; idx < ExitPortal.size(); idx++ ) {
