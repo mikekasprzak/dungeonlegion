@@ -483,8 +483,22 @@ public:
 					
 					Real Diff = RadiusSum - Length;
 					
-					Entity[idx].Pos -= (Line * Diff) * Real::Half;
-					Entity[idx2].Pos += (Line * Diff) * Real::Half;
+					// Less Mass, easier to push bigger guys //
+//					Real E1Mass = Entity[idx].Radius;
+//					Real E2Mass = Entity[idx2].Radius;
+					// Greater, More correct size ratio masses //
+					Real E1Mass = Entity[idx].CircleArea();
+					Real E2Mass = Entity[idx2].CircleArea();
+					
+					// Test various properties to figure out if one of them should not be moved //
+					
+					
+					// Sum the Masses //
+					Real MassSum = E1Mass + E2Mass;
+					
+					// Move the positions //					
+					Entity[idx].Pos -= (Line * Diff) * (Real::One - (E1Mass / MassSum));
+					Entity[idx2].Pos += (Line * Diff) * (Real::One - (E2Mass / MassSum));
 				}
 			}
 		}	
