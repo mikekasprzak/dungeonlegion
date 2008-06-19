@@ -472,14 +472,22 @@ public:
 			}
 		}
 
-		// TODO: Figure out the pushing rules //
-		// Step all Heroes Vs Enemies //
-//		for ( size_t idx = 0; idx < Hero.size(); idx++ ) {
-//			// Step all Enemies //
-//			for ( size_t idx2 = 0; idx2 < Enemy.size(); idx2++ ) {
-//			
-//			}
-//		}	
+		// Collision detection Versus all Entities //
+		for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+			// Step all un-touched Entities //
+			for ( size_t idx2 = idx+1; idx2 < Entity.size(); idx2++ ) {
+				if ( Test_Point_Vs_Sphere2D( Entity[idx].Pos, Entity[idx2].Pos, Entity[idx2].Radius + Entity[idx].Radius ) ) {
+					Vector2D Line = Entity[idx2].Pos - Entity[idx].Pos;
+					Real Length = Line.NormalizeRet();
+					Real RadiusSum = Entity[idx2].Radius + Entity[idx].Radius;
+					
+					Real Diff = RadiusSum - Length;
+					
+					Entity[idx].Pos -= (Line * Diff) * Real::Half;
+					Entity[idx2].Pos += (Line * Diff) * Real::Half;
+				}
+			}
+		}	
 
 		// Remove all Impulses //
 		Impulse.clear();
