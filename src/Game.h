@@ -410,11 +410,11 @@ public:
 				}
 			}
 		
-			// Test for Collisions Vs. Collectors //
+			// Test for Entity Collisions Vs. Collectors //
 			for ( size_t idx2 = 0; idx2 < ExitPortal.size(); idx2++ ) {
-				if ( Test_Point_Vs_Sphere2D( Entity[idx].Pos, ExitPortal[idx2].Pos, ExitPortal[idx2].Radius ) ) {
+				if ( Test_Point_Vs_Sphere2D( Entity[idx].Pos, ExitPortal[idx2].Pos, ExitPortal[idx2].Radius + Entity[idx].Radius ) ) {
 					
-					// Kill Hero //
+					// Kill Entity //
 					Entity.erase( Entity.begin() + idx );
 					idx--;
 					break;
