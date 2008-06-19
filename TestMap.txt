@@ -38,12 +38,12 @@ Id 1
 
 // Exit Portal //
 Sphere -12 2
-Id 2
+Id 4
 
 // Enemy //
 Sphere 10 0
-Id 11
+Id 12
 
 // Entity //
 Sphere -8 -4
-Id 12 
+Id 5 

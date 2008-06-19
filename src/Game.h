@@ -375,7 +375,7 @@ public:
 						printf(" + Added Hero\n");
 						break;
 					}
-					case 2: {
+					case 4: {
 						// Exit Portal //
 						ExitPortal.push_back( cExitPortal(Map.Element[idx].Center) );
 						printf(" + Added Exit Portal\n");
