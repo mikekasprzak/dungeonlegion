@@ -267,8 +267,8 @@ public:
 	// Determine if something is within my Attack Range //
 	inline bool IsWithinAttackRange( const Vector2D& VsPos, const Real VsRadius ) const {
 		Vector2D Diff = VsPos - Pos;
-		Real RadiusSum = RadiusSquared() + (VsRadius * VsRadius);
-		RadiusSum += Status.AttackRange * Status.AttackRange;
+		Real RadiusSum = Radius + VsRadius + Status.AttackRange;
+		RadiusSum *= RadiusSum;
 		
 		return Diff.MagnitudeSquared() < RadiusSum;
 	}
@@ -433,7 +433,7 @@ public:
 					case 1: {
 						// Hero //
 						Entity.push_back( 
-							cEntity( Map.Element[idx].Center, cEntity::BR_HERO, 12 )
+							cEntity( Map.Element[idx].Center, cEntity::BR_HERO, 14 )
 							);
 						CurrentHero = Entity.size() - 1;
 						printf(" + Added Hero\n");
@@ -450,8 +450,6 @@ public:
 						Entity.push_back( 
 							cEntity( Map.Element[idx].Center, cEntity::BR_TROOP, 8 )
 							);
-						// Leadership hack //
-						Entity.back().Leader = &Entity[CurrentHero];
 						printf(" + Added Troop\n");
 						break;
 					}
@@ -479,7 +477,8 @@ public:
 				Collision.push_back( &Map.Element[idx] );
 				printf(" + Added Collision Polygon\n");
 			}
-		}		
+		}
+		
 	}
 	
 	inline void Step() {
@@ -558,7 +557,28 @@ public:
 		// Collision detection Versus all Entities //
 		for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
 			// Step all un-touched Entities //
-			for ( size_t idx2 = idx+1; idx2 < Entity.size(); idx2++ ) {
+			for ( size_t idx2 = idx+1; idx2 < Entity.size(); idx2++ ) {	
+				// If there's a brain compatability match (i.e. Join me) //
+				if ( (Entity[idx].Brain == cEntity::BR_HERO) || (Entity[idx2].Brain == cEntity::BR_HERO) ) {
+					if ( (Entity[idx].Brain == cEntity::BR_TROOP) ) {
+						if ( (Entity[idx].Leader == 0 ) ) {
+							if ( Entity[idx2].IsWithinAttackRange( Entity[idx] ) ) {
+								Entity[idx].Leader = &Entity[idx2];
+								printf("Pwned %i\n", idx);
+							}
+						}
+					}
+					else if ( (Entity[idx2].Brain == cEntity::BR_TROOP) ) {
+						if ( (Entity[idx2].Leader == 0 ) ) {
+							if ( Entity[idx].IsWithinAttackRange( Entity[idx2] ) ) {
+								Entity[idx2].Leader = &Entity[idx];
+								printf("Pwned %i\n", idx2);
+							}
+						}						
+					}
+				}
+				
+				// Test for collision versus other object //
 				if ( Test_Point_Vs_Sphere2D( Entity[idx].Pos, Entity[idx2].Pos, Entity[idx2].Radius + Entity[idx].Radius ) ) {
 					Vector2D Line = Entity[idx2].Pos - Entity[idx].Pos;
 					Real Length = Line.NormalizeRet();
@@ -575,15 +595,15 @@ public:
 					
 					// Test various properties to figure out if one of them should not be moved //
 					{
-//						// If the other guy is my leader //
-//						if ( Entity[idx].Leader == &Entity[idx2] ) {
-//							// Since E2 is my leader, make my mass not affect him //
-//							E1Mass = 0;
-//						}
-//						else if ( Entity[idx2].Leader == &Entity[idx] ) {
-//							// Since E1 is my leader, make my mass not affect him //
-//							E2Mass = 0;
-//						}
+						// If the other guy is my leader //
+						if ( Entity[idx].Leader == &Entity[idx2] ) {
+							// Since E2 is my leader, make my mass not affect him //
+							E1Mass = 0;
+						}
+						else if ( Entity[idx2].Leader == &Entity[idx] ) {
+							// Since E1 is my leader, make my mass not affect him //
+							E2Mass = 0;
+						}
 						
 						// If the other guy is my target //
 						if ( Entity[idx].Target == &Entity[idx2] ) {
