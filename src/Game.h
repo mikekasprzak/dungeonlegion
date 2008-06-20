@@ -284,7 +284,7 @@ public:
 public:	
 	inline void StepPhysics() {
 		Vector2D Temp = Pos;
-		Vector2D NewVelocity = (Velocity() * Real(0.98)) + Force;
+		Vector2D NewVelocity = (Velocity() * Real(0.9)) + Force;
 		
 		Pos += NewVelocity;
 		Old = Temp;
@@ -311,7 +311,7 @@ public:
 		
 //		// Movement Hack //
 		if ( !ReachedTarget ) {
-			AddForce( (GetTarget() - Pos).Normal() * Real(0.05) );
+			AddForce( (GetTarget() - Pos).Normal() * Real(0.2) );
 		}
 		
 		if ( Target ) {

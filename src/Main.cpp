@@ -44,7 +44,7 @@ int main( int argc, char* argv[] ) {
 			Game.Draw();
 					
 			// Draw center cross //
-			gfxDrawCross( gfxGetCameraCenter(), 4 );
+//			gfxDrawCross( gfxGetCameraCenter(), 4 );
 
 			// Draw the cursor (last, so it's on top of everything) //
 //			gfxDrawCircle( Camera.Mouse, 2, RGB_YELLOW );
@@ -52,6 +52,7 @@ int main( int argc, char* argv[] ) {
 			
 			// Draw cursors and hud stuffs in screen space, as opposed to camera space //
 			gfxSetScreenMatrix();
+			gfxDrawCross( Vector2D::Zero, 4 );
 			// Draw the cursor (last, so it's on top of everything) //
 			gfxDrawCircle( Mouse.Pos, 2, RGB_WHITE );
 	
