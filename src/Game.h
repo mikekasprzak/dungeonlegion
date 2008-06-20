@@ -188,8 +188,11 @@ public:
 	
 	// AI Variables //
 	cEntity* Leader;
+	
 	Vector2D TargetPos;
 	cEntity* Target;
+	
+	bool ReachedTarget;
 
 
 public:
@@ -203,7 +206,8 @@ public:
 		
 		Leader( 0 ),
 		TargetPos( _StartPos ),
-		Target( 0 )
+		Target( 0 ),
+		ReachedTarget( true )
 	{
 	}
 
@@ -250,8 +254,12 @@ public:
 	inline const Vector2D& GetTarget() const {
 		if ( Target )
 			return Target->Pos;
-		else if ( Leader )
-			return Leader->Pos;
+		else if ( Leader ) {
+			if ( Leader->Target )
+				return Leader->Target->Pos;
+			else
+				return Leader->Pos;
+		}
 		else
 			return TargetPos;
 	}
@@ -302,8 +310,28 @@ public:
 		
 		
 //		// Movement Hack //
-		AddForce( (GetTarget() - Pos).Normal() * Real(0.05) );
+		if ( !ReachedTarget ) {
+			AddForce( (GetTarget() - Pos).Normal() * Real(0.05) );
+		}
 		
+		if ( Target ) {
+			Real Distance = Radius + Status.AttackRange + Target->Radius;
+			ReachedTarget = (GetTarget() - Pos).MagnitudeSquared() < Distance * Distance;
+		}
+		else if ( Leader ) {
+			if ( Leader->Target ) {
+				Real Distance = Radius + Status.AttackRange + Leader->Target->Radius;
+				ReachedTarget = (GetTarget() - Pos).MagnitudeSquared() < Distance * Distance;				
+			}
+			else {
+				Real Distance = Radius + Status.AttackRange + Leader->Radius;
+				ReachedTarget = (GetTarget() - Pos).MagnitudeSquared() < Distance * Distance;
+			}
+		}
+		else {
+			Real Distance = Radius + Status.AttackRange + Real(4);
+			ReachedTarget = (GetTarget() - Pos).MagnitudeSquared() < Distance * Distance;
+		}
 	}
 	
 	inline void Step() {
@@ -311,9 +339,12 @@ public:
 		StepAI();
 	}
 	
-	inline void Draw() { 
+	inline void Draw() {
 		if ( Brain == BR_HERO ) {
-			gfxDrawCross( GetTarget(), 3, RGB_GREEN );
+			if ( !ReachedTarget )
+				gfxDrawCross( GetTarget(), 5, RGB_GREEN );
+			else
+				gfxDrawCross( GetTarget(), 3, RGB_GREY );
 			
 			gfxDrawCircle( Pos, Radius, RGB_PURPLE );
 			
@@ -456,6 +487,7 @@ public:
 		if ( mouse_b == 1 ) {
 			Entity[CurrentHero].TargetPos = Camera.Mouse;
 			Entity[CurrentHero].Target = 0;
+			Entity[CurrentHero].ReachedTarget = false;
 			
 			for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
 				if ( idx == CurrentHero )
@@ -535,26 +567,26 @@ public:
 					Real Diff = RadiusSum - Length;
 					
 					// Less Mass, easier to push bigger guys //
-					Real E1Mass = Entity[idx].Radius;
-					Real E2Mass = Entity[idx2].Radius;
+//					Real E1Mass = Entity[idx].Radius;
+//					Real E2Mass = Entity[idx2].Radius;
 					// Greater Mass, harder to push big guys, more correct ratio //
-//					Real E1Mass = Entity[idx].CircleArea();
-//					Real E2Mass = Entity[idx2].CircleArea();
+					Real E1Mass = Entity[idx].CircleArea();
+					Real E2Mass = Entity[idx2].CircleArea();
 					
 					// Test various properties to figure out if one of them should not be moved //
 					{
-						// If the other guy is my leader //
-						if ( Entity[idx].Leader == &Entity[idx2] ) {
-							// Since E2 is my leader, make my mass not affect him //
-							E1Mass = 0;
-						}
-						else if ( Entity[idx2].Leader == &Entity[idx] ) {
-							// Since E1 is my leader, make my mass not affect him //
-							E2Mass = 0;
-						}
+//						// If the other guy is my leader //
+//						if ( Entity[idx].Leader == &Entity[idx2] ) {
+//							// Since E2 is my leader, make my mass not affect him //
+//							E1Mass = 0;
+//						}
+//						else if ( Entity[idx2].Leader == &Entity[idx] ) {
+//							// Since E1 is my leader, make my mass not affect him //
+//							E2Mass = 0;
+//						}
 						
 						// If the other guy is my target //
-						else if ( Entity[idx].Target == &Entity[idx2] ) {
+						if ( Entity[idx].Target == &Entity[idx2] ) {
 							// Since E2 is my target, my mass shouldn't affect him //
 							E1Mass = 0;
 						}
