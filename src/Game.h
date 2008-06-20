@@ -295,21 +295,6 @@ public:
 	
 	inline void StepAI() {
 		// Movement //
-//		Vector2D TargetVector = GetTarget() - Pos;
-//		Real Length = TargetVector.NormalizeRet();
-//		
-//		Vector2D Vel = Velocity();
-//		Real Speed = Vel.NormalizeRet();
-//		
-//		
-//		
-//		if ( Length > Real(0.2) )
-//			Length = Real(0.2);
-//			
-//		Pos += TargetVector * Length;
-		
-		
-//		// Movement Hack //
 		if ( !ReachedTarget ) {
 			AddForce( (GetTarget() - Pos).Normal() * Real(0.2) );
 		}
