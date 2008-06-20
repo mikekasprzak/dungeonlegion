@@ -173,8 +173,11 @@ public:
 	enum {
 		BR_NULL = 0,
 		BR_HERO,
-		BR_RECRUITABLE,
 		BR_TROOP,
+		
+		BR_CLICKABLE,
+		
+		BR_RECRUITABLE,
 		BR_NEUTRAL,
 		BR_ENEMY,
 		
@@ -269,7 +272,7 @@ public:
 	}
 	
 public:	
-	inline void Step() {
+	inline void StepPhysics() {
 		Vector2D Temp = Pos;
 		Vector2D NewVelocity = (Velocity() * Real(0.98)) + Force;
 		
@@ -278,15 +281,38 @@ public:
 		
 		// Clear Collected Forces //
 		Force = Vector2D(0,0);
+	}
+	
+	inline void StepAI() {
+		// Movement //
+//		Vector2D TargetVector = GetTarget() - Pos;
+//		Real Length = TargetVector.NormalizeRet();
+//		
+//		Vector2D Vel = Velocity();
+//		Real Speed = Vel.NormalizeRet();
+//		
+//		
+//		
+//		if ( Length > Real(0.2) )
+//			Length = Real(0.2);
+//			
+//		Pos += TargetVector * Length;
 		
-		// Movement Hack //
+		
+//		// Movement Hack //
 		AddForce( (GetTarget() - Pos).Normal() * Real(0.05) );
+		
+	}
+	
+	inline void Step() {
+		StepPhysics();
+		StepAI();
 	}
 	
 	inline void Draw() { 
-		gfxDrawCross( GetTarget(), 3, RGB_GREEN );
-		
 		if ( Brain == BR_HERO ) {
+			gfxDrawCross( GetTarget(), 3, RGB_GREEN );
+			
 			gfxDrawCircle( Pos, Radius, RGB_PURPLE );
 			
 			gfxDrawCircle( Pos, Radius + Status.AttackRange, RGB_GREY );
@@ -423,9 +449,22 @@ public:
 	
 	inline void Step() {
 		// Magnet Moving Hack //
-		if ( mouse_b == 1 )
-			if ( Entity.size() )
-				Entity[CurrentHero].TargetPos = Camera.Mouse;
+		if ( mouse_b == 1 ) {
+			Entity[CurrentHero].TargetPos = Camera.Mouse;
+			Entity[CurrentHero].Target = 0;
+			
+			for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+				if ( idx == CurrentHero )
+					continue;
+					
+				if ( Entity[idx].Brain < cEntity::BR_CLICKABLE )
+					continue;
+				
+				if ( Test_Point_Vs_Sphere2D( Camera.Mouse, Entity[idx].Pos, Entity[idx].Radius ) ) {
+					Entity[CurrentHero].Target = &Entity[idx];
+				}
+			}
+		}
 		
 		
 		// Step all Collectors //
@@ -531,7 +570,6 @@ public:
 								E2Mass = 0;
 							}
 						}
-											
 					}
 					
 					// Sum the Masses //
