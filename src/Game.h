@@ -250,6 +250,8 @@ public:
 	inline const Vector2D& GetTarget() const {
 		if ( Target )
 			return Target->Pos;
+		else if ( Leader )
+			return Leader->Pos;
 		else
 			return TargetPos;
 	}
@@ -400,7 +402,7 @@ public:
 					case 1: {
 						// Hero //
 						Entity.push_back( 
-							cEntity( Map.Element[idx].Center, cEntity::BR_HERO, 6 )
+							cEntity( Map.Element[idx].Center, cEntity::BR_HERO, 12 )
 							);
 						CurrentHero = Entity.size() - 1;
 						printf(" + Added Hero\n");
@@ -415,15 +417,17 @@ public:
 					case 5: {
 						// Troop //
 						Entity.push_back( 
-							cEntity( Map.Element[idx].Center, cEntity::BR_TROOP, 4 )
+							cEntity( Map.Element[idx].Center, cEntity::BR_TROOP, 8 )
 							);
+						// Leadership hack //
+						Entity.back().Leader = &Entity[CurrentHero];
 						printf(" + Added Troop\n");
 						break;
 					}
 					case 11: {
 						// Enemy //
 						Entity.push_back( 
-							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 8 )
+							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 16 )
 							);
 						printf(" + Added Enemy 1\n");
 						break;
@@ -431,7 +435,7 @@ public:
 					case 12: {
 						// Enemy //
 						Entity.push_back( 
-							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 18 )
+							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 36 )
 							);
 						Entity.back().State = cEntity::ST_ENGAGED;
 						printf(" + Added Enemy 2\n");
@@ -470,7 +474,8 @@ public:
 		// Step all Collectors //
 		for ( size_t idx = 0; idx < ExitPortal.size(); idx++ ) {
 			ExitPortal[idx].Step();
-			// TODO: Add Impulse 
+			
+			// Add an impulse that pulls them towards us //
 			Impulse.push_back( 
 				cImpulse(
 					ExitPortal[idx].Pos,
@@ -508,10 +513,11 @@ public:
 			// Test for Entity Collisions Vs. Collectors //
 			for ( size_t idx2 = 0; idx2 < ExitPortal.size(); idx2++ ) {
 				if ( Test_Point_Vs_Sphere2D( Entity[idx].Pos, ExitPortal[idx2].Pos, ExitPortal[idx2].Radius + Entity[idx].Radius ) ) {
-					
 					// Kill Entity //
 					Entity.erase( Entity.begin() + idx );
 					idx--;
+					
+					// Break out of the for loop //
 					break;
 				}
 			}

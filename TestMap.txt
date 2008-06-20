@@ -7,7 +7,7 @@ Vertex -960 -640
 Vertex 960 640
 
 // Set Global Scalal for rest of co-ordinates //
-Scalar 20
+Scalar 40
 
 // Main Level Colosion Body //
 Poly
