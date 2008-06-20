@@ -327,9 +327,9 @@ public:
 	inline void Draw() {
 		if ( Brain == BR_HERO ) {
 			if ( !ReachedTarget )
-				gfxDrawCross( GetTarget(), 5, RGB_GREEN );
+				gfxDrawX( GetTarget(), 5, RGB_GREEN );
 			else
-				gfxDrawCross( GetTarget(), 3, RGB_GREY );
+				gfxDrawX( GetTarget(), 3, RGB_GREY );
 			
 			gfxDrawCircle( Pos, Radius, RGB_PURPLE );
 			
