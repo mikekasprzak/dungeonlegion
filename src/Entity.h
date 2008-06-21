@@ -26,6 +26,8 @@ public:
 	
 	Real AttackRange;
 	
+	Real EngageRange;
+	
 	// ActionRate - How long between each action
 	// Initative - How quickly you can perform an action initially?
 
@@ -43,7 +45,8 @@ public:
 		Attack(2),
 		Defense(1),
 		
-		AttackRange( 3 )
+		AttackRange( 3 ),
+		EngageRange( 32 )
 	{
 	}
 
@@ -233,6 +236,20 @@ public:
 	inline bool IsWithinAttackRange( const cEntity& Vs ) const {
 		return IsWithinAttackRange( Vs.Pos, Vs.Radius );
 	}
+
+	// Determine if something is within my Engage Range (how close for me to go fight it) //
+	inline bool IsWithinEngageRange( const Vector2D& VsPos, const Real VsRadius ) const {
+		Vector2D Diff = VsPos - Pos;
+		Real RadiusSum = Radius + VsRadius + Status.EngageRange;
+		RadiusSum *= RadiusSum;
+		
+		return Diff.MagnitudeSquared() < RadiusSum;
+	}
+	
+	inline bool IsWithinEngageRange( const cEntity& Vs ) const {
+		return IsWithinEngageRange( Vs.Pos, Vs.Radius );
+	}
+
 	
 	inline bool IsEngaged() const {
 		//return State == cEntity::ST_ATTACKING;
@@ -286,6 +303,8 @@ public:
 	}
 	
 	inline void Draw() {
+		gfxDrawCircle( Pos, Radius + Status.EngageRange, RGB_ORANGE );
+		
 		if ( !Status.IsAlive() ) {
 			gfxDrawX( Pos, Radius, RGB_RED );
 			

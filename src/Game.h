@@ -214,6 +214,32 @@ public:
 					}
 				}
 				
+				// If one of us is an enemy //
+				if ( (Entity[idx].Brain == cEntity::BR_ENEMY) || (Entity[idx2].Brain == cEntity::BR_ENEMY) ) {
+					if ( (Entity[idx].Brain != cEntity::BR_ENEMY) || (Entity[idx2].Brain != cEntity::BR_ENEMY) ) {
+						if ( Entity[idx].Brain != cEntity::BR_HERO ) {
+							if ( Entity[idx].State == cEntity::ST_IDLE ) {
+								if ( Entity[idx].Target == 0 ) {
+									if ( Entity[idx].IsWithinEngageRange( Entity[idx2] ) ) {
+										Entity[idx].Target = &Entity[idx2];
+										printf("%i Targeted %i\n", idx, idx2);
+									}
+								}
+							}
+						}
+						if ( Entity[idx2].Brain != cEntity::BR_HERO ) {
+							if ( Entity[idx2].State == cEntity::ST_IDLE ) {
+								if ( Entity[idx2].Target == 0 ) {
+									if ( Entity[idx2].IsWithinEngageRange( Entity[idx] ) ) {
+										Entity[idx2].Target = &Entity[idx];
+										printf("%i Targeted %i\n", idx2, idx);
+									}
+								}
+							}
+						}
+					}
+				}
+				
 				// Test for collision versus other object //
 				if ( Test_Point_Vs_Sphere2D( Entity[idx].Pos, Entity[idx2].Pos, Entity[idx2].Radius + Entity[idx].Radius ) ) {
 					Vector2D Line = Entity[idx2].Pos - Entity[idx].Pos;
@@ -241,16 +267,6 @@ public:
 							E2Mass = 0;
 						}
 						
-						// If the other guy is my target //
-						if ( Entity[idx].Target == &Entity[idx2] ) {
-							// Since E2 is my target, my mass shouldn't affect him //
-							E1Mass = 0;
-						}
-						else if ( Entity[idx2].Target == &Entity[idx] ) {
-							// Since E1 is my target, my mass shouldn't affect him //
-							E2Mass = 0;
-						}
-						
 						// So long as we don't have the same leader, obey the "no pushing //
 						//   if engaged" rule. //
 						else if ( (Entity[idx].Leader == 0) || (Entity[idx].Leader != Entity[idx2].Leader) ) {
@@ -264,6 +280,17 @@ public:
 								E2Mass = 0;
 							}
 						}
+						
+						// If the other guy is my target //
+						else if ( Entity[idx].Target == &Entity[idx2] ) {
+							// Since E2 is my target, my mass shouldn't affect him //
+							E1Mass = 0;
+						}
+						else if ( Entity[idx2].Target == &Entity[idx] ) {
+							// Since E1 is my target, my mass shouldn't affect him //
+							E2Mass = 0;
+						}
+						
 					}
 					
 					// Sum the Masses //
