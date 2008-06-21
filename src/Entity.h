@@ -104,6 +104,8 @@ public:
 	enum {
 		ST_NULL = 0,
 		ST_IDLE,
+		//ST_WAITING,
+		ST_ESCAPING,
 		//ST_MOVING,
 		//ST_FOLLOWING,
 		//ST_ENGAGING,
@@ -301,7 +303,7 @@ public:
 		}
 		else if ( Brain == BR_TROOP ) {
 			if ( Leader == 0 )
-				gfxDrawCircle( Pos, Radius, RGB_BLUE );
+				gfxDrawCircle( Pos, Radius, RGB_GREY );
 			else
 				gfxDrawCircle( Pos, Radius, RGB_SKY );
 			
