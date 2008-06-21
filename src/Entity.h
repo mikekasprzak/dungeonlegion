@@ -145,6 +145,8 @@ public:
 	
 	bool ReachedTarget;
 
+	int EngagableTargets;
+
 
 public:
 	cEntity( const Vector2D& _StartPos, const size_t _BrainType = BR_NULL, const Real _Radius = 6 ) :
@@ -158,7 +160,8 @@ public:
 		Leader( 0 ),
 		TargetPos( _StartPos ),
 		Target( 0 ),
-		ReachedTarget( true )
+		ReachedTarget( true ),
+		EngagableTargets( 0 )
 	{
 	}
 

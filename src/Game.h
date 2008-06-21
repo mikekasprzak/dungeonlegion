@@ -184,14 +184,7 @@ public:
 				}
 			}
 			
-			// Stop chacing a target that's left my escape range //
-			if ( Entity[idx].Brain == cEntity::BR_ENEMY ) {
-				if ( Entity[idx].Target ) {
-					if ( !Entity[idx].IsWithinEscapeRange( *Entity[idx].Target ) ) {
-						Entity[idx].Target = 0;
-					}
-				}
-			}
+			Entity[idx].EngagableTargets = 0;
 		}
 
 		// Collision detection Versus all Entities //
@@ -228,8 +221,9 @@ public:
 					if ( (Entity[idx].Brain != cEntity::BR_ENEMY) || (Entity[idx2].Brain != cEntity::BR_ENEMY) ) {
 						if ( Entity[idx].Brain != cEntity::BR_HERO ) {
 							if ( Entity[idx].State == cEntity::ST_IDLE ) {
-								if ( Entity[idx].Target == 0 ) {
-									if ( Entity[idx].IsWithinEngageRange( Entity[idx2] ) ) {
+								if ( Entity[idx].IsWithinEngageRange( Entity[idx2] ) ) {
+									Entity[idx].EngagableTargets++;
+									if ( Entity[idx].Target == 0 ) {
 										Entity[idx].Target = &Entity[idx2];
 										printf("%i Targeted %i\n", idx, idx2);
 									}
@@ -238,8 +232,9 @@ public:
 						}
 						if ( Entity[idx2].Brain != cEntity::BR_HERO ) {
 							if ( Entity[idx2].State == cEntity::ST_IDLE ) {
-								if ( Entity[idx2].Target == 0 ) {
-									if ( Entity[idx2].IsWithinEngageRange( Entity[idx] ) ) {
+								if ( Entity[idx2].IsWithinEngageRange( Entity[idx] ) ) {
+									Entity[idx2].EngagableTargets++;
+									if ( Entity[idx2].Target == 0 ) {
 										Entity[idx2].Target = &Entity[idx];
 										printf("%i Targeted %i\n", idx2, idx);
 									}
@@ -311,6 +306,28 @@ public:
 				}
 			}
 		}	
+
+		// Step all Entities //
+		for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+			// Stop chacing a target that's left my escape range //
+			if ( Entity[idx].Brain == cEntity::BR_ENEMY ) {
+				// First, if there is somebody else in my Engage Range, prefer them //
+				if ( Entity[idx].Target ) {
+					if ( !Entity[idx].IsWithinEngageRange( *Entity[idx].Target ) ) {
+						if ( Entity[idx].EngagableTargets > 0 ) {
+							Entity[idx].Target = 0;
+						}
+					}
+				}
+				// If nobody else is in my Engage Range, chase my target until he breaks Escape //
+				if ( Entity[idx].Target ) {
+					if ( !Entity[idx].IsWithinEscapeRange( *Entity[idx].Target ) ) {
+						Entity[idx].Target = 0;
+					}
+				}
+			}
+		}
+
 
 		// Solve versus polygon collision border //
 		for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
