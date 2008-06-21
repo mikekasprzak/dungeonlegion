@@ -103,8 +103,8 @@ public:
 						Entity.push_back( 
 							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 36 )
 							);
-						Entity.back().State = cEntity::ST_ATTACKING;
-						Entity.back().Status.HP = 0;
+						//Entity.back().State = cEntity::ST_ATTACKING;
+						//Entity.back().Status.HP = 0;
 						printf(" + Added Enemy 2\n");
 						break;
 					}	
@@ -122,24 +122,30 @@ public:
 	inline void Step() {
 		// Magnet Moving Hack //
 		if ( mouse_b == 1 ) {
-			Entity[CurrentHero].TargetPos = Camera.Mouse;
-			Entity[CurrentHero].Target = 0;
-			Entity[CurrentHero].ReachedTarget = false;
-			
-			for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
-				if ( !Entity[idx].Status.IsAlive() )
-					continue;
-				
-				if ( idx == CurrentHero )
-					continue;
+			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
+				if ( Test_Point_Vs_Polygon2D( Camera.Mouse, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size() ) ) {
+					Entity[CurrentHero].TargetPos = Camera.Mouse;
+					Entity[CurrentHero].Target = 0;
+					Entity[CurrentHero].ReachedTarget = false;
 					
-				if ( Entity[idx].Brain < cEntity::BR_CLICKABLE )
-					continue;
-				
-				if ( Test_Point_Vs_Sphere2D( Camera.Mouse, Entity[idx].Pos, Entity[idx].Radius ) ) {
-					Entity[CurrentHero].Target = &Entity[idx];
+					for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+						if ( !Entity[idx].Status.IsAlive() )
+							continue;
+						
+						if ( idx == CurrentHero )
+							continue;
+							
+						if ( Entity[idx].Brain < cEntity::BR_CLICKABLE )
+							continue;
+						
+						if ( Test_Point_Vs_Sphere2D( Camera.Mouse, Entity[idx].Pos, Entity[idx].Radius ) ) {
+							Entity[CurrentHero].Target = &Entity[idx];
+						}
+					}
+					
+					break;			
 				}
-			}
+			}			
 		}
 		
 		
@@ -164,22 +170,6 @@ public:
 			// Apply Impulses //
 			for ( size_t idx2 = 0; idx2 < Impulse.size(); idx2++ ) {
 				Entity[idx].AddForce( Impulse[idx2].GetForce( Entity[idx].Pos ) );
-			}
-
-
-			// Test for Collisions Vs. Polygons //
-			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
-				if ( Test_Point_Vs_CapsuleChain2D( Entity[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size(), Entity[idx].Radius ) )
-				{
-					Vector2D EdgePoint = Nearest_InnerEdgePoint_On_CapsuleChain2D( 
-						Entity[idx].Pos,
-						&Collision[idx2]->Vertex[0],
-						Collision[idx2]->Vertex.size(),
-						Entity[idx].Radius
-						);
-					
-					Entity[idx].Pos = EdgePoint;
-				}
 			}
 		
 			// Test for Entity Collisions Vs. Collectors //
@@ -210,7 +200,7 @@ public:
 						if ( (Entity[idx].Leader == 0 ) ) {
 							if ( Entity[idx2].IsWithinAttackRange( Entity[idx] ) ) {
 								Entity[idx].Leader = &Entity[idx2];
-								printf("Pwned %i\n", idx);
+								printf("Recruited Entity %i\n", idx);
 							}
 						}
 					}
@@ -218,7 +208,7 @@ public:
 						if ( (Entity[idx2].Leader == 0 ) ) {
 							if ( Entity[idx].IsWithinAttackRange( Entity[idx2] ) ) {
 								Entity[idx2].Leader = &Entity[idx];
-								printf("Pwned %i\n", idx2);
+								printf("Recruited Entity %i\n", idx2);
 							}
 						}						
 					}
@@ -285,6 +275,24 @@ public:
 				}
 			}
 		}	
+
+		// Solve versus polygon collision border //
+		for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+			// Test for Collisions Vs. Polygons //
+			for ( size_t idx2 = 0; idx2 < Collision.size(); idx2++ ) {
+				if ( Test_Point_Vs_CapsuleChain2D( Entity[idx].Pos, &Collision[idx2]->Vertex[0], Collision[idx2]->Vertex.size(), Entity[idx].Radius ) )
+				{
+					Vector2D EdgePoint = Nearest_InnerEdgePoint_On_CapsuleChain2D( 
+						Entity[idx].Pos,
+						&Collision[idx2]->Vertex[0],
+						Collision[idx2]->Vertex.size(),
+						Entity[idx].Radius
+						);
+					
+					Entity[idx].Pos = EdgePoint;
+				}
+			}
+		}		
 
 		// Remove all Impulses //
 		Impulse.clear();

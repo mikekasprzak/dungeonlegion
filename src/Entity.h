@@ -122,7 +122,6 @@ public:
 		
 		BR_CLICKABLE, // Everything above this you can click on //
 		
-		BR_RECRUITABLE,
 		BR_NEUTRAL,
 		BR_ENEMY,
 		
@@ -196,9 +195,10 @@ public:
 
 public:
 	// Return where I should be going //
-	inline const Vector2D& GetTarget() const {
+	inline const Vector2D& GetTargetPos() const {
 		if ( Target )
 			return Target->Pos;
+		// Note: This is temporary.  Once leaders can give orders, my target is always my target. //
 		else if ( Leader ) {
 			if ( Leader->Target )
 				return Leader->Target->Pos;
@@ -207,6 +207,16 @@ public:
 		}
 		else
 			return TargetPos;
+	}
+	
+	// Return who I'm engaging //
+	inline const cEntity* GetTarget() const {
+		// Note: This is temporary.  Once leaders can give orders, my target is always my target. //
+		if ( Leader ) {
+			if ( Leader->Target )
+				return Leader->Target;
+		}
+		return Target;
 	}
 	
 	// Determine if something is within my Attack Range //
@@ -223,7 +233,11 @@ public:
 	}
 	
 	inline bool IsEngaged() const {
-		return State == cEntity::ST_ATTACKING;	
+		//return State == cEntity::ST_ATTACKING;
+		if ( Target != 0 ) {
+			return IsWithinAttackRange( *Target );
+		}
+		return false;
 	}
 	
 public:	
@@ -241,26 +255,26 @@ public:
 	inline void StepAI() {
 		// Movement //
 		if ( !ReachedTarget ) {
-			AddForce( (GetTarget() - Pos).Normal() * Real(0.2) );
+			AddForce( (GetTargetPos() - Pos).Normal() * Real(0.2) );
 		}
 		
 		if ( Target ) {
 			Real Distance = Radius + Status.AttackRange + Target->Radius;
-			ReachedTarget = (GetTarget() - Pos).MagnitudeSquared() < Distance * Distance;
+			ReachedTarget = (GetTargetPos() - Pos).MagnitudeSquared() < Distance * Distance;
 		}
 		else if ( Leader ) {
 			if ( Leader->Target ) {
 				Real Distance = Radius + Status.AttackRange + Leader->Target->Radius;
-				ReachedTarget = (GetTarget() - Pos).MagnitudeSquared() < Distance * Distance;				
+				ReachedTarget = (GetTargetPos() - Pos).MagnitudeSquared() < Distance * Distance;				
 			}
 			else {
 				Real Distance = Radius + Status.AttackRange + Leader->Radius;
-				ReachedTarget = (GetTarget() - Pos).MagnitudeSquared() < Distance * Distance;
+				ReachedTarget = (GetTargetPos() - Pos).MagnitudeSquared() < Distance * Distance;
 			}
 		}
 		else {
 			Real Distance = Radius + Status.AttackRange + Real(4);
-			ReachedTarget = (GetTarget() - Pos).MagnitudeSquared() < Distance * Distance;
+			ReachedTarget = (GetTargetPos() - Pos).MagnitudeSquared() < Distance * Distance;
 		}
 	}
 	
@@ -277,9 +291,9 @@ public:
 		}
 		else if ( Brain == BR_HERO ) {
 			if ( !ReachedTarget )
-				gfxDrawX( GetTarget(), 5, RGB_GREEN );
+				gfxDrawX( GetTargetPos(), 5, RGB_GREEN );
 			else
-				gfxDrawX( GetTarget(), 3, RGB_GREY );
+				gfxDrawX( GetTargetPos(), 3, RGB_GREY );
 			
 			gfxDrawCircle( Pos, Radius, RGB_PURPLE );
 			
