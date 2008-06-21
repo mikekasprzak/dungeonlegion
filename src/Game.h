@@ -183,6 +183,15 @@ public:
 					break;
 				}
 			}
+			
+			// Stop chacing a target that's left my escape range //
+			if ( Entity[idx].Brain == cEntity::BR_ENEMY ) {
+				if ( Entity[idx].Target ) {
+					if ( !Entity[idx].IsWithinEscapeRange( *Entity[idx].Target ) ) {
+						Entity[idx].Target = 0;
+					}
+				}
+			}
 		}
 
 		// Collision detection Versus all Entities //
@@ -267,29 +276,29 @@ public:
 							E2Mass = 0;
 						}
 						
-						// So long as we don't have the same leader, obey the "no pushing //
-						//   if engaged" rule. //
-						else if ( (Entity[idx].Leader == 0) || (Entity[idx].Leader != Entity[idx2].Leader) ) {
-							// If the other guy is engaged in combat //
-							if ( Entity[idx2].IsEngaged() ) {
-								// E2 is already planted and engaged in a battle, I shouldn't move him //
-								E1Mass = 0;
-							}
-							else if ( Entity[idx].IsEngaged() ) {
-								// E1 is already planted and engaged in a battle, I shouldn't move him //
-								E2Mass = 0;
-							}
-						}
-						
-						// If the other guy is my target //
-						else if ( Entity[idx].Target == &Entity[idx2] ) {
-							// Since E2 is my target, my mass shouldn't affect him //
-							E1Mass = 0;
-						}
-						else if ( Entity[idx2].Target == &Entity[idx] ) {
-							// Since E1 is my target, my mass shouldn't affect him //
-							E2Mass = 0;
-						}
+//						// So long as we don't have the same leader, obey the "no pushing //
+//						//   if engaged" rule. //
+//						else if ( (Entity[idx].Leader == 0) || (Entity[idx].Leader != Entity[idx2].Leader) ) {
+//							// If the other guy is engaged in combat //
+//							if ( Entity[idx2].IsEngaged() ) {
+//								// E2 is already planted and engaged in a battle, I shouldn't move him //
+//								E1Mass = 0;
+//							}
+//							else if ( Entity[idx].IsEngaged() ) {
+//								// E1 is already planted and engaged in a battle, I shouldn't move him //
+//								E2Mass = 0;
+//							}
+//						}
+//						
+//						// If the other guy is my target //
+//						else if ( Entity[idx].Target == &Entity[idx2] ) {
+//							// Since E2 is my target, my mass shouldn't affect him //
+//							E1Mass = 0;
+//						}
+//						else if ( Entity[idx2].Target == &Entity[idx] ) {
+//							// Since E1 is my target, my mass shouldn't affect him //
+//							E2Mass = 0;
+//						}
 						
 					}
 					

@@ -27,6 +27,7 @@ public:
 	Real AttackRange;
 	
 	Real EngageRange;
+	Real EscapeRange;
 	
 	// ActionRate - How long between each action
 	// Initative - How quickly you can perform an action initially?
@@ -46,7 +47,8 @@ public:
 		Defense(1),
 		
 		AttackRange( 3 ),
-		EngageRange( 32 )
+		EngageRange( 32 ),
+		EscapeRange( 96 )
 	{
 	}
 
@@ -250,6 +252,19 @@ public:
 		return IsWithinEngageRange( Vs.Pos, Vs.Radius );
 	}
 
+	// Determine if something is within my Escape Range (how before I stop chasing it) //
+	inline bool IsWithinEscapeRange( const Vector2D& VsPos, const Real VsRadius ) const {
+		Vector2D Diff = VsPos - Pos;
+		Real RadiusSum = Radius + VsRadius + Status.EscapeRange;
+		RadiusSum *= RadiusSum;
+		
+		return Diff.MagnitudeSquared() < RadiusSum;
+	}
+	
+	inline bool IsWithinEscapeRange( const cEntity& Vs ) const {
+		return IsWithinEscapeRange( Vs.Pos, Vs.Radius );
+	}
+
 	
 	inline bool IsEngaged() const {
 		//return State == cEntity::ST_ATTACKING;
@@ -303,7 +318,7 @@ public:
 	}
 	
 	inline void Draw() {
-		gfxDrawCircle( Pos, Radius + Status.EngageRange, RGB_ORANGE );
+		//gfxDrawCircle( Pos, Radius + Status.EngageRange, RGB_ORANGE );
 		
 		if ( !Status.IsAlive() ) {
 			gfxDrawX( Pos, Radius, RGB_RED );
@@ -328,8 +343,12 @@ public:
 			
 			gfxDrawCircle( Pos, Radius + Status.AttackRange, RGB_GREY );
 		}
-		else
+		else {
+			gfxDrawCircle( Pos, Radius + Status.EngageRange, RGB_ORANGE );
+			gfxDrawCircle( Pos, Radius + Status.EscapeRange, RGB_GREY );
+			
 			gfxDrawCircle( Pos, Radius, RGB_RED );
+		}
 	}
 };
 // - ------------------------------------------------------------------------------------------ - //
