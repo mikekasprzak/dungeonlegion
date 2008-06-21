@@ -25,6 +25,8 @@ public:
 	Real OuterRadius;
 	Real OuterForce;
 	
+	const class cEntity* Owner;
+	
 	
 	// Cached Variables //
 	Real ForceDiff;
@@ -38,11 +40,13 @@ public:
 	inline cImpulse(
 		const Vector2D& _Pos,
 		const Real& _InnerRadius, const Real& _InnerForce,
-		const Real& _OuterRadius, const Real& _OuterForce
+		const Real& _OuterRadius, const Real& _OuterForce,
+		const class cEntity* _Owner = 0
 		) :
 		Pos( _Pos ),
 		InnerRadius( _InnerRadius ), InnerForce( _InnerForce ),
 		OuterRadius( _OuterRadius ), OuterForce( _OuterForce ),
+		Owner( _Owner ),
 		ForceDiff( _InnerForce - _OuterForce ),
 		RadiusDiff( _OuterRadius - _InnerRadius ),
 		InvRadiusDiff( Real::One / RadiusDiff ),

@@ -35,6 +35,8 @@ public:
 	// AttackCount - How many attacks you get 
 	// AttackRate - How long between each attack (multiple attacks only)
 
+	// Swing Time?
+	// Speed
 
 	
 	// Things for identifying enhancements //
