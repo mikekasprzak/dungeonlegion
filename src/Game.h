@@ -103,7 +103,8 @@ public:
 						Entity.push_back( 
 							cEntity( Map.Element[idx].Center, cEntity::BR_ENEMY, 36 )
 							);
-						Entity.back().State = cEntity::ST_ENGAGED;
+						Entity.back().State = cEntity::ST_ATTACKING;
+						Entity.back().Status.HP = 0;
 						printf(" + Added Enemy 2\n");
 						break;
 					}	
@@ -126,6 +127,9 @@ public:
 			Entity[CurrentHero].ReachedTarget = false;
 			
 			for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+				if ( !Entity[idx].Status.IsAlive() )
+					continue;
+				
 				if ( idx == CurrentHero )
 					continue;
 					
@@ -193,8 +197,13 @@ public:
 
 		// Collision detection Versus all Entities //
 		for ( size_t idx = 0; idx < Entity.size(); idx++ ) {
+			if ( !Entity[idx].Status.IsAlive() )
+				continue;
 			// Step all un-touched Entities //
 			for ( size_t idx2 = idx+1; idx2 < Entity.size(); idx2++ ) {	
+				if ( !Entity[idx2].Status.IsAlive() )
+					continue;
+
 				// If there's a brain compatability match (i.e. Join me) //
 				if ( (Entity[idx].Brain == cEntity::BR_HERO) || (Entity[idx2].Brain == cEntity::BR_HERO) ) {
 					if ( (Entity[idx].Brain == cEntity::BR_TROOP) ) {

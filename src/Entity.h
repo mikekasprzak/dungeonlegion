@@ -17,6 +17,7 @@
 // - ------------------------------------------------------------------------------------------ - //
 
 // - ------------------------------------------------------------------------------------------ - //
+// Statistical constants? //
 class cStatus {
 public:
 	int HP, MaxHP;
@@ -24,6 +25,14 @@ public:
 	int Defense;
 	
 	Real AttackRange;
+	
+	// ActionRate - How long between each action
+	// Initative - How quickly you can perform an action initially?
+
+	// AttackCount - How many attacks you get 
+	// AttackRate - How long between each attack (multiple attacks only)
+
+
 	
 	// Things for identifying enhancements //
 
@@ -98,7 +107,7 @@ public:
 		//ST_MOVING,
 		//ST_FOLLOWING,
 		//ST_ENGAGING,
-		ST_ENGAGED,
+		ST_ATTACKING,
 		
 				
 		ST_END
@@ -111,7 +120,7 @@ public:
 		BR_HERO,
 		BR_TROOP,
 		
-		BR_CLICKABLE,
+		BR_CLICKABLE, // Everything above this you can click on //
 		
 		BR_RECRUITABLE,
 		BR_NEUTRAL,
@@ -132,7 +141,7 @@ public:
 
 
 public:
-	cEntity( const Vector2D& _StartPos, const size_t _BrainType = BR_HERO, const Real _Radius = 6 ) :
+	cEntity( const Vector2D& _StartPos, const size_t _BrainType = BR_NULL, const Real _Radius = 6 ) :
 		Pos( _StartPos ),
 		Old( _StartPos ),
 		Radius( _Radius ),
@@ -214,7 +223,7 @@ public:
 	}
 	
 	inline bool IsEngaged() const {
-		return State == cEntity::ST_ENGAGED;	
+		return State == cEntity::ST_ATTACKING;	
 	}
 	
 public:	
@@ -261,7 +270,12 @@ public:
 	}
 	
 	inline void Draw() {
-		if ( Brain == BR_HERO ) {
+		if ( !Status.IsAlive() ) {
+			gfxDrawX( Pos, Radius, RGB_RED );
+			
+			gfxDrawCircle( Pos, Radius, RGB_RED );
+		}
+		else if ( Brain == BR_HERO ) {
 			if ( !ReachedTarget )
 				gfxDrawX( GetTarget(), 5, RGB_GREEN );
 			else
@@ -272,7 +286,10 @@ public:
 			gfxDrawCircle( Pos, Radius + Status.AttackRange, RGB_GREY );
 		}
 		else if ( Brain == BR_TROOP ) {
-			gfxDrawCircle( Pos, Radius, RGB_SKY );
+			if ( Leader == 0 )
+				gfxDrawCircle( Pos, Radius, RGB_BLUE );
+			else
+				gfxDrawCircle( Pos, Radius, RGB_SKY );
 			
 			gfxDrawCircle( Pos, Radius + Status.AttackRange, RGB_GREY );
 		}
