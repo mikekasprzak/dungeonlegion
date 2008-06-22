@@ -143,9 +143,9 @@ public:
 						}
 					}
 					
-					break;			
+					break;
 				}
-			}			
+			}
 		}
 		
 		
@@ -212,7 +212,7 @@ public:
 								Entity[idx2].Leader = &Entity[idx];
 								printf("Recruited Entity %i\n", idx2);
 							}
-						}						
+						}
 					}
 				}
 				
