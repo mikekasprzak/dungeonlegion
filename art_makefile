@@ -1,0 +1,75 @@
+# - ------------------------------------------------------------------------ - #
+TARGET				:=	obj/_ArtUpdated
+# - ------------------------------------------------------------------------ - #
+TreeTool			:=	Tools/TreeTool
+
+TextureTool			:=	Tools/TextureTool
+PVRTool				:=	Tools/PVRTexTool
+LZMA				:=	Tools/lzma
+# - ------------------------------------------------------------------------ - #
+ART_FILES			:=	$(shell $(TreeTool) Art .png)
+
+IGNORE_LIST			:=	
+# - ------------------------------------------------------------------------ - #
+ART_FILES			:=	$(filter-out $(IGNORE_LIST),$(ART_FILES))
+# - ------------------------------------------------------------------------ - #
+# To support more ways of adapting files, add them here. Before if a PNG variant. #
+ART_FILES			:=	$(ART_FILES:.png=.lzma)
+# - ------------------------------------------------------------------------ - #
+ART_FILES			:=	$(subst Art/,Content/,$(ART_FILES))
+# - ------------------------------------------------------------------------ - #
+
+# - ------------------------------------------------------------------------ - #
+$(TARGET): makedirs $(ART_FILES)
+	@touch $@
+# - ------------------------------------------------------------------------ - #
+
+# - ------------------------------------------------------------------------ - #
+force:
+	touch $(shell $(TreeTool) Art .png)
+# - ------------------------------------------------------------------------ - #
+clean:
+	-rm -r obj/Art $(TARGET)
+# - ------------------------------------------------------------------------ - #
+makedirs:
+	mkdir -p $(sort $(dir $(ART_FILES)) $(subst Content/,obj/Art/,$(dir $(ART_FILES))))
+# - ------------------------------------------------------------------------ - #
+phony: clean makedirs force
+# - ------------------------------------------------------------------------ - #
+
+# - ------------------------------------------------------------------------ - #
+Content/%.rgba4.lzma: Art/%.rgba4.png
+	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL4444 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
+	$(LZMA) e obj/Art/$*.pvr $@
+# - ------------------------------------------------------------------------ - #
+Content/%.rgba8.lzma: Art/%.rgba8.png
+	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL8888 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
+	$(LZMA) e obj/Art/$*.pvr $@
+# - ------------------------------------------------------------------------ - #
+Content/%.l8.lzma: Art/%.l8.png
+	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL8 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
+	$(LZMA) e obj/Art/$*.pvr $@
+# - ------------------------------------------------------------------------ - #
+Content/%.l8.lzma: Art/%.l8.png
+	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL8 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
+	$(LZMA) e obj/Art/$*.pvr $@
+# - ------------------------------------------------------------------------ - #
+Content/%.la8.lzma: Art/%.la8.png
+	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL88 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
+	$(LZMA) e obj/Art/$*.pvr $@
+# - ------------------------------------------------------------------------ - #
+Content/%.dxt.lzma: Art/%.dxt.png
+	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fDXT5 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
+	$(LZMA) e obj/Art/$*.pvr $@
+# - ------------------------------------------------------------------------ - #
+Content/%.lzma: Art/%.png
+	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL4444 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
+	$(LZMA) e obj/Art/$*.pvr $@
+# - ------------------------------------------------------------------------ - #

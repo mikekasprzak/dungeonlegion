@@ -1,0 +1,1 @@
+g++ -I../src Bin2C_Src\Bin2C.cpp -O2 -o Bin2C.exe

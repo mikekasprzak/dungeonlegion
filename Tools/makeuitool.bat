@@ -1,0 +1,1 @@
+g++ -I../src UITool_Src\UITool.cpp -O2 -o UITool.exe

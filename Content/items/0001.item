@@ -1,0 +1,12 @@
+// Item //
+Name "Sword of Fargoal"
+
+Class "Weapon"
+SubClass "Sword"
+
+Uses 0
+//ChangeToAfterUse "0002.item" // Sword
+Throws 0
+
+
+//ChangeToAfterBreak "0003.item" // Broken Sword

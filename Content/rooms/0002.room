@@ -1,0 +1,13 @@
+// Room //
+Polygon
+Vertex -80 -80
+Vertex +80 -80
+Vertex +80 +80
+Vertex -80 +80
+
+// Models //
+
+// Items //
+
+// Entities //
+
