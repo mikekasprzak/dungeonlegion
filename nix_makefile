@@ -2,7 +2,7 @@
 TARGET				:=	output/Smiles
 # - ------------------------------------------------------------------------ - #
 DEFINES				:=	-DSDL_BUILD -DNIX_BUILD
-INCLUDES			:=	-Isrc -Isrc/SDLGraphics
+INCLUDES			:=	-Isrc -Isrc/GLGraphics
 # - ------------------------------------------------------------------------ - #
 LIBRARIES			:=	`sdl-config --cflags --libs` -lSDL_mixer -lGL -lGLU 
 
