@@ -120,11 +120,25 @@ int main( int argc, char* argv[] ) {
 	gfxInit( 400, 300, 1024, 600, FullScreen, ZBuffer );
 #endif // WINDOWS_BUILD //
 	
+	// Trying to solve window focus bug from MSys... didn't help //	
+//	{
+//		SDL_Event MyEvent;
+//		MyEvent.active.type = SDL_ACTIVEEVENT;
+//		MyEvent.active.gain = 1;
+//		MyEvent.active.state = SDL_APPMOUSEFOCUS | SDL_APPINPUTFOCUS;// | SDL_APPACTIVE;
+//		
+//		SDL_PushEvent( &MyEvent );
+//	}
+	
 //	gfxOrtho();
 	gfxPerspective();
 
 
 //	sndInit();
+//	SDL_InitSubSystem( SDL_INIT_AUDIO );
+	
+	
+//	SDL_InitSubSystem( SDL_INIT_JOYSTICK );
 
 	{
 		cGame Game;
@@ -157,6 +171,8 @@ int main( int argc, char* argv[] ) {
 	}
 	
 //	sndFree();
+	// Not required because of the quit call below, but this can be used to re-init audio // 
+//	SDL_QuitSubSystem( SDL_INIT_AUDIO );
 	
 	gfxExit();
 	return 0;
