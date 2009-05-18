@@ -17,7 +17,7 @@
 #include "Point/PointVsChain2D.h"
 // - ------------------------------------------------------------------------------------------ - //
 // Point Cluster, Polygon, Edged Polygon (one with edge enability flags) //
-#include "Point/PointVsPointCluster2D.h"
+#include "Point/PointVsPoints2D.h"
 #include "Point/PointVsPolygon2D.h"
 #include "Point/PointVsEdgedPolygon2D.h"
 // - ------------------------------------------------------------------------------------------ - //

@@ -1,13 +1,13 @@
 // - ------------------------------------------------------------------------------------------ - //
-#ifndef __AdvancedGeometry_PointVsPointCluster2D_H__
-#define __AdvancedGeometry_PointVsPointCluster2D_H__
+#ifndef __AdvancedGeometry_PointVsPoints2D_H__
+#define __AdvancedGeometry_PointVsPoints2D_H__
 // - ------------------------------------------------------------------------------------------ - //
 #include <Math/Vector/Vector2D.h>
 // - ------------------------------------------------------------------------------------------ - //
 
 // - ------------------------------------------------------------------------------------------ - //
 // Get the position of the nearest point //
-inline const Vector2D Nearest_Point_On_PointCluster2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
+inline const Vector2D Nearest_Point_On_Points2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
 	Vector2D Point;
 	Real DistanceSquared;
 	
@@ -28,17 +28,17 @@ inline const Vector2D Nearest_Point_On_PointCluster2D( const Vector2D& Pos, cons
 }
 // - ------------------------------------------------------------------------------------------ - //
 // Get the position of the nearest point //
-inline const Vector2D Nearest_CornerPoint_On_PointCluster2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
-	return NearestPointOnPointCluster2D( Pos, VsPoint, VsCount );
+inline const Vector2D Nearest_CornerPoint_On_Points2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
+	return NearestPointOnPoints2D( Pos, VsPoint, VsCount );
 }
 // - ------------------------------------------------------------------------------------------ - //
 // Get the position of the nearest point //
-inline const Vector2D Nearest_CornerPoint_OnEdgeOf_PointCluster2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
-	return NearestPointOnPointCluster2D( Pos, VsPoint, VsCount );
+inline const Vector2D Nearest_CornerPoint_OnEdgeOf_Points2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
+	return NearestPointOnPoints2D( Pos, VsPoint, VsCount );
 }
 // - ------------------------------------------------------------------------------------------ - //
 // Get the index of the nearest corner point //
-inline const size_t Nearest_CornerPointIndex_On_PointCluster2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
+inline const size_t Nearest_CornerPointIndex_On_Points2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
 	size_t Index;
 	Real DistanceSquared;
 	
@@ -59,11 +59,11 @@ inline const size_t Nearest_CornerPointIndex_On_PointCluster2D( const Vector2D& 
 }
 // - ------------------------------------------------------------------------------------------ - //
 // Get the position of the corner point //
-inline const size_t Nearest_CornerPointIndex_OnEdgeOf_PointCluster2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
-	return NearestCornerPointIndexOnPointCluster2D( Pos, VsPoint, VsCount );
+inline const size_t Nearest_CornerPointIndex_OnEdgeOf_Points2D( const Vector2D& Pos, const Vector2D* VsPoint, const size_t VsCount ) {
+	return NearestCornerPointIndexOnPoints2D( Pos, VsPoint, VsCount );
 }
 // - ------------------------------------------------------------------------------------------ - //
 
 // - ------------------------------------------------------------------------------------------ - //
-#endif // __AdvancedGeometry_PointVsPointCluster2D_H__ //
+#endif // __AdvancedGeometry_PointVsPoints2D_H__ //
 // - ------------------------------------------------------------------------------------------ - //
