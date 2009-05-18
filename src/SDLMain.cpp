@@ -154,7 +154,7 @@ int main( int argc, char* argv[] ) {
 				PollEvents();
 				
 				Mouse.Update();
-				Camera.Update();
+//				Camera.Update();
 				
 				Game.Step();
 				

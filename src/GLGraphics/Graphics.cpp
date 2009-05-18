@@ -8,9 +8,9 @@ SDL_Surface* Buffer;
 
 bool ShutdownGame;
 
-Matrix3x3 Matrix;
-
-std::vector<Matrix3x3>* MatrixStack;
+//Matrix3x3 Matrix;
+//
+//std::vector<Matrix3x3>* MatrixStack;
 
 const Font* CurrentFont;
 
@@ -136,8 +136,8 @@ namespace OverScreen {
 // - ------------------------------------------------------------------------------------------ - //
 cMouse Mouse;
 // - ------------------------------------------------------------------------------------------ - //
-cCamera Camera;
-cCamera* CurrentCamera = &Camera;
+//cCamera Camera;
+//cCamera* CurrentCamera = &Camera;
 // - ------------------------------------------------------------------------------------------ - //
 //Vector2D ViewShape;
 //Vector2D HalfViewShape;
