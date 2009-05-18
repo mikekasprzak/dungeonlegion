@@ -417,6 +417,77 @@ public:
 	// - -------------------------------------------------------------------------------------- - //
 
 
+	// - -------------------------------------------------------------------------------------- - //
+	// Specific Functions that apply to this type //
+	// - -------------------------------------------------------------------------------------- - //
+	inline static const Real Abs( _RealType Value ) {
+		if ( Real(Value) < Zero )
+			return -Real(Value);
+		else
+			return Real(Value);
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	// Square Root //
+	inline static const Real Sqrt( _RealType Value ) {
+		if ( !IsZero( Value ) )
+			return std::sqrt( Value );
+		else
+			return Real::Zero;
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	// Sine //
+	inline static const Real Sin( _RealType Value ) {
+		return std::sin( Value * Real::TwoPi );
+	}	
+	// - -------------------------------------------------------------------------------------- - //
+	// Cosine //
+	inline static const Real Cos( _RealType Value ) {
+		return std::cos( Value * Real::TwoPi );
+	}	
+	// - -------------------------------------------------------------------------------------- - //
+	// Tangent //
+	inline static const Real Tan( _RealType Value ) {
+		return std::tan( Value * Real::TwoPi );
+	}	
+	// - -------------------------------------------------------------------------------------- - //
+	// Floor //
+	inline static const Real Floor( _RealType Value ) {
+		return std::floor( Value );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	// Ceil //
+	inline static const Real Ceil( _RealType Value ) {
+		return std::ceil( Value );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	// Round //
+	inline static const Real Round( _RealType Value ) {
+		if ( (Value - Floor(Value)) > Real::Half )
+			return Ceil(Value);
+		else
+			return Floor(Value);
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	// Inverse Square Root ( 1 / sqrt(Value) ) //
+//	inline static const Real InvSqrt( float Value ) {
+//		if ( IsZero( Value ) )
+//			return std::sqrt( Value );
+//		else
+//			return Real::Zero;
+//	}
+	// - -------------------------------------------------------------------------------------- - //
+	inline static const bool IsZero( _RealType Value ) {
+		//return *this == Real::Zero;
+		return Abs(Value) < Real::SmallestUnit;
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	// Variation, that requires the guarentee that the number is positive. Used with magnitude. //
+	inline static const bool IsZeroPositive( _RealType Value ) {
+		return Value < Real::SmallestUnit;
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	
+
 	// Random Numbers //
 	static Real Random();
 };

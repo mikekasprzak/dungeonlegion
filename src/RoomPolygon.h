@@ -21,7 +21,7 @@ public:
 	void Draw() {
 		// If there are vertices, draw them //
 		if ( Vertex.size() ) {
-			Real VertexSize(4);
+			Real VertexSize(3);
 			Real NormalLength(8);
 			
 			ColorType VertexColor = RGB_RED;
@@ -30,7 +30,7 @@ public:
 
 			for ( size_t idx = 0; idx < Vertex.size(); idx++ ) {
 				// Points //
-				gfxDrawCircle( Vertex[idx], VertexSize, VertexColor );
+				gfxDrawCircleFill( Vertex[idx], VertexSize, VertexColor );
 			}
 	
 			for ( size_t idx = 0; idx < Vertex.size() - 1; idx++ ) {			

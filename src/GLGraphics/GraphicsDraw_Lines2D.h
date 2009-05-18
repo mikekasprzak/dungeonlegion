@@ -13,7 +13,7 @@ inline void gfxDrawLine( const Vector2D& P1, const Vector2D& P2, const ColorType
 	gfxRestoreColor( Color );
 }
 // - ------------------------------------------------------------------------------------------ - //
-inline void gfxDrawLineNormal( const Vector2D& P1, const Vector2D& P2, const Real Length = Real(8), const ColorType Color = CurrentColor) {
+inline void gfxDrawLineNormal( const Vector2D& P1, const Vector2D& P2, const Real Length = CurrentNormalLength, const ColorType Color = CurrentColor) {
 	gfxSetColor( Color );
 	
 	Vector2D Ray = (P2-P1);

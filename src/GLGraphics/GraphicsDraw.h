@@ -6,7 +6,8 @@
 #include "UV.h"
 // - ------------------------------------------------------------------------------------------ - //
 // Lines and Arrows //
-#include "GraphicsDraw_Lines.h"
+#include "GraphicsDraw_Lines2D.h"
+#include "GraphicsDraw_Lines3D.h"
 // - ------------------------------------------------------------------------------------------ - //
 // Rectangles //
 #include "GraphicsDraw_Rectangles.h"
