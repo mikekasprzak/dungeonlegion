@@ -22,7 +22,7 @@
 #include <Math/Matrix.h>
 #include <Geometry/Rect.h>
 // - ------------------------------------------------------------------------------------------ - //
-#include "TexturePool.h"
+#include "Texture/TexturePool.h"
 #include "UV.h"
 // - ------------------------------------------------------------------------------------------ - //
 typedef int ColorType;
