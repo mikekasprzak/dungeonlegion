@@ -3,10 +3,10 @@ inline void gfxDrawRect( const Vector2D& P1, const Vector2D& P2, const ColorType
 	gfxSetColor( Color );
 
 	float Verts[] = {
-		(float)P1.x+0.5f, (float)P1.y+1.5f,
-		(float)P1.x+0.5f, (float)P2.y+0.5f,
-		(float)P2.x-0.5f, (float)P2.y+0.5f,
-		(float)P2.x-0.5f, (float)P1.y+1.5f,
+		(float)P1.x, (float)P1.y,
+		(float)P1.x, (float)P2.y,
+		(float)P2.x, (float)P2.y,
+		(float)P2.x, (float)P1.y,
 	};
     
     glVertexPointer( 2, GL_FLOAT, 0, Verts );
@@ -19,10 +19,10 @@ inline void gfxDrawRect( const Real P1x, const Real P1y, const Real P2x, const R
 	gfxSetColor( Color );
 
 	float Verts[] = {
-		(float)P1x+0.5f, (float)P1y+1.5f,
-		(float)P1x+0.5f, (float)P2y+0.5f,
-		(float)P2x-0.5f, (float)P2y+0.5f,
-		(float)P2x-0.5f, (float)P1y+1.5f,
+		(float)P1x, (float)P1y,
+		(float)P1x, (float)P2y,
+		(float)P2x, (float)P2y,
+		(float)P2x, (float)P1y,
 	};
     
     glVertexPointer( 2, GL_FLOAT, 0, Verts );
@@ -35,10 +35,10 @@ inline void gfxDrawRectFill( const Vector2D& P1, const Vector2D& P2, const Color
 	gfxSetColor( Color );
 
     float Verts[] = {
-		(float)P1.x+0.5f, (float)P1.y+0.5f,
-		(float)P1.x+0.5f, (float)P2.y+0.5f,
-		(float)P2.x+0.5f, (float)P1.y+0.5f,
-		(float)P2.x+0.5f, (float)P2.y+0.5f,
+		(float)P1.x, (float)P1.y,
+		(float)P1.x, (float)P2.y,
+		(float)P2.x, (float)P1.y,
+		(float)P2.x, (float)P2.y,
     };
     
     glVertexPointer( 2, GL_FLOAT, 0, Verts );
@@ -51,10 +51,10 @@ inline void gfxDrawRectFill( const Real P1x, const Real P1y, const Real P2x, con
 	gfxSetColor( Color );
 
     float Verts[] = {
-		(float)P1x+0.5f, (float)P1y+0.5f,
-		(float)P1x+0.5f, (float)P2y+0.5f,
-		(float)P2x+0.5f, (float)P1y+0.5f,
-		(float)P2x+0.5f, (float)P2y+0.5f,
+		(float)P1x, (float)P1y,
+		(float)P1x, (float)P2y,
+		(float)P2x, (float)P1y,
+		(float)P2x, (float)P2y,
 	};
         
     glVertexPointer( 2, GL_FLOAT, 0, Verts );

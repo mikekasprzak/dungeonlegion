@@ -71,19 +71,19 @@ inline void gfxDrawCircleFill( const Vector2D& Center, const Vector2D& Radius, c
 // - ------------------------------------------------------------------------------------------ - //
 
 // - ------------------------------------------------------------------------------------------ - //
-inline void gfxDrawRadiusBox( const Vector2D& Center, const Real& Radius, const ColorType Color = CurrentColor ) {
+inline void gfxDrawSquare( const Vector2D& Center, const Real& Radius, const ColorType Color = CurrentColor ) {
 	gfxDrawRect( Center.x-Radius, Center.y-Radius, Center.x+Radius, Center.y+Radius, Color );
 }
 // - ------------------------------------------------------------------------------------------ - //
-inline void gfxDrawRadiusBox( const Vector2D& Center, const Vector2D& Radius, const ColorType Color = CurrentColor ) {
+inline void gfxDrawSquare( const Vector2D& Center, const Vector2D& Radius, const ColorType Color = CurrentColor ) {
 	gfxDrawRect( Center.x-Radius.x, Center.y-Radius.y, Center.x+Radius.x, Center.y+Radius.y, Color );
 }
 // - ------------------------------------------------------------------------------------------ - //
-inline void gfxDrawRadiusBoxFill( const Vector2D& Center, const Real& Radius, const ColorType Color = CurrentColor ) {
+inline void gfxDrawSquareFill( const Vector2D& Center, const Real& Radius, const ColorType Color = CurrentColor ) {
 	gfxDrawRectFill( Center.x-Radius, Center.y-Radius, Center.x+Radius, Center.y+Radius, Color );
 }
 // - ------------------------------------------------------------------------------------------ - //
-inline void gfxDrawRadiusBoxFill( const Vector2D& Center, const Vector2D& Radius, const ColorType Color = CurrentColor ) {
+inline void gfxDrawSquareFill( const Vector2D& Center, const Vector2D& Radius, const ColorType Color = CurrentColor ) {
 	gfxDrawRectFill( Center.x-Radius.x, Center.y-Radius.y, Center.x+Radius.x, Center.y+Radius.y, Color );
 }
 // - ------------------------------------------------------------------------------------------ - //

@@ -10,10 +10,12 @@
 #include "GraphicsDraw_Lines3D.h"
 // - ------------------------------------------------------------------------------------------ - //
 // Rectangles //
-#include "GraphicsDraw_Rectangles.h"
+#include "GraphicsDraw_Rectangles2D.h"
+#include "GraphicsDraw_Rectangles3D.h"
 // - ------------------------------------------------------------------------------------------ - //
-// Shapes by Center and Radius - Circle, Square, +, X //
-#include "GraphicsDraw_Markers.h"
+// Shapes by Center and Radius - Circle, Square, +, X, Triangle, Diamond //
+#include "GraphicsDraw_Markers2D.h"
+#include "GraphicsDraw_Markers3D.h"
 // - ------------------------------------------------------------------------------------------ - //
 // Plain polygon rendering //
 #include "GraphicsDraw_Polygons.h"
