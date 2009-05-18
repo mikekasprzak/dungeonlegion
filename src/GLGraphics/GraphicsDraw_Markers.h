@@ -107,6 +107,24 @@ inline void gfxDrawDiamondFill( const Vector2D& Center, const Vector2D& Radius, 
 // - ------------------------------------------------------------------------------------------ - //
 
 // - ------------------------------------------------------------------------------------------ - //
+inline void gfxDrawRadiusTriangle( const Vector2D& Center, const Real& Radius, const ColorType Color = CurrentColor ) {
+	gfxDrawCircle( Center, Radius, Color, 3 );
+}
+// - ------------------------------------------------------------------------------------------ - //
+inline void gfxDrawRadiusTriangle( const Vector2D& Center, const Vector2D& Radius, const ColorType Color = CurrentColor ) {
+	gfxDrawCircle( Center, Radius, Color, 3 );
+}
+// - ------------------------------------------------------------------------------------------ - //
+inline void gfxDrawRadiusTriangleFill( const Vector2D& Center, const Real& Radius, const ColorType Color = CurrentColor ) {
+	gfxDrawCircleFill( Center, Radius, Color, 3 );
+}
+// - ------------------------------------------------------------------------------------------ - //
+inline void gfxDrawRadiusTriangleFill( const Vector2D& Center, const Vector2D& Radius, const ColorType Color = CurrentColor ) {
+	gfxDrawCircleFill( Center, Radius, Color, 3 );
+}
+// - ------------------------------------------------------------------------------------------ - //
+
+// - ------------------------------------------------------------------------------------------ - //
 inline void gfxDrawCross( const Vector2D& Center, const Real& Radius, const ColorType Color = CurrentColor ) {
 	gfxSetColor( Color );
  
