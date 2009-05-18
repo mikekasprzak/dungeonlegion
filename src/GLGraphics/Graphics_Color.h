@@ -76,7 +76,21 @@ inline ColorType HSV( float Hue, float Sat, float Val ) {
 
 	return RGB( (int)(r * 255.0f), (int)(g * 255.0f), (int)(b * 255.0f) );
 }
-
+// - ------------------------------------------------------------------------------------------ - //
+inline void gfxEnableAlphaBlending() {
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+//	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND );
+}
+// - ------------------------------------------------------------------------------------------ - //
+inline void gfxEnableAddativeBlending() {
+	glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE );
+}
+// - ------------------------------------------------------------------------------------------ - //
+inline void gfxDisableBlending() {
+	glDisable( GL_BLEND );
+}
 // - ------------------------------------------------------------------------------------------ - //
 #endif // __GLGraphics_Color_H__ //
 // - ------------------------------------------------------------------------------------------ - //

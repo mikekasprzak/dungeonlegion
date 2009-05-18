@@ -4,9 +4,8 @@
 // - ------------------------------------------------------------------------------------------ - //
 #include "OpenGL.h"
 // - ------------------------------------------------------------------------------------------ - //
-// ColorType, Color Constants, RGB and RGBA Macros //
+// ColorType, Color Constants, RGB and RGBA Macros, Blending Operations //
 #include "Graphics_Color.h"
-#include "UV.h"
 // - ------------------------------------------------------------------------------------------ - //
 // Screen/RefScreen/OverscanScreen Namespaces, Screen Clipping Control //
 #include "Graphics_Screen.h"

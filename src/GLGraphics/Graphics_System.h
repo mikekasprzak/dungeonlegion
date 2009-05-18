@@ -1,6 +1,8 @@
 
 #include <Math/Vector.h>
 
+#include "UV.h"
+
 extern bool ShutdownGame;
 
 // Non resulotion globals //
