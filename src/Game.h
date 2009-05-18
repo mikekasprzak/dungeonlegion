@@ -11,7 +11,7 @@
 //#include <Sound/SoundPlayer.h>
 
 #include <Geometry/Rect.h>
-#include <AdvancedGeometry/PointVsPairRect2D.h>
+#include <AdvancedGeometry/2D/Point/PointVsPairRect2D.h>
 // - ------------------------------------------------------------------------------------------ - //
 #include <Rebel/Sequence.h>
 #include <Grid/Grid2D.h>
