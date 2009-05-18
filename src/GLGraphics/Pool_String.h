@@ -2,6 +2,8 @@
 #ifndef __GLGraphics_Pool_String_H__
 #define __GLGraphics_Pool_String_H__
 // - ------------------------------------------------------------------------------------------ - //
+// Simplified mini string library used by Pools.  A subset of the full string library. //
+// - ------------------------------------------------------------------------------------------ - //
 #include <string>
 // - ------------------------------------------------------------------------------------------ - //
 const char Slash = '/';

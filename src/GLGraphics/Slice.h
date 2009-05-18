@@ -1,4 +1,4 @@
-
+// NOTE: Slice files are a special format of sub chunks of an image. //
 
 /*
 "SLIC" - Magic number for slice files
