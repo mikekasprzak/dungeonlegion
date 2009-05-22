@@ -2,7 +2,7 @@
 TARGET				:=	output/DungeonLegion.exe
 # - ------------------------------------------------------------------------ - #
 DEFINES				:=	-DSDL_BUILD -DWINDOWS_BUILD -DWINDOW_TITLE=\"Dungeon\ Legion\"
-INCLUDES			:=	-Isrc -Isrc/GLGraphics -Isrc/External
+INCLUDES			:=	-Isrc -Isrc/GLGraphics -Isrc/External -Isrc/SDLMain
 # - ------------------------------------------------------------------------ - #
 LIBRARIES			:=	-Lmingw32/lib -lmingw32 -lSDLmain -lSDL \
 						-lkernel32 -luser32 -lgdi32 -lcomdlg32 -lole32 -ldinput \
@@ -10,7 +10,7 @@ LIBRARIES			:=	-Lmingw32/lib -lmingw32 -lSDLmain -lSDL \
 #						-lSDL_mixer \
 #						-mwindows
 
-IGNORE_LIST			:=	src/UnixTime.cpp
+IGNORE_LIST			:=	src/SDLMain/UnixTime.cpp
 # - ------------------------------------------------------------------------ - #
 TreeTool			:=	Tools/TreeTool
 # - ------------------------------------------------------------------------ - #

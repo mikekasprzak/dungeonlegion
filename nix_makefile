@@ -2,12 +2,13 @@
 TARGET				:=	output/Smiles
 # - ------------------------------------------------------------------------ - #
 DEFINES				:=	-DSDL_BUILD -DNIX_BUILD
-INCLUDES			:=	-Isrc -Isrc/GLGraphics -Isrc/External
+INCLUDES			:=	-Isrc -Isrc/GLGraphics -Isrc/External -Isrc/SDLMain
 # - ------------------------------------------------------------------------ - #
 LIBRARIES			:=	`sdl-config --cflags --libs` -lSDL_mixer -lGL -lGLU 
 
 IGNORE_LIST			:=	%/AllegroMain.cpp \
 						%/AllegroGraphics/Graphics.cpp \
+						src/SDLMain/WindowsTime.cpp \
 # - ------------------------------------------------------------------------ - #
 TreeTool			:=	Tools/TreeTool
 # - ------------------------------------------------------------------------ - #
