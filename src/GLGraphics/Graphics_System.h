@@ -200,9 +200,9 @@ inline void gfxInit( const int _RefWidth, const int _RefHeight, const int _Actua
 #ifdef WINDOWS_BUILD
 	// Adjust Sync Settings //	 
 	{
-		typedef void (APIENTRY * WGLSWAPINTERVALEXT) ( int ) ;
-		
-		WGLSWAPINTERVALEXT wglSwapIntervalEXT = (WGLSWAPINTERVALEXT) SDL_GL_GetProcAddress( "wglSwapIntervalEXT" );
+//		typedef void (APIENTRY * WGLSWAPINTERVALEXT) ( int ) ;
+//		
+//		WGLSWAPINTERVALEXT wglSwapIntervalEXT = (WGLSWAPINTERVALEXT) SDL_GL_GetProcAddress( "wglSwapIntervalEXT" );
 		if ( wglSwapIntervalEXT != 0 ) {
 			wglSwapIntervalEXT( 0 );
 		} 
