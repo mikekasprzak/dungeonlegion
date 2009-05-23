@@ -128,7 +128,23 @@ def write_mesh( FP, mesh ):
 					FP.write( '			Face %i %i %i\n' % (vert+1,vert+2,vert+3) )
 				
 			vert += len(face.verts)
-	FP.write( '\n' )
+# ---------------------------------------------------------------------------- #
+def write_properties( FP, prop ):
+	if prop:
+		FP.write( '	Properties\n' )
+		for myprop in prop:
+			FP.write( '		Property \"%s\" %s ' % (myprop.getName(),myprop.getType()) )
+			if myprop.getType() == 'BOOL':
+				FP.write( '%s' % myprop.getData() )
+			elif myprop.getType() == 'STRING':
+				FP.write( '\"%s\"' % myprop.getData() )
+			elif myprop.getType() == 'INT':
+				FP.write( '%i' % myprop.getData() )
+			elif myprop.getType() == 'FLOAT':
+				FP.write( '%f' % myprop.getData() )
+			elif myprop.getType() == 'TIME':
+				FP.write( '%s' % myprop.getData() )
+			FP.write( '\n' )
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
@@ -166,7 +182,9 @@ def write_pme(filename):
 			mesh = BPyMesh.getMeshFromObject(obj, None, True, False, SCN)
 #			mesh.transform(obj.matrixWorld)
 			write_mesh( file, mesh )
-		
+			write_properties( file, obj.getAllProperties() )
+			file.write( '\n' )
+	
 	file.close()
 				
 #	if not mesh:
