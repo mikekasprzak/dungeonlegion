@@ -35,6 +35,7 @@ from Blender import Lamp
 from Blender import Camera
 from Blender import Window
 import math
+import os
 
 # Utility Library, soon to become standardized (BPy is new API) #
 import BPyMesh
@@ -44,6 +45,53 @@ import BPyMesh
 SCN = []		# Current Scene #
 EXPORT_DIR = ''	# Export Directory #
 # ---------------------------------------------------------------------------- #
+
+# ---------------------------------------------------------------------------- #
+def relpath( origin, dest ):
+	return origin
+# ---------------------------------------------------------------------------- #
+#def relpath(origin, dest):
+#    """
+#    Return the relative path between origin and dest.
+#    
+#    If it's not possible return dest.
+#    
+#    
+#    If they are identical return ``os.curdir``
+#    
+#    Adapted from `path.py <http://www.jorendorff.com/articles/python/path/>`_ by Jason Orendorff. 
+#    """
+#    origin = bsys.expandpath(origin).replace('\\', '/')
+#    dest = bsys.expandpath(dest).replace('\\', '/')
+#    #
+#    orig_list = splitall(os.path.normcase(origin))
+#    # Don't normcase dest!  We want to preserve the case.
+#    dest_list = splitall(dest)
+#    #
+#    if orig_list[0] != os.path.normcase(dest_list[0]):
+#        # Can't get here from there.
+#        return dest
+#    #
+#    # Find the location where the two paths start to differ.
+#    i = 0
+#    for start_seg, dest_seg in zip(orig_list, dest_list):
+#        if start_seg != os.path.normcase(dest_seg):
+#            break
+#        i += 1
+#    #
+#    # Now i is the point where the two paths diverge.
+#    # Need a certain number of "os.pardir"s to work up
+#    # from the origin to the point of divergence.
+#    segments = [os.pardir] * (len(orig_list) - i)
+#    # Need to add the diverging part of dest_list.
+#    segments += dest_list[i:]
+#    if len(segments) == 0:
+#        # If they happen to be identical, use os.curdir.
+#        return os.curdir
+#    else:
+#        return os.path.join(*segments).replace('\\', '/')
+
+
 
 # ---------------------------------------------------------------------------- #
 def write_facemesh( FP, mesh ):
@@ -109,7 +157,7 @@ def write_mesh( FP, mesh, obj ):
 		for mytex in material.getTextures():
 			if mytex:
 				if mytex.tex.getType() == 'Image':
-					FP.write( '			Image \"%s\"\n' % mytex.tex.getImage().getName() )
+					FP.write( '			Image \"%s\"\n' % relpath(mytex.tex.getImage().getFilename(), EXPORT_DIR) )
 				else:
 					FP.write( '			// Empty Material //\n' )
 				
@@ -175,7 +223,7 @@ def write_pme(filename):
 	global EXPORT_DIR
 	
 	# Note the start time of this operation, so we can log how long this took #
-	StartTime = Blender.sys.time()
+	StartTime = bsys.time()
 	
 	# Append ".pme" in case it's missing it #
 	if not filename.lower().endswith('.pme'):
@@ -203,7 +251,7 @@ def write_pme(filename):
 		if 'Mesh' == obj.type:
 			# getMeshFromObject( Object, Parent, Apply Modifiers, VGroup?, Scene ) #
 			mesh = BPyMesh.getMeshFromObject(obj, None, True, False, SCN)
-#			mesh.transform(obj.matrixWorld)
+			mesh.transform(obj.matrixWorld)
 			write_mesh( file, mesh, obj )
 			write_properties( file, obj.getAllProperties() )
 			file.write( '\n' )
@@ -219,17 +267,20 @@ def write_pme(filename):
 		Window.EditMode(1)
 	
 	# Completed - Log the time it took #
-	EndTime = Blender.sys.time()
-	message = 'Successfully exported "%s" in %.4f seconds' % ( Blender.sys.basename(filename), EndTime-StartTime)
+	EndTime = bsys.time()
+	message = 'Successfully exported "%s" in %.4f seconds' % ( bsys.basename(filename), EndTime-StartTime)
 	print message
 
 
 def main():
-	fname = bsys.makename(ext=".pme")
-	if EXPORT_DIR <> '':
-		fname = bsys.join( EXPORT_DIR, bsys.basename(fname) )
-
-	Blender.Window.FileSelector( write_pme, 'PME Export', fname )
+	if os.getenv( 'BLENDER_TARGET' ):
+		write_pme( os.getenv( 'BLENDER_TARGET' ) )
+	else:
+		fname = bsys.makename(ext=".pme")
+		if EXPORT_DIR <> '':
+			fname = bsys.join( EXPORT_DIR, bsys.basename(fname) )
+	
+		Blender.Window.FileSelector( write_pme, 'PME Export', fname )
 
 
 if __name__=='__main__':
