@@ -75,11 +75,33 @@ def write_facemesh( FP, mesh ):
 				FP.write( '  %i %i %i %i' % (face.col[idx].r, face.col[idx].a, face.col[idx].b, face.col[idx].a) )
 			FP.write( '\n' )
 # ---------------------------------------------------------------------------- #
+def count_verts( mesh ):
+	verts = 0
+	for face in mesh.faces:
+		verts += len(face.verts)
+	
+	return verts
+# ---------------------------------------------------------------------------- #
+def count_faces( mesh ):
+	faces = 0
+	for face in mesh.faces:
+		faces += len(face.verts)-2
+	
+	return faces
+# ---------------------------------------------------------------------------- #
+def count_materialfaces( mesh, material ):
+	faces = 0
+	for face in mesh.faces:
+		if face.mat == material:
+			faces += len(face.verts)-2
+	
+	return faces
+# ---------------------------------------------------------------------------- #
 def write_mesh( FP, mesh ):
 	quadrange = [0, 1, 2, 1, 2, 3]
 	
 	FP.write( 'Mesh\n' )
-	FP.write( '	Materials\n' )
+	FP.write( '	Materials %i\n' % len(mesh.materials) )
 	
 	for idx in range(len(mesh.materials)):
 		material = mesh.materials[idx]
@@ -91,7 +113,7 @@ def write_mesh( FP, mesh ):
 				else:
 					FP.write( '			// Empty Material //\n' )
 				
-	FP.write( '	Vertices\n' )
+	FP.write( '	Vertices %i\n' % count_verts( mesh ) )
 	for face in mesh.faces:
 		for idx in range(len(face.verts)):
 			v = face.verts[idx]
@@ -114,9 +136,10 @@ def write_mesh( FP, mesh ):
 				FP.write( '  %i %i %i %i' % (face.col[idx].r, face.col[idx].a, face.col[idx].b, face.col[idx].a) )
 			FP.write( '\n' )
 
-	FP.write( '	Faces\n' )
+	FP.write( '	Faces %i\n' % count_faces( mesh ) )
 	for idx in range(len(mesh.materials)):
 		material = mesh.materials[idx]
+		FP.write( '		FaceCount %i\n' % count_materialfaces( mesh, idx ) )
 		FP.write( '		UseMaterial %i\n' % idx )
 		vert = 0
 		for face in mesh.faces:
