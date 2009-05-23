@@ -40,21 +40,33 @@ EXPORT_DIR = ''	# Export Directory #
 
 # ---------------------------------------------------------------------------- #
 def write_mesh( FP, mesh ):
+	quadrange = [0, 1, 2, 1, 2, 3]
+	
 	FP.write('Mesh\n')
 	for face in mesh.faces:
+		idxrange = range(len(face.verts))
+		
+		if len(face.verts) == 4:
+			idxrange = quadrange
+			
 		FP.write('	Face\n')
-		uvindex = 0
-		for v in face.verts:
+		for idx in idxrange:
+			v = face.verts[idx]
+			
+			FP.write( '		Vertex' )
+			FP.write( 'Norm' )
 			if mesh.faceUV:
-				FP.write( '	VertexNormUV %.6f %.6f %.6f' % tuple(v.co) )
-				FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
-				FP.write( '  %.6f %.6f' % tuple(face.uv[uvindex]) )
-				FP.write( '\n' )
-				uvindex += 1
-			else:
-				FP.write( '	VertexNorm %.6f %.6f %.6f' % tuple(v.co) )
-				FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
-				FP.write( '\n' )
+				FP.write( 'UV' )
+			if mesh.vertexColors:
+				FP.write( 'Color' )
+			
+			FP.write( ' %.6f %.6f %.6f' % tuple(v.co) )
+			FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
+			if mesh.faceUV:
+				FP.write( '  %.6f %.6f' % tuple(face.uv[idx]) )
+			if mesh.vertexColors:
+				FP.write( '  %i %i %i %i' % (face.col[idx].r, face.col[idx].a, face.col[idx].b, face.col[idx].a) )
+			FP.write( '\n' )
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
