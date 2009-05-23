@@ -58,9 +58,10 @@ public:
 	{
 	}
 	
-	cPMEFile( char* _FileName ) :
+	cPMEFile( const char* _FileName ) :
 		FileName( _FileName )
 	{
+		TextLoad();
 	}
 
 public:	

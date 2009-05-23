@@ -2,7 +2,8 @@
 #include "Game.h"
 // - ------------------------------------------------------------------------------------------ - //
 cGame::cGame() :
-	Layout( "Content/Layout.map" )
+	Layout( "Content/Layout.map" ),
+	Scene( "Content/meshes/BorkenBox.pme" )
 {	
 	// Add Rooms //
 	Room.push_back( cRoom( "Content/rooms/0001.room" ) );
