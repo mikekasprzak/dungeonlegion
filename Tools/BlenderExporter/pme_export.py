@@ -97,15 +97,15 @@ def count_materialfaces( mesh, material ):
 	
 	return faces
 # ---------------------------------------------------------------------------- #
-def write_mesh( FP, mesh ):
+def write_mesh( FP, mesh, obj ):
 	quadrange = [0, 1, 2, 1, 2, 3]
 	
-	FP.write( 'Mesh\n' )
+	FP.write( 'Mesh \"%s\"\n' % obj.getName() )
 	FP.write( '	Materials %i\n' % len(mesh.materials) )
 	
 	for idx in range(len(mesh.materials)):
 		material = mesh.materials[idx]
-		FP.write( '		Material %i\n' % idx )
+		FP.write( '		Material %i \"%s\"\n' % (idx,material.getName()) )
 		for mytex in material.getTextures():
 			if mytex:
 				if mytex.tex.getType() == 'Image':
@@ -204,7 +204,7 @@ def write_pme(filename):
 			# getMeshFromObject( Object, Parent, Apply Modifiers, VGroup?, Scene ) #
 			mesh = BPyMesh.getMeshFromObject(obj, None, True, False, SCN)
 #			mesh.transform(obj.matrixWorld)
-			write_mesh( file, mesh )
+			write_mesh( file, mesh, obj )
 			write_properties( file, obj.getAllProperties() )
 			file.write( '\n' )
 	
