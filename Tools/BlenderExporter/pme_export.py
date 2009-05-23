@@ -39,10 +39,10 @@ EXPORT_DIR = ''	# Export Directory #
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
-def write_mesh( FP, mesh ):
+def write_facemesh( FP, mesh ):
 	quadrange = [0, 1, 2, 1, 2, 3]
 	
-	FP.write('Mesh\n')
+	FP.write( 'Mesh\n' )
 	for face in mesh.faces:
 		idxrange = range(len(face.verts))
 		
@@ -67,6 +67,55 @@ def write_mesh( FP, mesh ):
 			if mesh.vertexColors:
 				FP.write( '  %i %i %i %i' % (face.col[idx].r, face.col[idx].a, face.col[idx].b, face.col[idx].a) )
 			FP.write( '\n' )
+# ---------------------------------------------------------------------------- #
+def write_mesh( FP, mesh ):
+	quadrange = [0, 1, 2, 1, 2, 3]
+	
+	FP.write( 'Mesh\n' )
+	FP.write( '	Materials\n' )
+	
+	for idx in range(len(mesh.materials)):
+		material = mesh.materials[idx]
+		FP.write( '		Material %i\n' % idx )
+		for mytex in material.getTextures():
+			if mytex:
+				if mytex.tex.getType() == 'Image':
+					FP.write( '			Image \"%s\"\n' % mytex.tex.getImage().getName() )
+				else:
+					FP.write( '			// Empty Material //\n' )
+				
+	FP.write( '	Vertices\n' )
+	for face in mesh.faces:
+		for idx in range(len(face.verts)):
+			v = face.verts[idx]
+			
+			FP.write( '		Vertex' )
+			FP.write( 'Norm' )
+			if mesh.faceUV:
+				FP.write( 'UV' )
+			if mesh.vertexColors:
+				FP.write( 'Color' )
+			
+			FP.write( ' %.6f %.6f %.6f' % tuple(v.co) )
+			FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
+			if mesh.faceUV:
+				FP.write( '  %.6f %.6f' % tuple(face.uv[idx]) )
+			if mesh.vertexColors:
+				FP.write( '  %i %i %i %i' % (face.col[idx].r, face.col[idx].a, face.col[idx].b, face.col[idx].a) )
+			FP.write( '\n' )
+
+	FP.write( '	Faces\n' )
+	FP.write( '		UseMaterial 0\n' )
+	vert = 0
+#	FP.write( '		UseMaterial %i\n' % face.mat )
+	for face in mesh.faces:
+		if len(face.verts) == 3:
+			FP.write( '			Face %i %i %i\n' % (vert+0,vert+1,vert+2) )
+		elif len(face.verts) == 4:
+			FP.write( '			Face %i %i %i\n' % (vert+0,vert+1,vert+2) )
+			FP.write( '			Face %i %i %i\n' % (vert+1,vert+2,vert+3) )
+		
+		vert += len(face.verts)
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
@@ -104,7 +153,9 @@ def write_pme(filename):
 			mesh = BPyMesh.getMeshFromObject(obj, None, True, False, SCN)
 #			mesh.transform(obj.matrixWorld)
 			write_mesh( file, mesh )
-			
+		
+		file.write( "\n" )
+		
 	file.close()
 			
 	
