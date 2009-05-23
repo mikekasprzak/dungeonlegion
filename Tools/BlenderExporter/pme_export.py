@@ -1,5 +1,7 @@
 #!BPY
 
+# ---------------------------------------------------------------------------- #
+
 """
 Name: 'Playground Mesh (.pme)...'
 Blender: 248
@@ -7,11 +9,14 @@ Group: 'Export'
 Tooltip: 'Export a Playground PME file'
 """
 
+# ---------------------------------------------------------------------------- #
+
 __author__ = ("Mike Kasprzak")
 __url__ = ["Sykhronics Entertainment, http://www.sykhronics.com",
 "Mike's Blog, http://www.toonormal.com"]
 __version__ = "0.1 (2009-05-22)"
 
+# ---------------------------------------------------------------------------- #
 
 __bpydoc__ = """\
 This script exports PME files, usable in games developed by/with Sykhronics Entertainment.
@@ -20,6 +25,8 @@ Usage:
 
 Run this script from "File->Export" menu.
 """
+
+# ---------------------------------------------------------------------------- #
 
 import Blender
 from Blender import sys as bsys
@@ -97,7 +104,10 @@ def write_mesh( FP, mesh ):
 				FP.write( 'Color' )
 			
 			FP.write( ' %.6f %.6f %.6f' % tuple(v.co) )
-			FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
+			if face.smooth:
+				FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
+			else:
+				FP.write( '  %.6f %.6f %.6f' % tuple(face.no) )
 			if mesh.faceUV:
 				FP.write( '  %.6f %.6f' % tuple(face.uv[idx]) )
 			if mesh.vertexColors:
@@ -105,17 +115,20 @@ def write_mesh( FP, mesh ):
 			FP.write( '\n' )
 
 	FP.write( '	Faces\n' )
-	FP.write( '		UseMaterial 0\n' )
-	vert = 0
-#	FP.write( '		UseMaterial %i\n' % face.mat )
-	for face in mesh.faces:
-		if len(face.verts) == 3:
-			FP.write( '			Face %i %i %i\n' % (vert+0,vert+1,vert+2) )
-		elif len(face.verts) == 4:
-			FP.write( '			Face %i %i %i\n' % (vert+0,vert+1,vert+2) )
-			FP.write( '			Face %i %i %i\n' % (vert+1,vert+2,vert+3) )
-		
-		vert += len(face.verts)
+	for idx in range(len(mesh.materials)):
+		material = mesh.materials[idx]
+		FP.write( '		UseMaterial %i\n' % idx )
+		vert = 0
+		for face in mesh.faces:
+			if face.mat == idx:
+				if len(face.verts) == 3:
+					FP.write( '			Face %i %i %i\n' % (vert+0,vert+1,vert+2) )
+				elif len(face.verts) == 4:
+					FP.write( '			Face %i %i %i\n' % (vert+0,vert+1,vert+2) )
+					FP.write( '			Face %i %i %i\n' % (vert+1,vert+2,vert+3) )
+				
+			vert += len(face.verts)
+	FP.write( '\n' )
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
@@ -154,34 +167,11 @@ def write_pme(filename):
 #			mesh.transform(obj.matrixWorld)
 			write_mesh( file, mesh )
 		
-		file.write( "\n" )
-		
 	file.close()
-			
-	
-#	ob = scn.objects.active
-#	if not ob:
-#		Blender.Draw.PupMenu('Error%t|Select 1 active object')
-#		return
-#	
-#	file = open(filename, 'wb')
-#	
-#	mesh = BPyMesh.getMeshFromObject(ob, None, True, False, scn)
+				
 #	if not mesh:
 #		Blender.Draw.PupMenu('Error%t|Could not get mesh data from active object')
 #		return
-#	
-#	mesh.transform(ob.matrixWorld)
-#	
-#	
-#	file = open(filename, "wb")
-#	file.write('Object\n'
-#	
-#	for f in mesh.faces:
-#		for v in f:
-#			file.write('Vertex %.6f %.6f %.6f\n' % tuple(v.co))
-#		file.write('\n')
-#	file.close()
 	
 	# If we were in edit mode, restore it #
 	if in_editmode:
