@@ -50,78 +50,8 @@ EXPORT_DIR = ''	# Export Directory #
 def relpath( origin, dest ):
 	return origin
 # ---------------------------------------------------------------------------- #
-#def relpath(origin, dest):
-#    """
-#    Return the relative path between origin and dest.
-#    
-#    If it's not possible return dest.
-#    
-#    
-#    If they are identical return ``os.curdir``
-#    
-#    Adapted from `path.py <http://www.jorendorff.com/articles/python/path/>`_ by Jason Orendorff. 
-#    """
-#    origin = bsys.expandpath(origin).replace('\\', '/')
-#    dest = bsys.expandpath(dest).replace('\\', '/')
-#    #
-#    orig_list = splitall(os.path.normcase(origin))
-#    # Don't normcase dest!  We want to preserve the case.
-#    dest_list = splitall(dest)
-#    #
-#    if orig_list[0] != os.path.normcase(dest_list[0]):
-#        # Can't get here from there.
-#        return dest
-#    #
-#    # Find the location where the two paths start to differ.
-#    i = 0
-#    for start_seg, dest_seg in zip(orig_list, dest_list):
-#        if start_seg != os.path.normcase(dest_seg):
-#            break
-#        i += 1
-#    #
-#    # Now i is the point where the two paths diverge.
-#    # Need a certain number of "os.pardir"s to work up
-#    # from the origin to the point of divergence.
-#    segments = [os.pardir] * (len(orig_list) - i)
-#    # Need to add the diverging part of dest_list.
-#    segments += dest_list[i:]
-#    if len(segments) == 0:
-#        # If they happen to be identical, use os.curdir.
-#        return os.curdir
-#    else:
-#        return os.path.join(*segments).replace('\\', '/')
 
 
-
-# ---------------------------------------------------------------------------- #
-def write_facemesh( FP, mesh ):
-	quadrange = [0, 1, 2, 1, 2, 3]
-	
-	FP.write( 'Mesh\n' )
-	for face in mesh.faces:
-		idxrange = range(len(face.verts))
-		
-		if len(face.verts) == 4:
-			idxrange = quadrange
-			
-		FP.write('	Face\n')
-		for idx in idxrange:
-			v = face.verts[idx]
-			
-			FP.write( '		Vertex' )
-			FP.write( 'Norm' )
-			if mesh.faceUV:
-				FP.write( 'UV' )
-			if mesh.vertexColors:
-				FP.write( 'Color' )
-			
-			FP.write( ' %.6f %.6f %.6f' % tuple(v.co) )
-			FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
-			if mesh.faceUV:
-				FP.write( '  %.6f %.6f' % tuple(face.uv[idx]) )
-			if mesh.vertexColors:
-				FP.write( '  %i %i %i %i' % (face.col[idx].r, face.col[idx].a, face.col[idx].b, face.col[idx].a) )
-			FP.write( '\n' )
 # ---------------------------------------------------------------------------- #
 def count_verts( mesh ):
 	verts = 0
@@ -187,7 +117,7 @@ def write_mesh( FP, mesh, obj ):
 	FP.write( '	Faces %i\n' % count_faces( mesh ) )
 	for idx in range(len(mesh.materials)):
 		material = mesh.materials[idx]
-		FP.write( '		FaceCount %i\n' % count_materialfaces( mesh, idx ) )
+		FP.write( '		FaceGroup %i\n' % count_materialfaces( mesh, idx ) )
 		FP.write( '		UseMaterial %i\n' % idx )
 		vert = 0
 		for face in mesh.faces:
