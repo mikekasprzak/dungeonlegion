@@ -39,8 +39,22 @@ EXPORT_DIR = ''	# Export Directory #
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
-def write_mesh( FP, obj ):
+def write_mesh( FP, mesh ):
 	FP.write('Mesh\n')
+	for face in mesh.faces:
+		FP.write('	Face\n')
+		uvindex = 0
+		for v in face.verts:
+			if mesh.faceUV:
+				FP.write( '	VertexNormUV %.6f %.6f %.6f' % tuple(v.co) )
+				FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
+				FP.write( '  %.6f %.6f' % tuple(face.uv[uvindex]) )
+				FP.write( '\n' )
+				uvindex += 1
+			else:
+				FP.write( '	VertexNorm %.6f %.6f %.6f' % tuple(v.co) )
+				FP.write( '  %.6f %.6f %.6f' % tuple(v.no) )
+				FP.write( '\n' )
 # ---------------------------------------------------------------------------- #
 
 # ---------------------------------------------------------------------------- #
@@ -76,12 +90,10 @@ def write_pme(filename):
 		if 'Mesh' == obj.type:
 			# getMeshFromObject( Object, Parent, Apply Modifiers, VGroup?, Scene ) #
 			mesh = BPyMesh.getMeshFromObject(obj, None, True, False, SCN)
+#			mesh.transform(obj.matrixWorld)
 			write_mesh( file, mesh )
 			
 	file.close()
-	
-#		mesh = BPyMesh.getMeshFromObject(obj, None, True, False, scn)
-#		if mesh:
 			
 	
 #	ob = scn.objects.active
