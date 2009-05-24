@@ -3,7 +3,7 @@
 // - ------------------------------------------------------------------------------------------ - //
 cGame::cGame() :
 	Layout( "Content/Layout.map" ),
-	Scene( "Content/meshes/BorkenBox.pme" )
+	Scene( "Content/meshes/MultiRoom.pme" )
 {	
 	// Add Rooms //
 	Room.push_back( cRoom( "Content/rooms/0001.room" ) );
@@ -28,16 +28,16 @@ void cGame::Step() {
 // - ------------------------------------------------------------------------------------------ - //
 void cGame::Draw() {
 	gfxClearBuffer( RGB(44,22,0) );
-	gfxEnableAlphaBlending();
+//	gfxEnableAlphaBlending();
 	
-	glEnable( GL_CULL_FACE );
-	glCullFace( GL_BACK );
+//	glEnable( GL_CULL_FACE );
+//	glCullFace( GL_BACK );
 	
 	glPushMatrix();
 	static int a = 0;
 	a++;
-	glRotatef( a/40.0f, a/60.0f, a/20.0f, 1 );
-	glScalef( 40, 40, 40 );
+	glRotatef( a/40.0f, 1, 1, 1 );
+	glScalef( 25, 25, 25 );
 	glTranslatef( 0, 0, 0 );
 
 	for ( size_t idx = 0; idx < Scene.Mesh.back().FaceGroup.size(); idx++ ) {
@@ -53,23 +53,23 @@ void cGame::Draw() {
 	glPopMatrix();
 
 	
-	// Game Mode //
-	if ( true ) {
-		//for ( size_t idx = 0; idx < Room.size(); idx++ )
-		for ( size_t idx = 0; idx < Layout.Room.size(); idx++ ) {
-			glPushMatrix();
-			glTranslatef( Layout.Room[idx].Pos.x, Layout.Room[idx].Pos.y, 0 );
-
-			
-			Room[ Layout.Room[idx].Id ].Draw();
-			glPopMatrix();
-		}
-	}
-	// Editor Mode //
-	else {
-		int CurrentRoom = 0;
-		Room[CurrentRoom].Draw();
-	}
+//	// Game Mode //
+//	if ( true ) {
+//		//for ( size_t idx = 0; idx < Room.size(); idx++ )
+//		for ( size_t idx = 0; idx < Layout.Room.size(); idx++ ) {
+//			glPushMatrix();
+//			glTranslatef( Layout.Room[idx].Pos.x, Layout.Room[idx].Pos.y, 0 );
+//
+//			
+//			Room[ Layout.Room[idx].Id ].Draw();
+//			glPopMatrix();
+//		}
+//	}
+//	// Editor Mode //
+//	else {
+//		int CurrentRoom = 0;
+//		Room[CurrentRoom].Draw();
+//	}
 
 }
 // - ------------------------------------------------------------------------------------------ - //

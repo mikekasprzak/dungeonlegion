@@ -49,6 +49,7 @@ void cPMEFile::TextLoad() {
 			Mesh.back().Vertex.back().Pos.x = File.StepFloatToken();
 			Mesh.back().Vertex.back().Pos.y = File.StepFloatToken();
 			Mesh.back().Vertex.back().Pos.z = File.StepFloatToken();
+			Mesh.back().Vertex.back().Color = RGB_WHITE;
 		}
 		else if ( File.IsStringToken( "VertexNorm" ) ) {
 			File.NextToken();
@@ -60,6 +61,7 @@ void cPMEFile::TextLoad() {
 			Mesh.back().Vertex.back().Normal.x = File.StepFloatToken();
 			Mesh.back().Vertex.back().Normal.y = File.StepFloatToken();
 			Mesh.back().Vertex.back().Normal.z = File.StepFloatToken();
+			Mesh.back().Vertex.back().Color = RGB_WHITE;
 		}
 		else if ( File.IsStringToken( "VertexNormUV" ) ) {
 			File.NextToken();
@@ -73,6 +75,7 @@ void cPMEFile::TextLoad() {
 			Mesh.back().Vertex.back().Normal.z = File.StepFloatToken();
 			Mesh.back().Vertex.back().UV.u = File.StepFloatToken() * UV_ONE_F;
 			Mesh.back().Vertex.back().UV.v = File.StepFloatToken() * UV_ONE_F;
+			Mesh.back().Vertex.back().Color = RGB_WHITE;
 		}
 		else if ( File.IsStringToken( "VertexNormUVColor" ) ) {
 			File.NextToken();
@@ -117,6 +120,7 @@ void cPMEFile::TextLoad() {
 			Mesh.back().Vertex.back().Pos.z = File.StepFloatToken();
 			Mesh.back().Vertex.back().UV.u = File.StepFloatToken() * UV_ONE_F;
 			Mesh.back().Vertex.back().UV.v = File.StepFloatToken() * UV_ONE_F;
+			Mesh.back().Vertex.back().Color = RGB_WHITE;
 		}
 		else if ( File.IsStringToken( "VertexUVColor" ) ) {
 			File.NextToken();
