@@ -23,6 +23,7 @@
 // Polygons with Textures //
 #include "GraphicsDraw_TexturedPolygons.h"
 #include "GraphicsDraw_TexturedPolygons3D.h"
+#include "GraphicsDraw_PolygonBatch.h"
 // - ------------------------------------------------------------------------------------------ - //
 // Text Rendering //
 #include "GraphicsDraw_Text.h"

@@ -133,7 +133,8 @@
 //	glVertexPointer(2, GL_FLOAT, 0, Vertex);
 //	glDrawArrays(GL_TRIANGLES, 0, VertexCount);
 //}
-//// - ------------------------------------------------------------------------------------------ - //
+
+
 
 // - ------------------------------------------------------------------------------------------ - //
 inline void gfxDrawIndexedPolygons3D( const float* Vertex, const unsigned int* Colors, const int* Indexes, const size_t IndexCount, const int Stride = 0 ) {
