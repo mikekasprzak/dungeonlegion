@@ -106,18 +106,18 @@ void PollEvents() {
 
 // - ------------------------------------------------------------------------------------------ - //
 int main( int argc, char* argv[] ) {
-	bool ZBuffer = false;
+	bool DepthBuffer = true;
 
 	// Note: FullScreen'ing should be handled in some user configurable way... hardcoded for debugging.
 #ifdef WINDOWS_BUILD
 	bool FullScreen = false;
 
-	gfxInit( 400, 300, 800, 600, FullScreen, ZBuffer );
-	//gfxInit( 400, 300, 1920, 1200, FullScreen, ZBuffer );
+	gfxInit( 400, 300, 800, 600, FullScreen, DepthBuffer );
+	//gfxInit( 400, 300, 1920, 1200, FullScreen, DepthBuffer );
 #else // WINDOWS_BUILD //
 	FullScreen = true;
 
-	gfxInit( 400, 300, 1024, 600, FullScreen, ZBuffer );
+	gfxInit( 400, 300, 1024, 600, FullScreen, DepthBuffer );
 #endif // WINDOWS_BUILD //
 	
 	// Trying to solve window focus bug from MSys... didn't help //	

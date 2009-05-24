@@ -111,7 +111,7 @@ inline void gfxInit( const int _RefWidth, const int _RefHeight, const int _Actua
 			
 		//	SDL_GL_SetAttribute( SDL_GL_BUFFER_SIZE, 32 );
 		
-		//	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, true );	
+		//	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, true );
 		//	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 32 );
 		//	SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 32 );
 		
@@ -124,6 +124,12 @@ inline void gfxInit( const int _RefWidth, const int _RefHeight, const int _Actua
 			//SDL_GL_SetAttribute( SDL_GL_MULTISAMPLESAMPLES, 4 ); 
 		
 		//	SDL_GL_SetAttribute( SDL_GL_SUGGEST, SDL_GL_DOUBLEBUFFER | SDL_GL_Z_DEPTH | SDL_GL_RENDERMETHOD | SDL_GL_SAMPLE_BUFFERS | SDL_GL_SAMPLES );
+
+		if ( _ZBuffer ) {
+			SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 32 );
+			//SDL_GL_SetAttribute( SDL_GL_SUGGEST, SDL_GL_Z_DEPTH );
+			
+		}
 
 #ifdef WINDOW_TITLE
 			SDL_WM_SetCaption( WINDOW_TITLE, NULL );
@@ -144,6 +150,8 @@ inline void gfxInit( const int _RefWidth, const int _RefHeight, const int _Actua
 	//glEnable( GL_TEXTURE_2D );
 #endif // SDL_BUILD //	
 	glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+
+	glDepthFunc( GL_LESS );
 
 //#else // SDL_BUILD //
 //	

@@ -23,7 +23,9 @@
 // Polygons with Textures //
 #include "GraphicsDraw_TexturedPolygons.h"
 #include "GraphicsDraw_TexturedPolygons3D.h"
-#include "GraphicsDraw_PolygonBatch.h"
+// - ------------------------------------------------------------------------------------------ - //
+// Primitive Renderer //
+#include "GraphicsDraw_Primitive.h"
 // - ------------------------------------------------------------------------------------------ - //
 // Text Rendering //
 #include "GraphicsDraw_Text.h"

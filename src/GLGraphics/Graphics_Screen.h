@@ -139,7 +139,7 @@ inline void gfxClearBuffer( const ColorType Color = RGB_BLACK ) {
 		((float)GET_B(Color)) / 255.0f, 
 		((float)GET_A(Color)) / 255.0f
 		);
-	glClear( GL_COLOR_BUFFER_BIT );
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 // - ------------------------------------------------------------------------------------------ - //
 inline void gfxSwapBuffer( ) {

@@ -40,16 +40,56 @@ void cGame::Draw() {
 	glScalef( 25, 25, 25 );
 	glTranslatef( 0, 0, 0 );
 
-	for ( size_t idx = 0; idx < Scene.Mesh.back().FaceGroup.size(); idx++ ) {
-		gfxDrawIndexedPolygons3D( 
-			(const float*)&Scene.Mesh.back().Vertex[0].Pos, 
-			(const unsigned*)&Scene.Mesh.back().Vertex[0].Color, 
-			(const int*)&Scene.Mesh.back().FaceGroup[idx].Face[0], 
-			Scene.Mesh.back().FaceGroup[idx].Face.size()*3,
-			sizeof( cPMEVertex )
-			);
+	{
+		cPMEMesh& Mesh = Scene.Mesh.back();
+
+		gfxEnableDepthTest();
+		glDepthFunc( GL_LESS );
+		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {		
+			gfxDrawPrimitive( 
+				Mesh.FaceGroup[idx].Face.size()*3,
+				
+				&Mesh.Vertex[0].Pos, 
+				0,
+				0,
+				&Mesh.Vertex[0].Color, 
+				
+				&Mesh.FaceGroup[idx].Face[0], 
+				
+				sizeof( cPMEVertex ),
+				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
+				);
+		}
+//		glDepthFunc( GL_LEQUAL );
+//		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {		
+//			gfxDrawPrimitive( 
+//				Mesh.FaceGroup[idx].Face.size()*3,
+//				
+//				&Mesh.Vertex[0].Pos, 
+//				0,
+//				0,
+//				0,//&Mesh.Vertex[0].Color, 
+//				
+//				&Mesh.FaceGroup[idx].Face[0], 
+//				
+//				sizeof( cPMEVertex ),
+//				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
+//				);
+//		}
+		gfxDisableDepthTest();
+
+		
+		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {		
+			gfxDrawPrimitive(
+				Mesh.Vertex.size(),
+				&Mesh.Vertex[0].Pos, 0, 0, 0, 
+				0,
+				sizeof( cPMEVertex ),
+				PRIMITIVE_DEFAULT | PRIMITIVE_POINTS
+				);
+		}
 	}
-	
+		
 	glPopMatrix();
 
 	
