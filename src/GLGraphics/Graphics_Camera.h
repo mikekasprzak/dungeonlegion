@@ -174,9 +174,9 @@ inline void gfxPerspective() {
 	// This frustrum configuration places (0,0,0) between the near and far plane //
 	// glFrustrum's Near and Far planes get negated by this call //
 	glFrustum(
-		-(RefWidth / 3.0f),  +(RefWidth / 3.0f),
-		-(RefHeight / 3.0f), +(RefHeight / 3.0f),
-		100.0f, 200.0f
+		-(RefWidth / 8.0f),  +(RefWidth / 8.0f),
+		-(RefHeight / 8.0f), +(RefHeight / 8.0f),
+		100.0f, 900.0f
 		);		
 #else // NOT SDL_BUILD //
 #endif // SDL_BUILD //
@@ -188,7 +188,7 @@ inline void gfxPerspective() {
 #ifdef IPHONE_BUILD
 	glRotatef(90,0,0,1);
 #endif // IPHONE_BUILD //
-	glTranslatef( 0, 0, -150.0f );
+	glTranslatef( 0, 0, -500.0f );
 }
 // - ------------------------------------------------------------------------------------------ - //
 //inline void gfxCenterCamera() {

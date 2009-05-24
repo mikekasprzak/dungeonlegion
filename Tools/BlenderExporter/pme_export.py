@@ -76,8 +76,6 @@ def count_materialfaces( mesh, material ):
 	return faces
 # ---------------------------------------------------------------------------- #
 def write_mesh( FP, mesh, obj ):
-	quadrange = [0, 1, 2, 1, 2, 3]
-	
 	FP.write( 'Mesh \"%s\"\n' % obj.getName() )
 	FP.write( '	Materials %i\n' % len(mesh.materials) )
 	
@@ -126,7 +124,7 @@ def write_mesh( FP, mesh, obj ):
 					FP.write( '			Face %i %i %i\n' % (vert+0,vert+1,vert+2) )
 				elif len(face.verts) == 4:
 					FP.write( '			Face %i %i %i\n' % (vert+0,vert+1,vert+2) )
-					FP.write( '			Face %i %i %i\n' % (vert+1,vert+2,vert+3) )
+					FP.write( '			Face %i %i %i\n' % (vert+2,vert+3,vert+0) )
 				
 			vert += len(face.verts)
 # ---------------------------------------------------------------------------- #
