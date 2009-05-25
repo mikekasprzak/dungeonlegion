@@ -22,14 +22,14 @@ cGame::~cGame() {
 	
 }
 // - ------------------------------------------------------------------------------------------ - //
-
+int Tweak;
 // - ------------------------------------------------------------------------------------------ - //
 void cGame::Step() {
 	// Test using 2D Shapes //
 	PairRect2D DecalVolume( -4,-4, 8,8 );
 	
 	DecalPos += Vector2D( System::StickX, System::StickY ) * Real(0.1f);
-
+	Tweak++;
 	
 	cPMEMesh& Mesh = Scene.Mesh.back();
 	Decal.Face.clear();
@@ -87,9 +87,7 @@ void cGame::Draw() {
 //	glCullFace( GL_BACK );
 	
 	glPushMatrix();
-	static int a = 0;
-	a++;
-	glRotatef( a/40.0f, 1, 1, 1 );
+	glRotatef( Tweak, 1, 1, 1 );
 	glScalef( 25, 25, 25 );
 	glTranslatef( 0, 0, 0 );
 
