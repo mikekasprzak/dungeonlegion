@@ -95,7 +95,6 @@ void cGame::Draw() {
 				0,
 				0,//&Mesh.Vertex[0].Color, 
 				
-				//&Mesh.FaceGroup[idx].Face[0],
 				&Decal.Face[0],
 				
 				sizeof( cPMEVertex ),
