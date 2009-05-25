@@ -38,8 +38,11 @@ public:
 	std::vector<cRoom> Room;
 	
 	cPMEFile Scene;
+	
 	cPMEFaceGroup Decal;
-
+	std::vector<cPMEVertex> DecalVertex;
+	//std::vector<cPMEVertex::tUVType> DecalUV;
+	TextureID HeartTexture;
 public:
 	// - -------------------------------------------------------------------------------------- - //
 	cGame();

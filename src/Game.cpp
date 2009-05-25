@@ -16,27 +16,58 @@ cGame::cGame() :
 //	//Room.back().Polygon.Vertex.push_back( Vector2D( 200, 100 ) );
 //	Room.back().TextSave();
 
-	//Decal
-	
 	// Test using 2D Shapes //
-	PairRect2D DecalVolume( 1.1,2.5, 2,2 );
+	PairRect2D DecalVolume( -4,-4, 8,8 );
+	Vector2D Offset( 2.1, 3.5 );
 	
 	cPMEMesh& Mesh = Scene.Mesh.back();
+	
+	// Determine what faces lie within Volume //
 	for ( size_t Group = 0; Group < Mesh.FaceGroup.size(); Group++ ) {
 		cPMEFaceGroup& FaceGroup = Mesh.FaceGroup[Group];
 		for ( size_t idx = 0; idx < FaceGroup.Face.size(); idx++ ) {
 			PairRect2D TriangleVolume( 
-				Mesh.Vertex[ FaceGroup.Face[idx].a ].Pos.ToVector2D(), 
+				Mesh.Vertex[ FaceGroup.Face[idx].a ].Pos.ToVector2D() - Offset, 
 				Vector2D::Zero
 				);
-			TriangleVolume.IncludePoint( Mesh.Vertex[ FaceGroup.Face[idx].b ].Pos.ToVector2D() );
-			TriangleVolume.IncludePoint( Mesh.Vertex[ FaceGroup.Face[idx].c ].Pos.ToVector2D() );
+			TriangleVolume.IncludePoint( Mesh.Vertex[ FaceGroup.Face[idx].b ].Pos.ToVector2D() - Offset );
+			TriangleVolume.IncludePoint( Mesh.Vertex[ FaceGroup.Face[idx].c ].Pos.ToVector2D() - Offset );
 			
 			if ( DecalVolume == TriangleVolume ) {
 				Decal.Face.push_back( FaceGroup.Face[idx] );
 			}
 		}
 	}
+	
+	DecalVertex = Mesh.Vertex;
+	
+	// Calculate UVs //
+	for ( size_t idx = 0; idx < Decal.Face.size(); idx++ ) {
+		Vector2D Across = DecalVolume.P2() - DecalVolume.P1();
+
+		{
+			size_t Index = Decal.Face[idx].a;
+			Vector2D a = Mesh.Vertex[ Index ].Pos.ToVector2D() - Offset;
+			DecalVertex[ Index ].UV.u = ((a.x - DecalVolume.P1().x) / Across.x) * Real(UV_ONE);
+			DecalVertex[ Index ].UV.v = ((a.y - DecalVolume.P1().y) / Across.y) * Real(UV_ONE);
+		}
+
+		{
+			size_t Index = Decal.Face[idx].b;
+			Vector2D a = Mesh.Vertex[ Index ].Pos.ToVector2D() - Offset;
+			DecalVertex[ Index ].UV.u = ((a.x - DecalVolume.P1().x) / Across.x) * Real(UV_ONE);
+			DecalVertex[ Index ].UV.v = ((a.y - DecalVolume.P1().y) / Across.y) * Real(UV_ONE);
+		}
+
+		{
+			size_t Index = Decal.Face[idx].c;
+			Vector2D a = Mesh.Vertex[ Index ].Pos.ToVector2D() - Offset;
+			DecalVertex[ Index ].UV.u = ((a.x - DecalVolume.P1().x) / Across.x) * Real(UV_ONE);
+			DecalVertex[ Index ].UV.v = ((a.y - DecalVolume.P1().y) / Across.y) * Real(UV_ONE);
+		}
+	}
+	
+	HeartTexture = gfxLoadTexture( "/Heart" );
 }
 // - ------------------------------------------------------------------------------------------ - //
 cGame::~cGame() {
@@ -84,6 +115,13 @@ void cGame::Draw() {
 				);
 		}
 		
+		glEnable(GL_TEXTURE_2D);
+		gfxEnableAlphaBlending();
+		gfxSetTexture( HeartTexture );
+		gfxSetSmoothTexturesMipMapped();
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
+		
 		// Draw Decal //
 		glDepthFunc( GL_LEQUAL );
 		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {		
@@ -92,7 +130,7 @@ void cGame::Draw() {
 				
 				&Mesh.Vertex[0].Pos, 
 				0,
-				0,
+				&DecalVertex[0].UV,
 				0,//&Mesh.Vertex[0].Color, 
 				
 				&Decal.Face[0],
@@ -103,6 +141,8 @@ void cGame::Draw() {
 		}
 		
 		gfxDisableDepthTest();
+		gfxDisableBlending();
+		glDisable(GL_TEXTURE_2D);
 
 		
 //		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {		

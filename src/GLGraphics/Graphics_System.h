@@ -200,7 +200,7 @@ inline void gfxInit( const int _RefWidth, const int _RefHeight, const int _Actua
 //	MatrixStack = new std::vector<Matrix3x3>();
 		
 	
-	TexturePool::Init( "Content" );
+	TexturePool::Init( "Content/textures" );
 	TexturePool::AddDirectory( "" );
 	
 //	gfxInitCapture();

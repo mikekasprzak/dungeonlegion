@@ -22,9 +22,11 @@ public:
 // - ------------------------------------------------------------------------------------------ - //
 class cPMEVertex {
 public:
+	typedef UVSet<UVType> tUVType;
+	
 	Vector3D Pos;
 	Vector3D Normal;
-	UVSet<short> UV;
+	tUVType UV;
 	ColorType Color;
 };
 // - ------------------------------------------------------------------------------------------ - //
