@@ -46,14 +46,15 @@
 #define PRIMITIVE_POINTS			((b00010000)<<24)	// Not Supported by DS //
 #define PRIMITIVE_LINES				((b00100000)<<24)	// Not Supported by DS //
 #define PRIMITIVE_LINE_STRIP		((b00110000)<<24)	// Not Supported by PS1, DS //
-#define PRIMITIVE_LINE_LOOP			((b01000000)<<24)	// Not Supported by PS1, PS2, Cube, DS, Xbox, DirectX //
+#define PRIMITIVE_LINE_LOOP			((b01000000)<<24)	// Not Supported by PS1, PS2, DS, Cube, Xbox, DirectX //
 #define PRIMITIVE_TRIANGLES			((b01010000)<<24)
 #define PRIMITIVE_TRIANGLE_STRIP	((b01100000)<<24)
 #define PRIMITIVE_TRIANGLE_FAN		((b01110000)<<24)	// Not Supported by PS1, DS //
-#define PRIMITIVE_QUADS				((b10000000)<<24)	// Not Supported by GL ES, PS2, DirectX //
-#define PRIMITIVE_QUAD_STRIP		((b10010000)<<24)	// Not Supported by GL ES, PS1, PS2, DirectX, Cube //
+
+#define PRIMITIVE_QUADS				((b10000000)<<24)	// Not Supported by GL ES, GL 3.0, PS2, DirectX //
+#define PRIMITIVE_QUAD_STRIP		((b10010000)<<24)	// Not Supported by GL ES, GL 3.0, PS1, PS2, Cube, DirectX //
 #define PRIMITIVE_SPRITE			((b11000000)<<24)	// Only Supported by PS1, PS2 //
-#define PRIMITIVE_POLYGON			((b11010000)<<24)	// Only Supported by GL, Xbox //
+#define PRIMITIVE_POLYGON			((b11010000)<<24)	// Only Supported by GL, Xbox. Depreciated in GL 3.0 //
 // - ------------------------------------------------------------------------------------------ - //
 #define PRIMITIVE_DEFAULT		(PRIMITIVE_3D|PRIMITIVE_UV_SYSTEM|PRIMITIVE_INDEX_32BIT)
 // - ------------------------------------------------------------------------------------------ - //
