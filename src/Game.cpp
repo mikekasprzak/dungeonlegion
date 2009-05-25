@@ -11,16 +11,9 @@ cGame::cGame() :
 	Room.push_back( cRoom( "Content/rooms/0001.room" ) );
 	Room.push_back( cRoom( "Content/rooms/0002.room" ) );
 
-
-//	Room.push_back( cRoom() );
-//	Room.back().FileName = "Content/rooms/0002.room";
-//	//Room.back().Polygon.Vertex.push_back( Vector2D( 200, 100 ) );
-//	Room.back().TextSave();
-
 	
 	cPMEMesh& Mesh = Scene.Mesh.back();
 	DecalVertex = Mesh.Vertex;
-	
 
 	HeartTexture = gfxLoadTexture( "/Heart" );
 }
@@ -36,15 +29,7 @@ void cGame::Step() {
 	PairRect2D DecalVolume( -4,-4, 8,8 );
 	
 	DecalPos += Vector2D( System::StickX, System::StickY ) * Real(0.1f);
-	
-//	if ( System::UpKey )
-//		DecalPos.y -= 0.1f;
-//	else if ( System::DownKey )
-//		DecalPos.y += 0.1f;
-//	if ( System::LeftKey )
-//		DecalPos.x -= 0.1f;
-//	else if ( System::RightKey )
-//		DecalPos.x += 0.1f;
+
 	
 	cPMEMesh& Mesh = Scene.Mesh.back();
 	Decal.Face.clear();
