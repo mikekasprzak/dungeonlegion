@@ -1,13 +1,16 @@
 # - ------------------------------------------------------------------------ - #
 TARGET				:=	obj/_ArtUpdated
 # - ------------------------------------------------------------------------ - #
+SRC					:=	SrcContent/textures
+DEST				:=	Content/textures
+# - ------------------------------------------------------------------------ - #
 TreeTool			:=	Tools/TreeTool
 
 TextureTool			:=	Tools/TextureTool
 PVRTool				:=	Tools/PVRTexTool
 LZMA				:=	Tools/lzma
 # - ------------------------------------------------------------------------ - #
-ART_FILES			:=	$(shell $(TreeTool) Art .png)
+ART_FILES			:=	$(shell $(TreeTool) $(SRC) .png)
 
 IGNORE_LIST			:=	
 # - ------------------------------------------------------------------------ - #
@@ -16,7 +19,7 @@ ART_FILES			:=	$(filter-out $(IGNORE_LIST),$(ART_FILES))
 # To support more ways of adapting files, add them here. Before if a PNG variant. #
 ART_FILES			:=	$(ART_FILES:.png=.lzma)
 # - ------------------------------------------------------------------------ - #
-ART_FILES			:=	$(subst Art/,Content/,$(ART_FILES))
+ART_FILES			:=	$(subst $(SRC)/,$(DEST)/,$(ART_FILES))
 # - ------------------------------------------------------------------------ - #
 
 # - ------------------------------------------------------------------------ - #
@@ -26,50 +29,50 @@ $(TARGET): makedirs $(ART_FILES)
 
 # - ------------------------------------------------------------------------ - #
 force:
-	touch $(shell $(TreeTool) Art .png)
+	touch $(shell $(TreeTool) $(SRC) .png)
 # - ------------------------------------------------------------------------ - #
 clean:
-	-rm -r obj/Art $(TARGET)
+	-rm -r obj/$(DEST) $(TARGET)
 # - ------------------------------------------------------------------------ - #
 makedirs:
-	mkdir -p $(sort $(dir $(ART_FILES)) $(subst Content/,obj/Art/,$(dir $(ART_FILES))))
+	mkdir -p $(sort $(dir $(ART_FILES)) $(subst $(DEST)/,obj/$(DEST)/,$(dir $(ART_FILES))))
 # - ------------------------------------------------------------------------ - #
 phony: clean makedirs force
 # - ------------------------------------------------------------------------ - #
 
 # - ------------------------------------------------------------------------ - #
-Content/%.rgba4.lzma: Art/%.rgba4.png
-	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
-	$(PVRTool) -m -nt -p -fOGL4444 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
-	$(LZMA) e obj/Art/$*.pvr $@
+$(DEST)/%.rgba4.lzma: $(SRC)/%.rgba4.png
+	$(TextureTool) $< obj/$(DEST)/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL4444 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
+	$(LZMA) e obj/$(DEST)/$*.pvr $@
 # - ------------------------------------------------------------------------ - #
-Content/%.rgba8.lzma: Art/%.rgba8.png
-	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
-	$(PVRTool) -m -nt -p -fOGL8888 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
-	$(LZMA) e obj/Art/$*.pvr $@
+$(DEST)/%.rgba8.lzma: $(SRC)/%.rgba8.png
+	$(TextureTool) $< obj/$(DEST)/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL8888 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
+	$(LZMA) e obj/$(DEST)/$*.pvr $@
 # - ------------------------------------------------------------------------ - #
-Content/%.l8.lzma: Art/%.l8.png
-	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
-	$(PVRTool) -m -nt -p -fOGL8 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
-	$(LZMA) e obj/Art/$*.pvr $@
+$(DEST)/%.l8.lzma: $(SRC)/%.l8.png
+	$(TextureTool) $< obj/$(DEST)/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL8 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
+	$(LZMA) e obj/$(DEST)/$*.pvr $@
 # - ------------------------------------------------------------------------ - #
-Content/%.l8.lzma: Art/%.l8.png
-	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
-	$(PVRTool) -m -nt -p -fOGL8 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
-	$(LZMA) e obj/Art/$*.pvr $@
+$(DEST)/%.l8.lzma: $(SRC)/%.l8.png
+	$(TextureTool) $< obj/$(DEST)/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL8 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
+	$(LZMA) e obj/$(DEST)/$*.pvr $@
 # - ------------------------------------------------------------------------ - #
-Content/%.la8.lzma: Art/%.la8.png
-	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
-	$(PVRTool) -m -nt -p -fOGL88 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
-	$(LZMA) e obj/Art/$*.pvr $@
+$(DEST)/%.la8.lzma: $(SRC)/%.la8.png
+	$(TextureTool) $< obj/$(DEST)/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL88 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
+	$(LZMA) e obj/$(DEST)/$*.pvr $@
 # - ------------------------------------------------------------------------ - #
-Content/%.dxt.lzma: Art/%.dxt.png
-	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
-	$(PVRTool) -m -nt -p -fDXT5 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
-	$(LZMA) e obj/Art/$*.pvr $@
+$(DEST)/%.dxt.lzma: $(SRC)/%.dxt.png
+	$(TextureTool) $< obj/$(DEST)/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fDXT5 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
+	$(LZMA) e obj/$(DEST)/$*.pvr $@
 # - ------------------------------------------------------------------------ - #
-Content/%.lzma: Art/%.png
-	$(TextureTool) $< obj/Art/$*.fat.png -fatten -flip
-	$(PVRTool) -m -nt -p -fOGL4444 -iobj/Art/$*.fat.png -oobj/Art/$*.pvr
-	$(LZMA) e obj/Art/$*.pvr $@
+$(DEST)/%.lzma: $(SRC)/%.png
+	$(TextureTool) $< obj/$(DEST)/$*.fat.png -fatten -flip
+	$(PVRTool) -m -nt -p -fOGL4444 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
+	$(LZMA) e obj/$(DEST)/$*.pvr $@
 # - ------------------------------------------------------------------------ - #
