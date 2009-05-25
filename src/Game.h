@@ -40,6 +40,7 @@ public:
 	cPMEFile Scene;
 	
 	cPMEFaceGroup Decal;
+	Vector2D DecalPos;
 	std::vector<cPMEVertex> DecalVertex;
 	//std::vector<cPMEVertex::tUVType> DecalUV;
 	TextureID HeartTexture;

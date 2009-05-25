@@ -61,12 +61,10 @@ void PollEvents() {
 			    switch(event.key.keysym.sym) {
 			    	case SDLK_UP: {
 			    		System::UpKey = 0;
-			    		gfxOrtho();
 			    		break;
 					}
 			    	case SDLK_DOWN: {
 			    		System::DownKey = 0;
-			    		gfxPerspective();
 			    		break;
 					}
 			    	case SDLK_LEFT: {
