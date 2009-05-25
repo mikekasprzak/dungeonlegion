@@ -38,6 +38,7 @@ public:
 	std::vector<cRoom> Room;
 	
 	cPMEFile Scene;
+	cPMEFaceGroup Decal;
 
 public:
 	// - -------------------------------------------------------------------------------------- - //

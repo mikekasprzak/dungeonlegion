@@ -224,6 +224,18 @@ public:
 		return NewRect;
 	}
 	// - -------------------------------------------------------------------------------------- - //
+	inline const void IncludePoint( const Vector2D& Point ) {
+		if ( Point.x < _P1.x )
+			_P1.x = Point.x;
+		if ( Point.x > _P2.x )
+			_P2.x = Point.x;
+
+		if ( Point.y < _P1.y )
+			_P1.y = Point.y;
+		if ( Point.y > _P2.y )
+			_P2.y = Point.y;
+	}
+	// - -------------------------------------------------------------------------------------- - //
 public:
 	// - -------------------------------------------------------------------------------------- - //
 	// Adding vectors to offset the position of a rectangle //
