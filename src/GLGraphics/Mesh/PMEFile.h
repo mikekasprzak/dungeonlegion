@@ -9,6 +9,7 @@
 #include <Set/ABCSet.h>
 #include <Math/Vector.h>
 
+#include <UV.h>
 #include <Color.h>
 // - ------------------------------------------------------------------------------------------ - //
 class cPMEMaterial {

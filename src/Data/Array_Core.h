@@ -10,11 +10,13 @@
 // TODO: Insertion code, Alignment resizing (min, max), searching, sorting  //
 // NOTE: Consider making reallocate specific to max size change.
 // - ------------------------------------------------------------------------------------------ - //
-template< class Type >
+template< class ARType >
 struct Array {
+	typedef ARType Type;
+	
 	size_t MaxSize;
 	size_t Size;
-	Type Data[0];
+	ARType Data[0];
 };
 // - ------------------------------------------------------------------------------------------ - //
 

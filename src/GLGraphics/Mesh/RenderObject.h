@@ -2,14 +2,18 @@
 #ifndef __GLGraphics_RenderObject_H__
 #define __GLGraphics_RenderObject_H__
 // - ------------------------------------------------------------------------------------------ - //
-#include <vector>
-#include <string>
+//#include <vector>
+//#include <string>
+
+#include <Data/Array.h>
 
 #include <Set/UVSet.h>
 #include <Set/ABCSet.h>
 #include <Math/Vector.h>
 
+#include <UV.h>
 #include <Color.h>
+#include <TextureID.h>
 // - ------------------------------------------------------------------------------------------ - //
 class cROMaterial {
 public:
@@ -31,16 +35,24 @@ public:
 	typedef ABCSet<int> FaceType;
 	
 	int MaterialIndex;
-	std::vector< FaceType > Face;
+	Array<FaceType>* Face;
 };
 // - ------------------------------------------------------------------------------------------ - //
 class cRenderObject {
 public:
-	std::vector<cROMaterial> Material;
+	Array<cROMaterial>* Material;
 
-	std::vector<cROVertex> Vertex;
-	std::vector<cROFaceGroup> FaceGroup;
+	Array<cROVertex>* Vertex;
+	Array<cROFaceGroup>* FaceGroup;
+
+
+//	std::vector<cROMaterial> Material;
+//
+//	std::vector<cROVertex> Vertex;
+//	std::vector<cROFaceGroup> FaceGroup;
 };
+// - ------------------------------------------------------------------------------------------ - //
+//cRenderObject LoadPME( const cPMEFile& PME );
 // - ------------------------------------------------------------------------------------------ - //
 #endif // __GLGraphics_RenderObject_H__ //
 // - ------------------------------------------------------------------------------------------ - //

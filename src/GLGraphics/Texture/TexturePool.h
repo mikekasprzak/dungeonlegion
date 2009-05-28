@@ -2,7 +2,7 @@
 #ifndef __GLGraphics_TexturePool_H__
 #define __GLGraphics_TexturePool_H__
 // - ------------------------------------------------------------------------------------------ - //
-#include "TextureID.h"
+#include <TextureID.h>
 // - ------------------------------------------------------------------------------------------ - //
 namespace TexturePool {
 	void Init( const char* BaseDirectory );
