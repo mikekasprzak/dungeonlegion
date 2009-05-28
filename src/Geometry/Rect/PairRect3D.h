@@ -240,6 +240,23 @@ public:
 		return NewRect;
 	}
 	// - -------------------------------------------------------------------------------------- - //
+	inline const void IncludePoint( const Vector3D& Point ) {
+		if ( Point.x < _P1.x )
+			_P1.x = Point.x;
+		if ( Point.x > _P2.x )
+			_P2.x = Point.x;
+
+		if ( Point.y < _P1.y )
+			_P1.y = Point.y;
+		if ( Point.y > _P2.y )
+			_P2.y = Point.y;
+
+		if ( Point.z < _P1.z )
+			_P1.z = Point.z;
+		if ( Point.z > _P2.z )
+			_P2.z = Point.z;
+	}
+	// - -------------------------------------------------------------------------------------- - //
 public:
 	// - -------------------------------------------------------------------------------------- - //
 	// Adding vectors to offset the position of a rectangle //

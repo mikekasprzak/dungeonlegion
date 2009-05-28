@@ -10,7 +10,10 @@ cRenderObjectInstance Instantiate( const cRenderObject& Object ) {
 	Instance.Object = &Object;
 	Instance.Matrix = Matrix4x4::Identity;
 		
-	// Calculate Rect //
+	// Allocate Rect //
+	Instance.FaceGroup = new_Array<cROIFaceGroup>(Instance.Object->FaceGroup->Size);
+	Instance.CalculateRect();
+	Instance.CalculateFaceGroupRects();
 	
 	// Software Lighting //
 	{
@@ -20,12 +23,44 @@ cRenderObjectInstance Instantiate( const cRenderObject& Object ) {
 	return Instance;
 }
 // - ------------------------------------------------------------------------------------------ - //
-void cRenderObjectInstance::DrawFaceGroup( const size_t Index ) {
-	glPushMatrix();
-	glMultMatrixf( (const float*)&Matrix );
-	_DrawFaceGroup( Index );
-	glPopMatrix();
+
+// - ------------------------------------------------------------------------------------------ - //
+void cRenderObjectInstance::CalculateFaceGroupRect( const size_t Index ) {
 }
+// - ------------------------------------------------------------------------------------------ - //
+void cRenderObjectInstance::CalculateFaceGroupRects() {
+	if ( Object ) {
+		for ( size_t FG = 0; FG < Object->FaceGroup->Size; FG++ ) {
+			Vector3D Point = Object->Vertex->Data[ Object->FaceGroup->Data[FG].Face->Data[0] ].Pos;
+			Point = Point.ApplyMatrix( Matrix );
+			
+			FaceGroup->Data[FG].Rect = PairRect3D( Point, Vector3D::Zero );
+			for ( size_t idx = 1; idx < Object->FaceGroup->Data[FG].Face->Size; idx++ ) {
+				Point = Object->Vertex->Data[ Object->FaceGroup->Data[FG].Face->Data[idx] ].Pos;
+				Point = Point.ApplyMatrix( Matrix );
+	
+				FaceGroup->Data[FG].Rect.IncludePoint( Point );
+			}
+		}
+	}
+}
+// - ------------------------------------------------------------------------------------------ - //
+void cRenderObjectInstance::CalculateRect() {
+	if ( Object ) {
+		Vector3D Point = Object->Vertex->Data[0].Pos;
+		Point = Point.ApplyMatrix( Matrix );
+		
+		Rect = PairRect3D( Point, Vector3D::Zero );
+		for ( size_t idx = 1; idx < Object->Vertex->Size; idx++ ) {
+			Point = Object->Vertex->Data[idx].Pos;
+			Point = Point.ApplyMatrix( Matrix );
+
+			Rect.IncludePoint( Point );
+		}
+	}
+}
+// - ------------------------------------------------------------------------------------------ - //
+
 // - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::_DrawFaceGroup( const size_t Index ) {
 	glEnable(GL_TEXTURE_2D);
@@ -46,9 +81,24 @@ void cRenderObjectInstance::_DrawFaceGroup( const size_t Index ) {
 		sizeof( cROVertex ),
 		PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
 		);
+	glDisable(GL_TEXTURE_2D);
+}
+// - ------------------------------------------------------------------------------------------ - //
+void cRenderObjectInstance::DrawFaceGroup( const size_t Index ) {
+	glPushMatrix();
+	glMultMatrixf( (const float*)&Matrix );
+
+	_DrawFaceGroup( Index );
+
+	glPopMatrix();
 }
 // - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::Draw() {
+	gfxDrawRect( Rect.P1(), Rect.P2(), RGB_WHITE );
+	
+//	gfxDrawCircleFill( Rect.P1(), Real(0.5), RGB_YELLOW );
+//	gfxDrawCircleFill( Rect.P2(), Real(0.5), RGB_YELLOW );
+	
 	glPushMatrix();
 	glMultMatrixf( (const float*)&Matrix );
 	

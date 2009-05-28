@@ -25,6 +25,7 @@ cGame::cGame() :
 // - ------------------------------------------------------------------------------------------ - //
 cGame::~cGame() {
 	Object.Free();
+	Instance.Free();
 }
 // - ------------------------------------------------------------------------------------------ - //
 int Tweak;
@@ -93,11 +94,14 @@ void cGame::Draw() {
 	
 	glPushMatrix();
 	//glRotatef( Tweak, 1, 1, 1 );
-	glScalef( 25, 25, 25 );
-	glTranslatef( 0, 0, 0 );
+	//glScalef( 25, 25, 25 );
+	glScalef( 15, 15, 15 );
+	glTranslatef( 0, 2, 0 );
 
 	Instance.Matrix(0,3) = Real::Sin(Tweak * Real(0.002)) * Real(8);
-
+	Instance.CalculateRect();
+	//Instance.CalculateFaceGroupRects();
+	
 	{
 //		cPMEMesh& Mesh = Scene.Mesh.back();
 

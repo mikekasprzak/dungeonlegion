@@ -32,7 +32,7 @@ public:
 // - ------------------------------------------------------------------------------------------ - //
 class cROIFaceGroup {
 public:
-	Rect3D Rect;
+	PairRect3D Rect;
 	
 //	cROFaceGroup* FaceGroup;
 };
@@ -43,16 +43,33 @@ public:
 	
 	Matrix4x4 Matrix;
 	
-	Rect3D Rect;
+	PairRect3D Rect;
 	
 //	cROIMaterial Material;
 	cROIVertex Vertex;
 	Array<cROIFaceGroup>* FaceGroup;
 
+public:
+	cRenderObjectInstance() :
+		Object(0),
+		FaceGroup(0)
+	{
+	}
+
+//	inline ~cRenderObjectInstance() 
+	inline void Free() {
+		if ( FaceGroup )
+			delete_Array(FaceGroup);
+	}
+	
 private:
 	void _DrawFaceGroup( const size_t Index );
 
-public:
+public:	
+	void CalculateFaceGroupRect( const size_t Index );
+	void CalculateFaceGroupRects();
+	void CalculateRect();
+	
 	void DrawFaceGroup( const size_t Index );
 	void Draw();
 };
