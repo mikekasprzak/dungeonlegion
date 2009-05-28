@@ -47,7 +47,7 @@ void cRenderObjectInstance::Draw() {
 	glPushMatrix();
 	glMultMatrixf( (const float*)&Matrix );
 	
-	for ( size_t idx = 0; idx < FaceGroup->Size; idx++ ) {
+	for ( size_t idx = 0; idx < Object->FaceGroup->Size; idx++ ) {
 		_DrawFaceGroup( idx );
 	}
 	

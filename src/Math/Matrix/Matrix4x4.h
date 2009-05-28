@@ -127,23 +127,19 @@ public:
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	inline Real& operator () ( const int& _x, const int& _y ) {
-		//return Array[ (_y * 3) + _x ];
-		return Array[ ((_y << 1) + _y) + _x ];
+		return Array[ ((_y << 2)) + _x ];
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	inline const Real& operator () ( const int& _x, const int& _y ) const {
-		//return Array[ (_y * 3) + _x ];
-		return Array[ ((_y << 1) + _y) + _x ];
+		return Array[ ((_y << 2)) + _x ];
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	inline Real& Matrix( const int& _x, const int& _y ) {
-		//return Array[ (_y * 3) + _x ];
-		return Array[ ((_y << 1) + _y) + _x ];
+		return Array[ ((_y << 2)) + _x ];
 	}	
 	// - -------------------------------------------------------------------------------------- - //
 	inline const Real& Matrix( const int& _x, const int& _y ) const {
-		//return Array[ (_y * 3) + _x ];
-		return Array[ ((_y << 1) + _y) + _x ];
+		return Array[ ((_y << 2)) + _x ];
 	}	
 	// - -------------------------------------------------------------------------------------- - //
 

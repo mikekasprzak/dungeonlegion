@@ -15,6 +15,8 @@ cGame::cGame() :
 		cPMEFile PME( "Content/meshes/MultiRoom.pme" );
 		Object = LoadPME( PME );
 		Instance = Instantiate( Object );
+		
+	//	Instance.Matrix(0,3) = 20;
 	}
 	
 	cPMEMesh& Mesh = Scene.Mesh.back();
@@ -92,9 +94,11 @@ void cGame::Draw() {
 //	glCullFace( GL_BACK );
 	
 	glPushMatrix();
-	glRotatef( Tweak, 1, 1, 1 );
+	//glRotatef( Tweak, 1, 1, 1 );
 	glScalef( 25, 25, 25 );
 	glTranslatef( 0, 0, 0 );
+
+	Instance.Matrix(0,3) = Tweak * Real(0.04);
 
 	{
 //		cPMEMesh& Mesh = Scene.Mesh.back();
@@ -117,21 +121,23 @@ void cGame::Draw() {
 //				);
 //		}
 
-		for ( size_t idx = 0; idx < Object.FaceGroup->Size; idx++ ) {
-			gfxDrawPrimitive( 
-				Object.FaceGroup->Data[idx].Face->Size,
-				
-				&Object.Vertex->Data[0].Pos, 
-				0,
-				0,
-				&Object.Vertex->Data[0].Color, 
-				
-				&Object.FaceGroup->Data[idx].Face->Data[0], 
-				
-				sizeof( cROVertex ),
-				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
-				);
-		}
+		Instance.Draw();
+
+//		for ( size_t idx = 0; idx < Object.FaceGroup->Size; idx++ ) {
+//			gfxDrawPrimitive( 
+//				Object.FaceGroup->Data[idx].Face->Size,
+//				
+//				&Object.Vertex->Data[0].Pos, 
+//				0,
+//				0,
+//				&Object.Vertex->Data[0].Color, 
+//				
+//				&Object.FaceGroup->Data[idx].Face->Data[0], 
+//				
+//				sizeof( cROVertex ),
+//				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
+//				);
+//		}
 		
 //		glEnable(GL_TEXTURE_2D);
 //		gfxEnableAlphaBlending();
