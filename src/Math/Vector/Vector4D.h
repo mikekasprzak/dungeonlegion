@@ -300,12 +300,12 @@ public:
 	inline const class Vector2D ToVector2D() const;
 	inline const class Vector3D ToVector3D() const;
 	
-//	inline const class Matrix2x1& ToMatrix2x1();
-//	inline const class Matrix1x2& ToMatrix1x2();
-//	inline const class Matrix2x1& ToMatrix3x1();
-//	inline const class Matrix1x2& ToMatrix1x3();
-//	inline const class Matrix2x1& ToMatrix4x1();
-//	inline const class Matrix1x2& ToMatrix1x4();
+//	inline const class Matrix2x1& ToMatrix2x1() const;
+//	inline const class Matrix1x2& ToMatrix1x2() const;
+//	inline const class Matrix3x1& ToMatrix3x1() const;
+//	inline const class Matrix1x3& ToMatrix1x3() const;
+	inline const class Matrix4x1& ToMatrix4x1() const;
+	inline const class Matrix1x4& ToMatrix1x4() const;
 	
 	inline const class ScalarVector4D& ToScalarVector() const;
 	// - -------------------------------------------------------------------------------------- - //
@@ -313,10 +313,7 @@ public:
 	// - -------------------------------------------------------------------------------------- - //
 	// Projection //
 	// - -------------------------------------------------------------------------------------- - //
-//	inline Vector4D ApplyMatrix( const class Matrix3x3& );
-//	inline Vector4D ApplyMatrix( const class Matrix4x4& );
-//	inline Vector4D ApplyMatrix( const class Matrix4x3& );
-//	inline Vector4D ApplyMatrix( const class Matrix3x4& );
+	inline const Vector4D ApplyMatrix( const class Matrix4x4& ) const;
 	// - -------------------------------------------------------------------------------------- - //
 };
 // - ------------------------------------------------------------------------------------------ - //

@@ -29,6 +29,7 @@ extern void SkipTime();
 #include <Mesh/PMEFile.h>
 #include <Mesh/RenderObject.h>
 #include <Mesh/RenderObject_Load.h>
+#include <Mesh/RenderObjectInstance.h>
 
 // - ------------------------------------------------------------------------------------------ - //
 class cGame {
@@ -45,6 +46,7 @@ public:
 	TextureID HeartTexture;
 	
 	cRenderObject Object;
+	cRenderObjectInstance Instance;
 	
 public:
 	// - -------------------------------------------------------------------------------------- - //

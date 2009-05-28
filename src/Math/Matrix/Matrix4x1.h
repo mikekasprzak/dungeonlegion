@@ -1,63 +1,45 @@
 // - ------------------------------------------------------------------------------------------ - //
-#ifndef __GLGraphics_RenderObjectInstance_H__
-#define __GLGraphics_RenderObjectInstance_H__
+// Matrix4x1 //
 // - ------------------------------------------------------------------------------------------ - //
-#include <vector>
+#ifndef __Geometry_Matrix4x1_H__
+#define __Geometry_Matrix4x1_H__
+// - ------------------------------------------------------------------------------------------ - //
 
 // - ------------------------------------------------------------------------------------------ - //
-#include <Data/Array.h>
+#include <Math/Vector/Vector4D.h>
+// - ------------------------------------------------------------------------------------------ - //
 
-#include <Math/Vector.h>
-#include <Math/Matrix.h>
-#include <Geometry/Rect.h>
-
-#include <Color.h>
 // - ------------------------------------------------------------------------------------------ - //
-#include "RenderObject.h"
+// Utility class for determining the vector multiplication type against a matrix //
 // - ------------------------------------------------------------------------------------------ - //
-//class cROIMaterial {
-//public:
-//	cROMaterial* Material;
-//};
-// - ------------------------------------------------------------------------------------------ - //
-class cROIVertex {
+class Matrix4x1: public Vector4D {
 public:
-	// VBO
+	inline Matrix4x1() {
+	}
 	
-//	cROVertex* Vertex;
+	inline Matrix4x1( const Real& _x, const Real& _y, const Real& _z, const Real& _w ) :
+		Vector4D( _x, _y, _z, _w )
+	{
+	}
 	
-	// Computed Colors - Software Vertex Lighting Only //
-	std::vector<ColorType> Color;
+	const Vector4D& ToVector4D() const {
+		return (const Vector4D&)*this;
+	}
 };
 // - ------------------------------------------------------------------------------------------ - //
-class cROIFaceGroup {
-public:
-	Rect3D Rect;
-	
-//	cROFaceGroup* FaceGroup;
-};
-// - ------------------------------------------------------------------------------------------ - //
-class cRenderObjectInstance {
-public:
-	const cRenderObject* Object;
-	
-	Matrix4x4 Matrix;
-	
-	Rect3D Rect;
-	
-//	cROIMaterial Material;
-	cROIVertex Vertex;
-	Array<cROIFaceGroup>* FaceGroup;
 
-private:
-	void _DrawFaceGroup( const size_t Index );
+// - ------------------------------------------------------------------------------------------ - //
+// Define the function that converts to a Matrix //
+// - ------------------------------------------------------------------------------------------ - //
+const Matrix4x1& Vector4D::ToMatrix4x1() const {
+	return (const Matrix4x1&)*this;
+}
+// - ------------------------------------------------------------------------------------------ - //
+const Matrix4x1& Vector3D::ToMatrix4x1() const {
+	return ToVector4D().ToMatrix4x1();
+}
+// - ------------------------------------------------------------------------------------------ - //
 
-public:
-	void DrawFaceGroup( const size_t Index );
-	void Draw();
-};
 // - ------------------------------------------------------------------------------------------ - //
-cRenderObjectInstance Instantiate( const cRenderObject& Object );
-// - ------------------------------------------------------------------------------------------ - //
-#endif // __GLGraphics_RenderObjectInstance_H__ //
+#endif // __Geometry_Matrix4x1_H__ //
 // - ------------------------------------------------------------------------------------------ - //

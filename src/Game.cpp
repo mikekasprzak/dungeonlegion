@@ -14,6 +14,7 @@ cGame::cGame() :
 	{
 		cPMEFile PME( "Content/meshes/MultiRoom.pme" );
 		Object = LoadPME( PME );
+		Instance = Instantiate( Object );
 	}
 	
 	cPMEMesh& Mesh = Scene.Mesh.back();

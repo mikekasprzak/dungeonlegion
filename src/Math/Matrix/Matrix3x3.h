@@ -233,7 +233,7 @@ public:
 		Matrix3x3 Matrix(
 			Real::One, Real::Zero, Real::Zero,
 			Real::Zero, Real::One, Real::Zero,
-			_Vs.x, _Vs.y, Real::One
+			_Vs.x, _Vs.y, _Vs.z
 			);
 		
 		return Matrix;
