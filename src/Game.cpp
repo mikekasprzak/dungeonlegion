@@ -96,7 +96,7 @@ void cGame::Draw() {
 	glScalef( 25, 25, 25 );
 	glTranslatef( 0, 0, 0 );
 
-	Instance.Matrix(0,3) = Tweak * Real(0.04);
+	Instance.Matrix(0,3) = Real::Sin(Tweak * Real(0.002)) * Real(8);
 
 	{
 //		cPMEMesh& Mesh = Scene.Mesh.back();
