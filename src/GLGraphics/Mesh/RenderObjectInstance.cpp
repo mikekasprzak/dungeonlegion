@@ -68,19 +68,21 @@ void cRenderObjectInstance::_DrawFaceGroup( const size_t Index ) {
 	gfxSetTexture( Object->Material->Data[ Object->FaceGroup->Data[Index].MaterialIndex ].Texture );
 	gfxSetSmoothTexturesMipMapped();
 	
-	gfxDrawPrimitive( 
-		Object->FaceGroup->Data[Index].Face->Size,
-		
-		&Object->Vertex->Data[0].Pos,
-		0,//&Object->Vertex->Data[0].Normal,
-		&Object->Vertex->Data[0].UV,
-		0,//&Object->Vertex->Data[0].Color, 
-		
-		&Object->FaceGroup->Data[Index].Face->Data[0], 
-		
-		sizeof( cROVertex ),
-		PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
-		);
+	
+	cPrimitive Primitive;
+	Primitive.Count = Object->FaceGroup->Data[Index].Face->Size;
+	Primitive.Vertex = &Object->Vertex->Data[0].Pos;
+	Primitive.Normal = &Object->Vertex->Data[0].Normal;
+	Primitive.UV = &Object->Vertex->Data[0].UV;
+	//Primitive.Color = &Object->Vertex->Data[0].Color;
+	
+	Primitive.Index = &Object->FaceGroup->Data[Index].Face->Data[0];
+	Primitive.Stride = sizeof( cROVertex );
+	Primitive.Flags = PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES;
+	
+	Primitive.Draw();
+
+
 	glDisable(GL_TEXTURE_2D);
 }
 // - ------------------------------------------------------------------------------------------ - //

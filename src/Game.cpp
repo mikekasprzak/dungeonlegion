@@ -4,7 +4,7 @@
 // - ------------------------------------------------------------------------------------------ - //
 cGame::cGame() :
 //	Layout( "Content/Layout.map" ),
-	Scene( "Content/meshes/MultiRoom.pme" ),
+//	Scene( "Content/meshes/MultiRoom.pme" ),
 	DecalPos( 0, 0 )
 {	
 	// Add Rooms //
@@ -18,8 +18,8 @@ cGame::cGame() :
 		Instance2 = Instantiate( Object );
 	}
 	
-	cPMEMesh& Mesh = Scene.Mesh.back();
-	DecalVertex = Mesh.Vertex;
+//	cPMEMesh& Mesh = Scene.Mesh.back();
+//	DecalVertex = Mesh.Vertex;
 
 	HeartTexture = gfxLoadTexture( "/Heart" );
 }
@@ -39,6 +39,7 @@ void cGame::Step() {
 	DecalPos += Vector2D( System::StickX, System::StickY ) * Real(0.1f);
 	Tweak++;
 	
+/*
 	cPMEMesh& Mesh = Scene.Mesh.back();
 	Decal.Face.clear();
 	
@@ -84,7 +85,7 @@ void cGame::Step() {
 			DecalVertex[ Index ].UV.v = ((a.y - DecalVolume.P1().y) / Across.y) * Real(UV_ONE);
 		}
 	}
-	
+*/	
 }
 // - ------------------------------------------------------------------------------------------ - //
 void cGame::Draw() {

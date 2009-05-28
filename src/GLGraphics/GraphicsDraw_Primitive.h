@@ -83,7 +83,7 @@ inline void gfxDrawPrimitive(
 		
 	if ( Normal ) {
 		glEnableClientState(GL_NORMAL_ARRAY);
-		glVertexPointer(VertexDimensions, GL_FLOAT, Stride, Normal);
+		glNormalPointer(GL_FLOAT, Stride, Normal);
 	}
 	else {
 		glDisableClientState(GL_NORMAL_ARRAY);		

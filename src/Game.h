@@ -38,7 +38,7 @@ public:
 	//cLayout Layout;
 	//std::vector<cRoom> Room;
 	
-	cPMEFile Scene;
+	//cPMEFile Scene;
 	
 	cPMEFaceGroup Decal;
 	Vector2D DecalPos;
