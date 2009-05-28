@@ -2,9 +2,6 @@
 #ifndef __GLGraphics_RenderObject_H__
 #define __GLGraphics_RenderObject_H__
 // - ------------------------------------------------------------------------------------------ - //
-//#include <vector>
-//#include <string>
-
 #include <Data/Array.h>
 
 #include <Set/UVSet.h>
@@ -32,27 +29,19 @@ public:
 // - ------------------------------------------------------------------------------------------ - //
 class cROFaceGroup {
 public:
-	typedef ABCSet<int> FaceType;
+	typedef int IndexType;
 	
-	int MaterialIndex;
-	Array<FaceType>* Face;
+	unsigned short MaterialIndex;
+	unsigned short Flags;
+	Array<IndexType>* Face;
 };
 // - ------------------------------------------------------------------------------------------ - //
 class cRenderObject {
 public:
 	Array<cROMaterial>* Material;
-
 	Array<cROVertex>* Vertex;
 	Array<cROFaceGroup>* FaceGroup;
-
-
-//	std::vector<cROMaterial> Material;
-//
-//	std::vector<cROVertex> Vertex;
-//	std::vector<cROFaceGroup> FaceGroup;
 };
-// - ------------------------------------------------------------------------------------------ - //
-//cRenderObject LoadPME( const cPMEFile& PME );
 // - ------------------------------------------------------------------------------------------ - //
 #endif // __GLGraphics_RenderObject_H__ //
 // - ------------------------------------------------------------------------------------------ - //

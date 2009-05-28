@@ -78,9 +78,13 @@ cRenderObject LoadPME( const cPMEFile& PME ) {
 				
 				ROFaceGroup.MaterialIndex = MaterialOffset + PMEFaceGroup.Material;
 				
-				// Broken up per component, in case the FaceGroup types are actually different //
-				
-
+				ROFaceGroup.Face = new_Array<cROFaceGroup::IndexType>(PMEFaceGroup.Face.size()*3);
+				for ( size_t idx3 = 0; idx3 < PMEFaceGroup.Face.size(); idx3++ ) {
+					// Broken up per component, in case the FaceGroup types are actually different //
+					ROFaceGroup.Face->Data[(idx3*3)+0] = PMEFaceGroup.Face[idx3].a;
+					ROFaceGroup.Face->Data[(idx3*3)+1] = PMEFaceGroup.Face[idx3].b;
+					ROFaceGroup.Face->Data[(idx3*3)+2] = PMEFaceGroup.Face[idx3].c;					
+				}
 			}
 			FaceGroupOffset += PME.Mesh[idx].FaceGroup.size();
 			MaterialOffset += PME.Mesh[idx].Material.size();

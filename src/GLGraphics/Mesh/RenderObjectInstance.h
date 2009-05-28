@@ -4,6 +4,9 @@
 // - ------------------------------------------------------------------------------------------ - //
 #include <vector>
 
+// - ------------------------------------------------------------------------------------------ - //
+#include <Data/Array.h>
+
 #include <Math/Vector.h>
 #include <Math/Matrix.h>
 #include <Geometry/Rect.h>
@@ -43,7 +46,7 @@ public:
 	
 	cROIMaterial Material;
 	cROIVertex Vertex;
-	std::vector<cROIFaceGroup> FaceGroup;
+	Array<cROIFaceGroup>* FaceGroup;
 };
 // - ------------------------------------------------------------------------------------------ - //
 #endif // __GLGraphics_RenderObjectInstance_H__ //
