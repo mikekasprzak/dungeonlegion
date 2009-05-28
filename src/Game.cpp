@@ -96,7 +96,7 @@ void cGame::Draw() {
 
 		gfxEnableDepthTest();
 		glDepthFunc( GL_LESS );
-		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {		
+		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {
 			gfxDrawPrimitive( 
 				Mesh.FaceGroup[idx].Face.size()*3,
 				
@@ -121,7 +121,7 @@ void cGame::Draw() {
 		
 		// Draw Decal //
 		glDepthFunc( GL_LEQUAL );
-		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {		
+		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {
 			gfxDrawPrimitive( 
 				Decal.Face.size()*3,
 				
@@ -152,7 +152,7 @@ void cGame::Draw() {
 //				);
 //		}
 	}
-		
+	
 	glPopMatrix();
 
 	
