@@ -2,7 +2,7 @@
 #include <GraphicsDraw.h>
 #include "RenderObjectInstance.h"
 
-//#include <Texture/TexturePool.h>
+#include <Texture/TexturePool.h>
 // - ------------------------------------------------------------------------------------------ - //
 cRenderObjectInstance Instantiate( const cRenderObject& Object ) {
 	cRenderObjectInstance Instance;
@@ -28,13 +28,18 @@ void cRenderObjectInstance::DrawFaceGroup( const size_t Index ) {
 }
 // - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::_DrawFaceGroup( const size_t Index ) {
+	glEnable(GL_TEXTURE_2D);
+	//gfxEnableAlphaBlending();
+	gfxSetTexture( Object->Material->Data[ Object->FaceGroup->Data[Index].MaterialIndex ].Texture );
+	gfxSetSmoothTexturesMipMapped();
+	
 	gfxDrawPrimitive( 
 		Object->FaceGroup->Data[Index].Face->Size,
 		
-		&Object->Vertex->Data[0].Pos, 
-		0,
-		0,
-		&Object->Vertex->Data[0].Color, 
+		&Object->Vertex->Data[0].Pos,
+		0,//&Object->Vertex->Data[0].Normal,
+		&Object->Vertex->Data[0].UV,
+		0,//&Object->Vertex->Data[0].Color, 
 		
 		&Object->FaceGroup->Data[Index].Face->Data[0], 
 		

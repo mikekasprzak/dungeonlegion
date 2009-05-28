@@ -1,6 +1,7 @@
 // - ------------------------------------------------------------------------------------------ - //
 #include "RenderObject.h"
 #include "PMEFile.h"
+#include <String/String.h>
 
 #include <Texture/TexturePool.h>
 // - ------------------------------------------------------------------------------------------ - //
@@ -15,12 +16,15 @@ cRenderObject LoadPME( const cPMEFile& PME ) {
 			MaterialCount += PME.Mesh[idx].Material.size();
 		}
 		
+//		printf("Material Count: %i\n", MaterialCount);
+		
 		Obj.Material = new_Array<cROMaterial>(MaterialCount);
 		size_t CurrentMaterial = 0;
 		for ( size_t idx = 0; idx < PME.Mesh.size(); idx++ ) {
 			for ( size_t idx2 = 0; idx2 < PME.Mesh[idx].Material.size(); idx2++ ) {
-//				Obj.Material->Data[CurrentMaterial].Texture = gfxLoadTexture( PME.Mesh[idx].Material[idx2].ImageFileName.c_str() );
-				Obj.Material->Data[CurrentMaterial].Texture = 0;
+				std::string File = String::BaseName( String::SystemSlash( PME.Mesh[idx].Material[idx2].ImageFileName ));
+				
+				Obj.Material->Data[CurrentMaterial].Texture = gfxLoadTexture( File.c_str() );
 				
 				CurrentMaterial++;
 			}

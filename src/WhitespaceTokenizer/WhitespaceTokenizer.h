@@ -136,14 +136,18 @@ public:
 		// If the token begins with a quote, it's a string //
 		// NOTE: multi-line strings not supported.  \" not supported either. //
 		if ( CurrentToken[0] == '\"' ) {
-			// Undo the step //
-			Line.seekg( Position );
-			
-			// Seek out the first quote (hack) //
-			getline( Line, CurrentToken, '\"' );
-			
-			// Store the contents up until the 2nd quote //
-			getline( Line, CurrentToken, '\"' );
+			if ( CurrentToken[CurrentToken.size()-1] == '\"' ) {
+				CurrentToken = CurrentToken.substr( 1, CurrentToken.size()-2 );
+			}
+			else {
+				CurrentToken = CurrentToken.substr( 1, CurrentToken.size()-1 );
+				std::string Temp;
+				std::streampos Pos2 = Line.tellg();
+				getline( Line, Temp, '\"' );
+				CurrentToken += Temp;
+				Pos2 += Temp.size();
+				Line.seekg( Pos2 );
+			}
 		}
 		// If the token begins with a "/" //
 		else if ( CurrentToken[0] == '/' ) {

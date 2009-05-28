@@ -73,6 +73,6 @@ $(DEST)/%.dxt.lzma: $(SRC)/%.dxt.png
 # - ------------------------------------------------------------------------ - #
 $(DEST)/%.lzma: $(SRC)/%.png
 	$(TextureTool) $< obj/$(DEST)/$*.fat.png -fatten -flip
-	$(PVRTool) -m -nt -p -fOGL4444 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
+	$(PVRTool) -m -nt -p -fOGL8888 -iobj/$(DEST)/$*.fat.png -oobj/$(DEST)/$*.pvr
 	$(LZMA) e obj/$(DEST)/$*.pvr $@
 # - ------------------------------------------------------------------------ - #
