@@ -96,10 +96,12 @@ void cRenderObjectInstance::DrawFaceGroup( const size_t Index ) {
 }
 // - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::Draw() {
+	glDisable( GL_LIGHTING );
 	gfxDrawRect( Rect.P1(), Rect.P2(), RGB_WHITE );
 	
-//	gfxDrawCircleFill( Rect.P1(), Real(0.5), RGB_YELLOW );
-//	gfxDrawCircleFill( Rect.P2(), Real(0.5), RGB_YELLOW );
+	gfxDrawCircleFill( Rect.P1(), Real(0.2), RGB_RED );
+	gfxDrawCircleFill( Rect.P2(), Real(0.2), RGB_YELLOW );
+	glEnable( GL_LIGHTING );
 	
 	glPushMatrix();
 	glMultMatrixf( (const float*)&Matrix );
