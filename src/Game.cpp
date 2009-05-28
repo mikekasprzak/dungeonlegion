@@ -3,14 +3,18 @@
 #include <Geometry/Rect.h>
 // - ------------------------------------------------------------------------------------------ - //
 cGame::cGame() :
-	Layout( "Content/Layout.map" ),
+//	Layout( "Content/Layout.map" ),
 	Scene( "Content/meshes/MultiRoom.pme" ),
 	DecalPos( 0, 0 )
 {	
 	// Add Rooms //
-	Room.push_back( cRoom( "Content/rooms/0001.room" ) );
-	Room.push_back( cRoom( "Content/rooms/0002.room" ) );
+//	Room.push_back( cRoom( "Content/rooms/0001.room" ) );
+//	Room.push_back( cRoom( "Content/rooms/0002.room" ) );
 
+	{
+		cPMEFile PME( "Content/meshes/MultiRoom.pme" );
+		Object = LoadPME( PME );
+	}
 	
 	cPMEMesh& Mesh = Scene.Mesh.back();
 	DecalVertex = Mesh.Vertex;
@@ -19,7 +23,7 @@ cGame::cGame() :
 }
 // - ------------------------------------------------------------------------------------------ - //
 cGame::~cGame() {
-	
+	Object.Free();
 }
 // - ------------------------------------------------------------------------------------------ - //
 int Tweak;
@@ -92,54 +96,70 @@ void cGame::Draw() {
 	glTranslatef( 0, 0, 0 );
 
 	{
-		cPMEMesh& Mesh = Scene.Mesh.back();
+//		cPMEMesh& Mesh = Scene.Mesh.back();
 
 		gfxEnableDepthTest();
 		glDepthFunc( GL_LESS );
-		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {
+//		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {
+//			gfxDrawPrimitive( 
+//				Mesh.FaceGroup[idx].Face.size()*3,
+//				
+//				&Mesh.Vertex[0].Pos, 
+//				0,
+//				0,
+//				&Mesh.Vertex[0].Color, 
+//				
+//				&Mesh.FaceGroup[idx].Face[0], 
+//				
+//				sizeof( cPMEVertex ),
+//				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
+//				);
+//		}
+
+		for ( size_t idx = 0; idx < Object.FaceGroup->Size; idx++ ) {
 			gfxDrawPrimitive( 
-				Mesh.FaceGroup[idx].Face.size()*3,
+				Object.FaceGroup->Data[idx].Face->Size,
 				
-				&Mesh.Vertex[0].Pos, 
+				&Object.Vertex->Data[0].Pos, 
 				0,
 				0,
-				&Mesh.Vertex[0].Color, 
+				&Object.Vertex->Data[0].Color, 
 				
-				&Mesh.FaceGroup[idx].Face[0], 
+				&Object.FaceGroup->Data[idx].Face->Data[0], 
 				
-				sizeof( cPMEVertex ),
+				sizeof( cROVertex ),
 				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
 				);
 		}
 		
-		glEnable(GL_TEXTURE_2D);
-		gfxEnableAlphaBlending();
-		gfxSetTexture( HeartTexture );
-		gfxSetSmoothTexturesMipMapped();
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
-		
-		// Draw Decal //
-		glDepthFunc( GL_LEQUAL );
-		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {
-			gfxDrawPrimitive( 
-				Decal.Face.size()*3,
-				
-				&Mesh.Vertex[0].Pos, 
-				0,
-				&DecalVertex[0].UV,
-				0,//&Mesh.Vertex[0].Color, 
-				
-				&Decal.Face[0],
-				
-				sizeof( cPMEVertex ),
-				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
-				);
-		}
-		
-		gfxDisableDepthTest();
-		gfxDisableBlending();
-		glDisable(GL_TEXTURE_2D);
+//		glEnable(GL_TEXTURE_2D);
+//		gfxEnableAlphaBlending();
+//		gfxSetTexture( HeartTexture );
+//		gfxSetSmoothTexturesMipMapped();
+//		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
+//		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
+//		
+//		// Draw Decal //
+//		glDepthFunc( GL_LEQUAL );
+//		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {
+//			gfxDrawPrimitive( 
+//				Decal.Face.size()*3,
+//				
+//				&Mesh.Vertex[0].Pos, 
+//				0,
+//				&DecalVertex[0].UV,
+//				0,//&Mesh.Vertex[0].Color, 
+//				
+//				&Decal.Face[0],
+//				
+//				sizeof( cPMEVertex ),
+//				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
+//				);
+//		}
+//		
+//		gfxDisableDepthTest();
+//		gfxDisableBlending();
+//		glDisable(GL_TEXTURE_2D);
 
 		
 //		for ( size_t idx = 0; idx < Mesh.FaceGroup.size(); idx++ ) {		

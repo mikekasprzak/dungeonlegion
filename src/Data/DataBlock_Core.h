@@ -12,6 +12,9 @@
 struct DataBlock {
 	size_t Size;
 	char Data[0];
+
+	// NOTE: There is no [] operator here because you normally create pointers to these. //
+	//   That means, the syntax for reading one is MyBlock->Data[Index], *NOT* MyBlock[Index]. //
 };
 // - ------------------------------------------------------------------------------------------ - //
 

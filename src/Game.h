@@ -27,23 +27,25 @@
 extern void SkipTime();
 // - ------------------------------------------------------------------------------------------ - //
 #include <Mesh/PMEFile.h>
-
+#include <Mesh/RenderObject.h>
+#include <Mesh/RenderObject_Load.h>
 
 // - ------------------------------------------------------------------------------------------ - //
 class cGame {
 public:
 	// - -------------------------------------------------------------------------------------- - //
-	cLayout Layout;
-	
-	std::vector<cRoom> Room;
+	//cLayout Layout;
+	//std::vector<cRoom> Room;
 	
 	cPMEFile Scene;
 	
 	cPMEFaceGroup Decal;
 	Vector2D DecalPos;
 	std::vector<cPMEVertex> DecalVertex;
-	//std::vector<cPMEVertex::tUVType> DecalUV;
 	TextureID HeartTexture;
+	
+	cRenderObject Object;
+	
 public:
 	// - -------------------------------------------------------------------------------------- - //
 	cGame();

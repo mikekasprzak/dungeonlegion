@@ -34,6 +34,18 @@ public:
 	unsigned short MaterialIndex;
 	unsigned short Flags;
 	Array<IndexType>* Face;
+
+public:
+	inline cROFaceGroup() :
+		Face(0)
+	{
+	}
+	
+//	inline ~cROFaceGroup() 
+	inline void Free() {
+		if ( Face )
+			delete_Array(Face);
+	}
 };
 // - ------------------------------------------------------------------------------------------ - //
 class cRenderObject {
@@ -41,6 +53,24 @@ public:
 	Array<cROMaterial>* Material;
 	Array<cROVertex>* Vertex;
 	Array<cROFaceGroup>* FaceGroup;
+
+public:
+	inline cRenderObject() :
+		Material(0),
+		Vertex(0),
+		FaceGroup(0)
+	{
+	}
+
+//	inline ~cRenderObject()
+	inline void Free() {
+		if ( Material )
+			delete_Array(Material);
+		if ( Vertex )
+			delete_Array(Vertex);
+		if ( FaceGroup )
+			delete_Array(FaceGroup);
+	}
 };
 // - ------------------------------------------------------------------------------------------ - //
 #endif // __GLGraphics_RenderObject_H__ //

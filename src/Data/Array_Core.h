@@ -17,6 +17,9 @@ struct Array {
 	size_t MaxSize;
 	size_t Size;
 	ARType Data[0];
+
+	// NOTE: There is no [] operator here because you normally create pointers to these. //
+	//   That means, the syntax for reading one is MyArray->Data[Index], *NOT* MyArray[Index]. //
 };
 // - ------------------------------------------------------------------------------------------ - //
 
