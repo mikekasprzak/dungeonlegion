@@ -46,7 +46,7 @@ public:
 	TextureID HeartTexture;
 	
 	cRenderObject Object;
-	cRenderObjectInstance Instance;
+	cRenderObjectInstance Instance, Instance2;
 	
 public:
 	// - -------------------------------------------------------------------------------------- - //

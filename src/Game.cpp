@@ -15,6 +15,7 @@ cGame::cGame() :
 		cPMEFile PME( "Content/meshes/MultiRoom.pme" );
 		Object = LoadPME( PME );
 		Instance = Instantiate( Object );
+		Instance2 = Instantiate( Object );
 	}
 	
 	cPMEMesh& Mesh = Scene.Mesh.back();
@@ -26,6 +27,7 @@ cGame::cGame() :
 cGame::~cGame() {
 	Object.Free();
 	Instance.Free();
+	Instance2.Free();
 }
 // - ------------------------------------------------------------------------------------------ - //
 int Tweak;
@@ -96,11 +98,22 @@ void cGame::Draw() {
 	//glRotatef( Tweak, 1, 1, 1 );
 	//glScalef( 25, 25, 25 );
 	glScalef( 15, 15, 15 );
-	glTranslatef( 0, 2, 0 );
+	glTranslatef( 0, 0, 0 );
 
-	Instance.Matrix(0,3) = Real::Sin(Tweak * Real(0.002)) * Real(8);
+	Real Slide = Real::Sin(Tweak * Real(0.002)) * Real(8);
+
+	Instance.Matrix(0,3) = Real(-10) + Slide;
 	Instance.CalculateRect();
 	//Instance.CalculateFaceGroupRects();
+
+	Instance2.Matrix(0,0) = Real::Zero;
+	Instance2.Matrix(0,1) = Real::One;
+	Instance2.Matrix(1,0) = -Real::One;
+	Instance2.Matrix(1,1) = Real::Zero;
+
+	Instance2.Matrix(0,3) = Real(10) + Slide;
+	Instance2.Matrix(1,3) = -Real(2);
+	Instance2.CalculateRect();
 	
 	{
 //		cPMEMesh& Mesh = Scene.Mesh.back();
@@ -124,6 +137,7 @@ void cGame::Draw() {
 //		}
 
 		Instance.Draw();
+		Instance2.Draw();
 
 //		for ( size_t idx = 0; idx < Object.FaceGroup->Size; idx++ ) {
 //			gfxDrawPrimitive( 
