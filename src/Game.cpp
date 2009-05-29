@@ -4,6 +4,9 @@
 // - ------------------------------------------------------------------------------------------ - //
 extern Vector3D Light;
 Vector3D LightPos( 0, 0, 10 );
+
+extern ColorType Ambient;
+ColorType Ambient = RGB(44,22,0);
 // - ------------------------------------------------------------------------------------------ - //
 cGame::cGame() :
 //	Layout( "Content/Layout.map" ),
@@ -101,7 +104,6 @@ void cGame::Step() {
 }
 // - ------------------------------------------------------------------------------------------ - //
 void cGame::Draw() {
-	ColorType Ambient = RGB(44,22,0);
 	gfxClearBuffer( Ambient );
 	
 //	gfxEnableAlphaBlending();

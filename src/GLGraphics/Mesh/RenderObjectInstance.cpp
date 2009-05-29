@@ -51,7 +51,13 @@ void cRenderObjectInstance::CalculateLighting() {
 		
 		int Lighter = ((float)Intensity * 0.8f);
 
-		Vertex.Color[idx] = RGB( Intensity, Lighter, Intensity );
+		extern ColorType Ambient;
+
+		Vertex.Color[idx] = RGB( 
+			GET_R(Ambient) > Intensity ? GET_R(Ambient) : Intensity, 
+			GET_G(Ambient) > Lighter ? GET_G(Ambient) : Lighter, 
+			GET_B(Ambient) > Intensity ? GET_B(Ambient) : Intensity
+			);
 	}
 }
 
@@ -130,14 +136,16 @@ void cRenderObjectInstance::DrawFaceGroup( const size_t Index ) {
 }
 // - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::Draw() {
+	gfxEnableAlphaBlending();
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
-	gfxDrawRect( Rect.P1(), Rect.P2(), RGB_WHITE );
+	gfxDrawRect( Rect.P1(), Rect.P2(), RGBA(255,255,255,64) );
 	
 	gfxDrawCircleFill( Rect.P1(), Real(0.2), RGB_RED );
 	gfxDrawCircleFill( Rect.P2(), Real(0.2), RGB_YELLOW );
 
+	gfxDisableBlending();
 	
 	glPushMatrix();
 	glMultMatrixf( (const float*)&Matrix );
