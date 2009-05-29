@@ -69,6 +69,8 @@ public:
 	void CalculateFaceGroupRect( const size_t Index );
 	void CalculateFaceGroupRects();
 	void CalculateRect();
+
+	void CalculateLighting();
 	
 	void DrawFaceGroup( const size_t Index );
 	void Draw();

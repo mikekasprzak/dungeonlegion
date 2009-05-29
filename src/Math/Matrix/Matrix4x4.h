@@ -190,20 +190,41 @@ public:
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	// Calculate the determinant, for the inverse //
-//	inline const Real Determinant() const {
-//		return
-//			(Matrix(0,0) * ((Matrix(1,1) * Matrix(2,2)) - (Matrix(1,2) * Matrix(2,1)))) +
-//			(Matrix(0,1) * ((Matrix(1,2) * Matrix(2,0)) - (Matrix(1,0) * Matrix(2,2)))) +
-//			(Matrix(0,2) * ((Matrix(1,0) * Matrix(2,1)) - (Matrix(1,1) * Matrix(2,0))));
-//	}
+	inline const Real Determinant() const {
+		return
+			Matrix(0,0) * 
+				(
+					Matrix(1,1) * (Matrix(2,2)*Matrix(3,3) - Matrix(2,3)*Matrix(3,2)) -
+					Matrix(2,1) * (Matrix(1,2)*Matrix(3,3) + Matrix(1,3)*Matrix(3,2)) +
+					Matrix(3,1) * (Matrix(1,2)*Matrix(2,3) - Matrix(1,3)*Matrix(2,2))
+				) -
+			Matrix(1,0) * 
+				(
+					Matrix(0,1) * (Matrix(2,2)*Matrix(3,3) - Matrix(2,3)*Matrix(3,2)) -
+					Matrix(2,1) * (Matrix(0,2)*Matrix(3,3) + Matrix(0,3)*Matrix(3,2)) +
+					Matrix(3,1) * (Matrix(0,2)*Matrix(2,3) - Matrix(0,3)*Matrix(2,2))
+				) +
+			Matrix(2,0) * 
+				(
+					Matrix(0,1) * (Matrix(1,2)*Matrix(3,3) - Matrix(1,3)*Matrix(3,2)) -
+					Matrix(1,1) * (Matrix(0,2)*Matrix(3,3) + Matrix(0,3)*Matrix(3,2)) +
+					Matrix(3,1) * (Matrix(0,2)*Matrix(1,3) - Matrix(0,3)*Matrix(1,2))
+				) -
+			Matrix(3,0) * 
+				(
+					Matrix(0,1) * (Matrix(1,2)*Matrix(2,3) - Matrix(1,3)*Matrix(2,2)) -
+					Matrix(1,1) * (Matrix(0,2)*Matrix(2,3) + Matrix(0,3)*Matrix(2,2)) +
+					Matrix(2,1) * (Matrix(0,2)*Matrix(1,3) - Matrix(0,3)*Matrix(1,2))
+				);
+	}
 	// - -------------------------------------------------------------------------------------- - //
 
 	// - -------------------------------------------------------------------------------------- - //
 	// Calculate the Inverse //
-//	inline const Matrix4x4 Inverse() {
-//		// Possible bug.  If the Determinant is 0, then the matrix has no inverse //
-//		return Adjoint() / Determinant();
-//	}
+	inline const Matrix4x4 Inverse() {
+		// Possible bug.  If the Determinant is 0, then the matrix has no inverse //
+		return Adjoint() / Determinant();
+	}
 	// - -------------------------------------------------------------------------------------- - //
 
 	// - -------------------------------------------------------------------------------------- - //

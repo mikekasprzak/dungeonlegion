@@ -16,6 +16,11 @@ cGame::cGame() :
 		Object = LoadPME( PME );
 		Instance = Instantiate( Object );
 		Instance2 = Instantiate( Object );
+		
+		Instance2.Matrix(0,0) = Real::Zero;
+		Instance2.Matrix(0,1) = Real::One;
+		Instance2.Matrix(1,0) = -Real::One;
+		Instance2.Matrix(1,1) = Real::Zero;			
 	}
 	
 //	cPMEMesh& Mesh = Scene.Mesh.back();
@@ -23,18 +28,8 @@ cGame::cGame() :
 
 	HeartTexture = gfxLoadTexture( "/Heart" );
 	
+	glDisable( GL_LIGHTING );
 	
-	GLfloat LightAmbient[]= { 0.5f, 0.5f, 0.5f, 1.0f };
-	GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat LightSpecular[]= { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-	//glLightfv(GL_LIGHT1, GL_SPECULAR, LightSpecular);
-	//glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
-	
-	glEnable( GL_LIGHT1 );
-	//glLightf( 
 }
 // - ------------------------------------------------------------------------------------------ - //
 cGame::~cGame() {
@@ -43,6 +38,7 @@ cGame::~cGame() {
 	Instance2.Free();
 }
 // - ------------------------------------------------------------------------------------------ - //
+extern int Tweak;
 int Tweak;
 // - ------------------------------------------------------------------------------------------ - //
 void cGame::Step() {
@@ -104,8 +100,6 @@ void cGame::Step() {
 void cGame::Draw() {
 	ColorType Ambient = RGB(44,22,0);
 	gfxClearBuffer( Ambient );
-	GLfloat AmbientLight[]= { GET_R(Ambient)/255.0f, GET_G(Ambient)/255.0f, GET_B(Ambient)/255.0f, GET_A(Ambient)/255.0f };
-	glLightModelfv( GL_LIGHT_MODEL_AMBIENT, AmbientLight );
 	
 //	gfxEnableAlphaBlending();
 	
@@ -118,11 +112,6 @@ void cGame::Draw() {
 	glScalef( 15, 15, 15 );
 	//glTranslatef( 0, 0, 0 );
 
-	GLfloat LightPosition[]= { 0.0f, 0.0f, 40.0f, 1.0f };
-	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
-	GLfloat LightDirection[]= { 0.0f, 0.0f, 1.0f };
-	glLightfv(GL_LIGHT1, GL_POSITION,LightDirection);
-
 
 	Real Slide = Real::Sin(Tweak * Real(0.002)) * Real(8);
 
@@ -133,6 +122,9 @@ void cGame::Draw() {
 	Instance2.Matrix(0,3) = Real(10) + Slide;
 	Instance2.Matrix(1,3) = -Real(2);
 	Instance2.CalculateRect();
+	
+	Instance.CalculateLighting();
+	Instance2.CalculateLighting();
 
 	
 	{
@@ -151,7 +143,7 @@ void cGame::Draw() {
 //				
 //				&Mesh.FaceGroup[idx].Face[0], 
 //				
-//				sizeof( cPMEVertex ),
+//				sizeof( cPMEVertex ), sizeof( cROVertex ),
 //				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
 //				);
 //		}
@@ -170,7 +162,7 @@ void cGame::Draw() {
 //				
 //				&Object.FaceGroup->Data[idx].Face->Data[0], 
 //				
-//				sizeof( cROVertex ),
+//				sizeof( cROVertex ), sizeof( cROVertex ),
 //				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
 //				);
 //		}
@@ -195,7 +187,7 @@ void cGame::Draw() {
 //				
 //				&Decal.Face[0],
 //				
-//				sizeof( cPMEVertex ),
+//				sizeof( cPMEVertex ), sizeof( cPMEVertex ),
 //				PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
 //				);
 //		}
@@ -210,7 +202,7 @@ void cGame::Draw() {
 //				Mesh.Vertex.size(),
 //				&Mesh.Vertex[0].Pos, 0, 0, 0, 
 //				0,
-//				sizeof( cPMEVertex ),
+//				sizeof( cPMEVertex ), sizeof( cPMEVertex ),
 //				PRIMITIVE_DEFAULT | PRIMITIVE_POINTS
 //				);
 //		}

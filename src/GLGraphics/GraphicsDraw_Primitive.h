@@ -63,7 +63,7 @@
 inline void gfxDrawPrimitive( 
 	const size_t Count,
 	const void* Vertex, const void* Normal = 0, const void* UV = 0, const void* Color = 0,
-	const void* Index = 0, const int Stride = 0, const unsigned Flags = PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
+	const void* Index = 0, const int Stride = 0, const int ColorStride = 0, const unsigned Flags = PRIMITIVE_DEFAULT | PRIMITIVE_TRIANGLES
 	)
 {
 	int VertexDimensions;
@@ -116,7 +116,7 @@ inline void gfxDrawPrimitive(
 	
 	if ( Color ) {
 		glEnableClientState(GL_COLOR_ARRAY);
-		glColorPointer(4, GL_UNSIGNED_BYTE, Stride, Color);
+		glColorPointer(4, GL_UNSIGNED_BYTE, ColorStride, Color);
 	}
 	else {
 		glDisableClientState(GL_COLOR_ARRAY);
@@ -177,13 +177,14 @@ public:
 	const void* Index;
 	
 	int Stride;
+	int ColorStride;
 	
 	unsigned Flags; // 2D versus 3D?, 16bit versus 32bit Indexes?, "shorts" for UVs? //
 public:
 	cPrimitive( 
 		const size_t _Count = 0,
 		const void* _Vertex = 0, const void* _Normal = 0, const void* _UV = 0, const void* _Color = 0,
-		const void* _Index = 0, const int _Stride = 0, const unsigned _Flags = PRIMITIVE_DEFAULT
+		const void* _Index = 0, const int _Stride = 0, const int _ColorStride = 0, const unsigned _Flags = PRIMITIVE_DEFAULT
 		) :
 		Count( _Count ),
 		Vertex( _Vertex ),
@@ -192,12 +193,13 @@ public:
 		Color( _Color ),
 		Index( _Index ),
 		Stride( _Stride ),
+		ColorStride( _ColorStride ),
 		Flags( _Flags )
 	{
 	}
 	
 	inline void Draw() {
-		gfxDrawPrimitive( Count, Vertex, Normal, UV, Color, Index, Stride, Flags );
+		gfxDrawPrimitive( Count, Vertex, Normal, UV, Color, Index, Stride, ColorStride, Flags );
 	}
 };
 // - ------------------------------------------------------------------------------------------ - //

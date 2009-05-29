@@ -17,12 +17,39 @@ cRenderObjectInstance Instantiate( const cRenderObject& Object ) {
 	
 	// Software Lighting //
 	{
-		Instance.Vertex.Color.resize( Object.Vertex->Size );
+		Instance.Vertex.Color.resize( Object.Vertex->Size, RGB_WHITE );
 	}
+	
+	Instance.CalculateLighting();
 	
 	return Instance;
 }
 // - ------------------------------------------------------------------------------------------ - //
+extern int Tweak;
+
+void cRenderObjectInstance::CalculateLighting() {
+	Vector4D Light( 0, 0, 5, 1 );
+	Light = Light.ApplyMatrix( Matrix.Inverse() );
+	
+	for ( size_t idx = 0; idx < Vertex.Color.size(); idx++ ) {
+		Vector3D& Point = Object->Vertex->Data[ idx ].Pos;
+		Vector3D& Norm = Object->Vertex->Data[ idx ].Normal;
+		
+		Vector3D Ray = Light.ToVector3D() - Point;
+		Real Length = Ray.NormalizeRet();
+
+		int Intensity = Real((256*10)/Length) * (Ray * Norm);
+		if ( Intensity > 255 )
+			Intensity = 255;
+		if ( Intensity < 0 )
+			Intensity = 0;
+		
+		int Lighter = ((float)Intensity * 0.8f);
+
+		Vertex.Color[idx] = RGB( Intensity, Lighter, Intensity );
+	}
+}
+
 
 // - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::CalculateFaceGroupRect( const size_t Index ) {
@@ -74,7 +101,9 @@ void cRenderObjectInstance::_DrawFaceGroup( const size_t Index ) {
 	Primitive.Vertex = &Object->Vertex->Data[0].Pos;
 	Primitive.Normal = &Object->Vertex->Data[0].Normal;
 	Primitive.UV = &Object->Vertex->Data[0].UV;
-	//Primitive.Color = &Object->Vertex->Data[0].Color;
+	
+	Primitive.Color = &Vertex.Color[0];
+	Primitive.ColorStride = 0;
 	
 	Primitive.Index = &Object->FaceGroup->Data[Index].Face->Data[0];
 	Primitive.Stride = sizeof( cROVertex );
@@ -96,12 +125,15 @@ void cRenderObjectInstance::DrawFaceGroup( const size_t Index ) {
 }
 // - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::Draw() {
-	glDisable( GL_LIGHTING );
-	gfxDrawRect( Rect.P1(), Rect.P2(), RGB_WHITE );
-	
-	gfxDrawCircleFill( Rect.P1(), Real(0.2), RGB_RED );
-	gfxDrawCircleFill( Rect.P2(), Real(0.2), RGB_YELLOW );
-	glEnable( GL_LIGHTING );
+//	glDisableClientState(GL_COLOR_ARRAY);
+//	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//	glDisableClientState(GL_NORMAL_ARRAY);
+//	gfxDrawRect( Rect.P1(), Rect.P2(), RGB_WHITE );
+//	
+//	gfxDrawCircleFill( Rect.P1(), Real(0.2), RGB_RED );
+//	gfxDrawCircleFill( Rect.P2(), Real(0.2), RGB_YELLOW );
+//	
+//	gfxSetColor( RGB_WHITE );
 	
 	glPushMatrix();
 	glMultMatrixf( (const float*)&Matrix );

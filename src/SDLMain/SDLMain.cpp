@@ -16,6 +16,7 @@
 
 // - ------------------------------------------------------------------------------------------ - //
 bool IsActive = true;
+bool TabReset = false;
 // - ------------------------------------------------------------------------------------------ - //
 void PollEvents() {
 	SDL_Event event;
@@ -54,6 +55,11 @@ void PollEvents() {
 			    		System::RightKey = 1;
 			    		break;
 					}
+					
+					case SDLK_TAB: {
+						TabReset = true;	
+						break;
+					}
 			    }
 			    break;
 			}
@@ -74,6 +80,11 @@ void PollEvents() {
 			    	case SDLK_RIGHT: {
 			    		System::RightKey = 0;
 			    		break;
+					}
+
+					case SDLK_TAB: {
+						TabReset = false;	
+						break;
 					}
 			    }
 			    break;
@@ -104,6 +115,8 @@ void PollEvents() {
 
 // - ------------------------------------------------------------------------------------------ - //
 int main( int argc, char* argv[] ) {
+	
+	
 	bool DepthBuffer = true;
 
 	// Note: FullScreen'ing should be handled in some user configurable way... hardcoded for debugging.
@@ -138,13 +151,13 @@ int main( int argc, char* argv[] ) {
 	
 //	SDL_InitSubSystem( SDL_INIT_JOYSTICK );
 
-	{
+	while ( !gfxHasShutdown() ) {
 		cGame Game;
 
 		SetFramesPerSecond( 60 );
 		TIMEVALUE WorkTime = GetTimeNow();
 
-		while( !gfxHasShutdown() ) {	
+		while( !gfxHasShutdown() && !TabReset ) {
 			TIMEVALUE TimeDiff = SubtractTime( GetTimeNow(), WorkTime );
 			int FramesOfWork = GetFrames( &TimeDiff );
 	
