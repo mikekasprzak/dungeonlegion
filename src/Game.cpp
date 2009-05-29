@@ -89,6 +89,10 @@ cGame::cGame() :
 	// Variables //
 	glBindAttribLocation( Program, 0, "vPosition" );
 
+	int Location = glGetUniformLocation( Program, "Tex0" ); 
+	glUniform1i( Location, 0 );
+
+
 	// Link ... //
 	glLinkProgram( Program );
 	
