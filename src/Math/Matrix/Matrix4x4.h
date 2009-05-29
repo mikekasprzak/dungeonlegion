@@ -127,20 +127,57 @@ public:
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	inline Real& operator () ( const int& _x, const int& _y ) {
-		return Array[ ((_y << 2)) + _x ];
+		return Array[ (_y << 2) + _x ];
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	inline const Real& operator () ( const int& _x, const int& _y ) const {
-		return Array[ ((_y << 2)) + _x ];
+		return Array[ (_y << 2) + _x ];
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	inline Real& Matrix( const int& _x, const int& _y ) {
-		return Array[ ((_y << 2)) + _x ];
+		return Array[ (_y << 2) + _x ];
 	}	
 	// - -------------------------------------------------------------------------------------- - //
 	inline const Real& Matrix( const int& _x, const int& _y ) const {
-		return Array[ ((_y << 2)) + _x ];
+		return Array[ (_y << 2) + _x ];
 	}	
+	// - -------------------------------------------------------------------------------------- - //
+
+
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Vector4D Row0() const {
+		return Vector4D( Matrix(0,0), Matrix(1,0), Matrix(2,0), Matrix(3,0) );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Vector4D Row1() const {
+		return Vector4D( Matrix(0,1), Matrix(1,1), Matrix(2,1), Matrix(3,1) );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Vector4D Row2() const {
+		return Vector4D( Matrix(0,2), Matrix(1,2), Matrix(2,2), Matrix(3,2) );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Vector4D Row3() const {
+		return Vector4D( Matrix(0,3), Matrix(1,3), Matrix(2,3), Matrix(3,3) );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Vector4D Column0() const {
+		return Vector4D( Matrix(0,0), Matrix(0,1), Matrix(0,2), Matrix(0,3) );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Vector4D Column1() const {
+		return Vector4D( Matrix(1,0), Matrix(1,1), Matrix(1,2), Matrix(1,3) );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Vector4D Column2() const {
+		return Vector4D( Matrix(2,0), Matrix(2,1), Matrix(2,2), Matrix(2,3) );
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Vector4D Column3() const {
+		return Vector4D( Matrix(3,0), Matrix(3,1), Matrix(3,2), Matrix(3,3) );
+	}
 	// - -------------------------------------------------------------------------------------- - //
 
 	// - -------------------------------------------------------------------------------------- - //
@@ -180,7 +217,7 @@ public:
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	// Calculate Adjoint of Matrix //
-	inline const Matrix4x4 Adjoint() {
+	inline const Matrix4x4 Transpose() const {
 		return Matrix4x4(
 			Array[0], Array[4], Array[8], Array[12],
 			Array[1], Array[5], Array[9], Array[13],
@@ -188,6 +225,25 @@ public:
 			Array[3], Array[7], Array[11], Array[15]
 			);
 	}
+	// - -------------------------------------------------------------------------------------- - //
+	inline const Matrix4x4 OrthoNormal() const {
+		return Matrix4x4( 
+			Row0().Normal(),
+			Row1().Normal(),
+			Row2().Normal(),
+			Row3().Normal()
+			);
+	}
+	// - -------------------------------------------------------------------------------------- - //
+	// Calculate Adjoint of Matrix //
+//	inline const Matrix4x4 Adjoint() const {
+//		return Matrix4x4(
+//			Array[0], Array[4], Array[8], Array[12],
+//			Array[1], Array[5], Array[9], Array[13],
+//			Array[2], Array[6], Array[10], Array[14],
+//			Array[3], Array[7], Array[11], Array[15]
+//			);
+//	}
 	// - -------------------------------------------------------------------------------------- - //
 	// Calculate the determinant, for the inverse //
 	inline const Real Determinant() const {
@@ -221,10 +277,10 @@ public:
 
 	// - -------------------------------------------------------------------------------------- - //
 	// Calculate the Inverse //
-	inline const Matrix4x4 Inverse() {
-		// Possible bug.  If the Determinant is 0, then the matrix has no inverse //
-		return Adjoint() / Determinant();
-	}
+//	inline const Matrix4x4 Inverse() const {
+//		// Possible bug.  If the Determinant is 0, then the matrix has no inverse //
+//		return Adjoint() / Determinant();
+//	}
 	// - -------------------------------------------------------------------------------------- - //
 
 	// - -------------------------------------------------------------------------------------- - //
@@ -300,30 +356,6 @@ public:
 		
 		return Matrix;
 	}
-	// - -------------------------------------------------------------------------------------- - //
-//	// Creates a rotation Matrix from a vector ((0,1) being an untransformed matrix) //
-//	inline static const Matrix4x4 Rotating( const Vector2D& _Vs ) {
-//		Matrix4x4 Matrix(
-//			_Vs.y, -_Vs.x, Real::Zero, Real::Zero,
-//			_Vs.x, _Vs.y, Real::Zero, Real::Zero,
-//			Real::Zero, Real::Zero, Real::One
-//			);
-//		
-//		return Matrix;
-//	}
-//	// - -------------------------------------------------------------------------------------- - //
-//	// Creates a rotation Matrix from an Angle //
-//	inline static const Matrix4x4 Rotating( const Real& Angle ) {
-//		Matrix4x4 Matrix(
-//			Angle.Cos(), -Angle.Sin(), Real::Zero,
-//			Angle.Sin(), Angle.Cos(), Real::Zero,
-//			Real::Zero, Real::Zero, Real::One
-//			);
-//		
-//		return Matrix;
-//	}
-	// - -------------------------------------------------------------------------------------- - //
-
 	// - -------------------------------------------------------------------------------------- - //
 };
 // - ------------------------------------------------------------------------------------------ - //

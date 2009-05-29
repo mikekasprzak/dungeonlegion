@@ -157,7 +157,7 @@ int main( int argc, char* argv[] ) {
 		SetFramesPerSecond( 60 );
 		TIMEVALUE WorkTime = GetTimeNow();
 
-		while( !gfxHasShutdown() && !TabReset ) {
+		while( !gfxHasShutdown() /*&& !TabReset*/ ) {
 			TIMEVALUE TimeDiff = SubtractTime( GetTimeNow(), WorkTime );
 			int FramesOfWork = GetFrames( &TimeDiff );
 	

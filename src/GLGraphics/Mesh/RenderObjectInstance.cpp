@@ -28,17 +28,22 @@ cRenderObjectInstance Instantiate( const cRenderObject& Object ) {
 extern int Tweak;
 
 void cRenderObjectInstance::CalculateLighting() {
-	Vector4D Light( 0, 0, 5, 1 );
-	Light = Light.ApplyMatrix( Matrix.Inverse() );
+	extern Vector3D LightPos;
+	Vector3D Light = LightPos;
+	Matrix3x3 NormMatrix( 
+		Matrix.Row0().ToVector3D().Normal(), 
+		Matrix.Row1().ToVector3D().Normal(),
+		Matrix.Row2().ToVector3D().Normal()
+		);
 	
 	for ( size_t idx = 0; idx < Vertex.Color.size(); idx++ ) {
 		Vector3D& Point = Object->Vertex->Data[ idx ].Pos;
 		Vector3D& Norm = Object->Vertex->Data[ idx ].Normal;
 		
-		Vector3D Ray = Light.ToVector3D() - Point;
+		Vector3D Ray = Light - Point.ApplyMatrix( Matrix );
 		Real Length = Ray.NormalizeRet();
 
-		int Intensity = Real((256*10)/Length) * (Ray * Norm);
+		int Intensity = Real((256*10)/Length) * (Ray * Norm.ApplyMatrix( NormMatrix ));
 		if ( Intensity > 255 )
 			Intensity = 255;
 		if ( Intensity < 0 )
@@ -125,15 +130,14 @@ void cRenderObjectInstance::DrawFaceGroup( const size_t Index ) {
 }
 // - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::Draw() {
-//	glDisableClientState(GL_COLOR_ARRAY);
-//	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-//	glDisableClientState(GL_NORMAL_ARRAY);
-//	gfxDrawRect( Rect.P1(), Rect.P2(), RGB_WHITE );
-//	
-//	gfxDrawCircleFill( Rect.P1(), Real(0.2), RGB_RED );
-//	gfxDrawCircleFill( Rect.P2(), Real(0.2), RGB_YELLOW );
-//	
-//	gfxSetColor( RGB_WHITE );
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	gfxDrawRect( Rect.P1(), Rect.P2(), RGB_WHITE );
+	
+	gfxDrawCircleFill( Rect.P1(), Real(0.2), RGB_RED );
+	gfxDrawCircleFill( Rect.P2(), Real(0.2), RGB_YELLOW );
+
 	
 	glPushMatrix();
 	glMultMatrixf( (const float*)&Matrix );

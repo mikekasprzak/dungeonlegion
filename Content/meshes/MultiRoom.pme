@@ -1,7 +1,7 @@
 Mesh "Plane"
 	Materials 1
 		Material 0 "Material.001"
-			Image "d:\ConcreteFloor2.png"
+			Image "d:\DungeonLegion\SrcContent\textures\ConcreteFloor2.png"
 	Vertices 2368
 		VertexNormUVColor -5.542265 2.000000 0.048516  -0.116459 0.032136 0.992645  -0.564516 -0.803805  100 0 100 0
 		VertexNormUVColor -4.919063 1.994375 0.179063  -0.345378 0.050996 0.937071  -0.491936 -0.804939  96 0 96 0

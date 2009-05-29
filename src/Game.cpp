@@ -2,6 +2,9 @@
 #include "Game.h"
 #include <Geometry/Rect.h>
 // - ------------------------------------------------------------------------------------------ - //
+extern Vector3D Light;
+Vector3D LightPos( 0, 0, 10 );
+// - ------------------------------------------------------------------------------------------ - //
 cGame::cGame() :
 //	Layout( "Content/Layout.map" ),
 //	Scene( "Content/meshes/MultiRoom.pme" ),
@@ -28,7 +31,7 @@ cGame::cGame() :
 
 	HeartTexture = gfxLoadTexture( "/Heart" );
 	
-	glDisable( GL_LIGHTING );
+	
 	
 }
 // - ------------------------------------------------------------------------------------------ - //
@@ -45,7 +48,7 @@ void cGame::Step() {
 	// Test using 2D Shapes //
 	PairRect2D DecalVolume( -4,-4, 8,8 );
 	
-	DecalPos += Vector2D( System::StickX, System::StickY ) * Real(0.1f);
+	LightPos += Vector3D( System::StickX, System::StickY, Real::Zero ) * Real(0.1f);
 	Tweak++;
 	
 /*
@@ -150,6 +153,11 @@ void cGame::Draw() {
 
 		Instance.Draw();
 		Instance2.Draw();
+		
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		gfxDrawCircle( LightPos, Real(0.3), RGB_GREEN );
 
 //		for ( size_t idx = 0; idx < Object.FaceGroup->Size; idx++ ) {
 //			gfxDrawPrimitive( 
