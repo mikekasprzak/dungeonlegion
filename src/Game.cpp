@@ -235,9 +235,9 @@ void cGame::Draw() {
 //				);
 //		}
 
+	glUseProgram( Program );
 		Instance.Draw();
 
-	glUseProgram( Program );
 		Instance2.Draw();
 	glUseProgram( 0 );
 		
