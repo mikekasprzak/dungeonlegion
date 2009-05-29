@@ -8,6 +8,41 @@ Vector3D LightPos( 0, 0, 10 );
 extern ColorType Ambient;
 ColorType Ambient = RGB(44,22,0);
 // - ------------------------------------------------------------------------------------------ - //
+unsigned CompileShader( const char* Src, GLenum type ) {
+	GLuint shader;
+	
+	shader = glCreateShader(type);
+	
+	if ( shader == 0 )
+		return 0;
+		
+	glShaderSource( shader, 1, &Src, NULL );
+	glCompileShader( shader );
+
+	GLint ShaderDidCompile;
+	glGetShaderiv( shader, GL_COMPILE_STATUS, &ShaderDidCompile );
+	
+	if ( !ShaderDidCompile ) {
+		if ( type == GL_VERTEX_SHADER )
+			printf( "Error: Vertex Shader Compile Failed!!\n" );
+		else if ( type == GL_FRAGMENT_SHADER )
+			printf( "Error: Fragment Shader Compile Failed!!\n" );
+			
+		GLint infoLen = 0;
+		glGetProgramiv( shader, GL_INFO_LOG_LENGTH, &infoLen ); 
+		if ( infoLen > 1 ) {
+			DataBlock* infoLog = new_DataBlock( infoLen );
+			
+			glGetShaderInfoLog( shader, infoLen, NULL, infoLog->Data );
+			printf( "%s\n", infoLog->Data );
+			
+			delete_DataBlock( infoLog );
+		}
+	}
+	
+	return shader;
+}
+// - ------------------------------------------------------------------------------------------ - //
 cGame::cGame() :
 //	Layout( "Content/Layout.map" ),
 //	Scene( "Content/meshes/MultiRoom.pme" ),
@@ -34,7 +69,46 @@ cGame::cGame() :
 
 	HeartTexture = gfxLoadTexture( "/Heart" );
 	
+	{
+		DataBlock* ShaderSrc = new_DataBlock_Null( "Content/shaders/Vertex.glsl" );
+		VertexProgram = CompileShader( ShaderSrc->Data, GL_VERTEX_SHADER );
+		delete_DataBlock( ShaderSrc );	
+	}
+
+	{
+		DataBlock* ShaderSrc = new_DataBlock_Null( "Content/shaders/Fragment.glsl" );
+		FragmentProgram = CompileShader( ShaderSrc->Data, GL_FRAGMENT_SHADER );
+		delete_DataBlock( ShaderSrc );	
+	}
+
+	// Programs //
+	Program = glCreateProgram();
+	glAttachShader( Program, VertexProgram );
+	glAttachShader( Program, FragmentProgram );
+
+	// Variables //
+	glBindAttribLocation( Program, 0, "vPosition" );
+
+	// Link ... //
+	glLinkProgram( Program );
 	
+	int ProgramDidLink;
+	glGetProgramiv( Program, GL_LINK_STATUS, &ProgramDidLink );
+	
+	if ( !ProgramDidLink ) {
+		printf( "Error: Program Linking Failed!!\n" );
+
+		GLint infoLen = 0;
+		glGetProgramiv( Program, GL_INFO_LOG_LENGTH, &infoLen ); 
+		if ( infoLen > 1 ) {
+			DataBlock* infoLog = new_DataBlock( infoLen );
+			
+			glGetProgramInfoLog( Program, infoLen, NULL, infoLog->Data );
+			printf( "%s\n", infoLog->Data );
+			
+			delete_DataBlock( infoLog );
+		}
+	}
 	
 }
 // - ------------------------------------------------------------------------------------------ - //
@@ -42,6 +116,11 @@ cGame::~cGame() {
 	Object.Free();
 	Instance.Free();
 	Instance2.Free();
+	
+	glDeleteShader( VertexProgram );
+	glDeleteShader( FragmentProgram );
+	
+	glDeleteProgram( Program );
 }
 // - ------------------------------------------------------------------------------------------ - //
 extern int Tweak;

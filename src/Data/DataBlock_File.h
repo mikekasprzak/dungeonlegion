@@ -119,6 +119,105 @@ inline DataBlock* read_DataBlock( STREAM* fp ) {
 }
 // - ------------------------------------------------------------------------------------------ - //
 
+// - ------------------------------------------------------------------------------------------ - //
+// Variations when you want the loaded file to feature a null termination character at the end //
+// - ------------------------------------------------------------------------------------------ - //
+inline DataBlock* new_DataBlock_Null( const char* _FileName ) {
+	// Open File //
+	FILE* fp = open_readonly_File( _FileName );
+	if ( fp == 0 ) {
+		return 0;
+	}
+	
+	// Determine how large file is //
+	size_t Size = size_File( fp );
+	
+	// Allocate space (Size is automatically set inside new_DataBlock) //
+	DataBlock* p = new_DataBlock( Size+1 );
+	p->Data[Size] = 0;
+	
+	// Read data //
+	read_File( fp, p->Data, Size );
+	
+	// Close file //
+	close_File( fp );
+	
+	// Return data //
+	return p;
+}
+// - ------------------------------------------------------------------------------------------ - //
+inline DataBlock* new_DataBlock_Null( char* _FileName ) {
+	// Open File //
+	FILE* fp = open_readonly_File( _FileName );
+	if ( fp == 0 ) {
+		return 0;
+	}
+	
+	// Determine how large file is //
+	size_t Size = size_File( fp );
+	
+	// Allocate space (Size is automatically set inside new_DataBlock) //
+	DataBlock* p = new_DataBlock( Size+1 );
+	p->Data[Size] = 0;
+	
+	// Read data //
+	read_File( fp, p->Data, Size );
+	
+	// Close file //
+	close_File( fp );
+	
+	// Return data //
+	return p;
+}
+// - ------------------------------------------------------------------------------------------ - //
+inline DataBlock* new_DataBlock_Null( FILE* fp ) {
+	// Read Size //
+	size_t Size = read_File<size_t>( fp );
+	
+	// Allocate space (Size is automatically set inside new_DataBlock) //
+	DataBlock* p = new_DataBlock( Size+1 );
+	p->Data[Size] = 0;
+	
+	// Read data //
+	read_File( fp, p->Data, Size );
+	
+	// Return data //
+	return p;
+}
+// - ------------------------------------------------------------------------------------------ - //
+inline DataBlock* new_DataBlock_Null( VFILE* fp ) {
+	// Read Size //
+	size_t Size = read_VFile<size_t>( fp );
+	
+	// Allocate space (Size is automatically set inside new_DataBlock) //
+	DataBlock* p = new_DataBlock( Size+1 );
+	p->Data[Size] = 0;
+	
+	// Read data //
+	read_VFile( fp, p->Data, Size );
+	
+	// Return data //
+	return p;
+}
+// - ------------------------------------------------------------------------------------------ - //
+template< class STREAM >
+inline DataBlock* new_DataBlock_Null( STREAM* fp ) {
+	// Read Size //
+	size_t Size = read_Stream<size_t>( fp );
+	
+	// Allocate space (Size is automatically set inside new_DataBlock) //
+	DataBlock* p = new_DataBlock( Size+1 );
+	p->Data[Size] = 0;
+	
+	// Read data //
+	read_Stream( fp, p->Data, Size );
+	
+	// Return data //
+	return p;
+}
+// - ------------------------------------------------------------------------------------------ - //
+
+
 
 // - ------------------------------------------------------------------------------------------ - //
 // These functions are for when you know how large a file is //

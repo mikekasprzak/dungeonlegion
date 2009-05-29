@@ -48,6 +48,10 @@ public:
 	cRenderObject Object;
 	cRenderObjectInstance Instance, Instance2;
 	
+	unsigned VertexProgram;
+	unsigned FragmentProgram;
+	unsigned Program;
+	
 public:
 	// - -------------------------------------------------------------------------------------- - //
 	cGame();
