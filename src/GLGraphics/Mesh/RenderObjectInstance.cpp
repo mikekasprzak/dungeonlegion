@@ -25,16 +25,26 @@ cRenderObjectInstance Instantiate( const cRenderObject& Object ) {
 	return Instance;
 }
 // - ------------------------------------------------------------------------------------------ - //
-extern int Tweak;
 
+// - ------------------------------------------------------------------------------------------ - //
 void cRenderObjectInstance::CalculateLighting() {
 	extern Vector3D LightPos;
 	Vector3D Light = LightPos;
-	Matrix3x3 NormMatrix( 
-		Matrix.Row0().ToVector3D().Normal(), 
-		Matrix.Row1().ToVector3D().Normal(),
-		Matrix.Row2().ToVector3D().Normal()
+	
+//	Matrix3x3 NormMatrix( 
+//		Matrix.Row0().ToVector3D().Normal(), 
+//		Matrix.Row1().ToVector3D().Normal(),
+//		Matrix.Row2().ToVector3D().Normal()
+//		);
+
+	Matrix4x4 NormMatrix( 
+		Matrix.Row0().Normal(), 
+		Matrix.Row1().Normal(),
+		Matrix.Row2().Normal()
 		);
+		
+//	Light = Light.ApplyMatrix( NormMatrix.Transpose() );
+//	Light -= Matrix.Column3().ToVector3D();
 	
 	for ( size_t idx = 0; idx < Vertex.Color.size(); idx++ ) {
 		Vector3D& Point = Object->Vertex->Data[ idx ].Pos;
@@ -60,6 +70,7 @@ void cRenderObjectInstance::CalculateLighting() {
 			);
 	}
 }
+// - ------------------------------------------------------------------------------------------ - //
 
 
 // - ------------------------------------------------------------------------------------------ - //

@@ -145,7 +145,7 @@ public:
 	}
 	// - -------------------------------------------------------------------------------------- - //
 	// Calculate Adjoint of Matrix //
-	inline const Matrix3x3 Adjoint() {
+	inline const Matrix3x3 Transpose() {
 		return Matrix3x3(
 			Array[0], Array[3], Array[6],
 			Array[1], Array[4], Array[7],
@@ -164,10 +164,10 @@ public:
 
 	// - -------------------------------------------------------------------------------------- - //
 	// Calculate the Inverse //
-	inline const Matrix3x3 Inverse() {
-		// Possible bug.  If the Determinant is 0, then the matrix has no inverse //
-		return Adjoint() / Determinant();
-	}
+//	inline const Matrix3x3 Inverse() {
+//		// Possible bug.  If the Determinant is 0, then the matrix has no inverse //
+//		return Adjoint() / Determinant();
+//	}
 	// - -------------------------------------------------------------------------------------- - //
 
 	// - -------------------------------------------------------------------------------------- - //
