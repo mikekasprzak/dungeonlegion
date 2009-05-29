@@ -209,7 +209,6 @@ void cGame::Draw() {
 	
 	Instance.CalculateLighting();
 	Instance2.CalculateLighting();
-
 	
 	{
 //		cPMEMesh& Mesh = Scene.Mesh.back();
@@ -233,7 +232,10 @@ void cGame::Draw() {
 //		}
 
 		Instance.Draw();
+
+	glUseProgram( Program );
 		Instance2.Draw();
+	glUseProgram( 0 );
 		
 		glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
