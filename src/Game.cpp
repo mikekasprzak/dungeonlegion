@@ -235,11 +235,11 @@ void cGame::Draw() {
 //				);
 //		}
 
-//	glUseProgram( Program );
+	glUseProgram( Program );
 		Instance.Draw();
 
 		Instance2.Draw();
-//	glUseProgram( 0 );
+	glUseProgram( 0 );
 		
 		glDisableClientState(GL_COLOR_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
