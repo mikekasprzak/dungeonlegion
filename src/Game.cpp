@@ -2,6 +2,7 @@
 #include "Game.h"
 #include <Geometry/Rect.h>
 #include <Algorithm/ArrayAlgorithm.h>
+#include <Algorithm/Align.h>
 // - ------------------------------------------------------------------------------------------ - //
 extern Vector3D Light;
 Vector3D LightPos( 0, 0, 10 );
@@ -114,11 +115,6 @@ cGame::cGame() :
 			delete_DataBlock( infoLog );
 		}
 	}
-	
-	float Test[] = { 20, 2, 3, 1, 14, 18 };
-	Add( 10.0f, Test, 6 );
-	printf( "Test: %f\n", GetLargest( Test, 6 ) );
-	
 }
 // - ------------------------------------------------------------------------------------------ - //
 cGame::~cGame() {
